@@ -1,0 +1,70 @@
+.deployed-components-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.deployed-components-container h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.deployed-components-container > p {
+  text-align: center;
+  opacity: 0.8;
+  margin-bottom: 2rem;
+}
+
+.components-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.component-preview {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  animation: slideIn 0.3s ease;
+}
+
+.component-preview:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  border-color: #00dbde;
+}
+
+.component-preview h3 {
+  margin-bottom: 0.5rem;
+  color: #00dbde;
+}
+
+.component-preview p {
+  opacity: 0.8;
+  margin-bottom: 1rem;
+}
+
+.live-demo {
+  background: #000;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin: 1rem 0;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.demo-content {
+  text-align: center;
+}
+
+.demo-content p {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #00dbde;
+}

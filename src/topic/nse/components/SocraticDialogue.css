@@ -1,0 +1,321 @@
+.socratic-dialogue {
+  animation: fadeIn 0.5s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 700px;
+}
+
+.dialogue-controls {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.scenario-btn,
+.hint-btn {
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.scenario-btn:hover,
+.hint-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: #667eea;
+  transform: translateY(-2px);
+}
+
+.hint-box {
+  background: rgba(102, 126, 234, 0.15);
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  animation: slideIn 0.3s ease;
+}
+
+.hint-box strong {
+  color: #f093fb;
+}
+
+.chat-container {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 16px;
+  padding: 25px;
+  margin-bottom: 25px;
+  overflow: hidden;
+  display: flex;
+  position: relative;
+}
+
+.messages-list {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.messages-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.messages-list::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+
+.messages-list::-webkit-scrollbar-thumb {
+  background: rgba(102, 126, 234, 0.3);
+  border-radius: 3px;
+}
+
+.message {
+  margin-bottom: 20px;
+  animation: fadeIn 0.5s ease;
+}
+
+.message.tutor {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  border-left: 4px solid #667eea;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.message.user {
+  background: rgba(255, 255, 255, 0.05);
+  border-left: 4px solid #764ba2;
+  padding: 20px;
+  border-radius: 12px;
+  margin-left: 50px;
+}
+
+.message strong {
+  color: #fff;
+  display: inline-block;
+  margin-bottom: 10px;
+  font-size: 0.9em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.concept-tag {
+  display: inline-block;
+  background: rgba(102, 126, 234, 0.2);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.8em;
+  margin-left: 10px;
+  color: #667eea;
+  font-weight: normal;
+  text-transform: none;
+}
+
+.message p {
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.thinking-indicator {
+  display: flex;
+  gap: 5px;
+  padding: 10px 0;
+}
+
+.thinking-indicator span {
+  width: 8px;
+  height: 8px;
+  background: #667eea;
+  border-radius: 50%;
+  animation: thinking 1.4s infinite;
+}
+
+.thinking-indicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.thinking-indicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes thinking {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.7;
+  }
+  30% {
+    transform: translateY(-10px);
+    opacity: 1;
+  }
+}
+
+.concepts-sidebar {
+  width: 200px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.concepts-sidebar h4 {
+  color: #667eea;
+  margin-bottom: 15px;
+  font-size: 0.9em;
+}
+
+.concepts-sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.concepts-sidebar li {
+  margin-bottom: 8px;
+  padding: 5px 10px;
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: 4px;
+  font-size: 0.85em;
+}
+
+.input-area {
+  display: flex;
+  gap: 15px;
+}
+
+.input-area input {
+  flex: 1;
+  padding: 15px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 1em;
+  transition: all 0.3s ease;
+}
+
+.input-area input:focus {
+  outline: none;
+  border-color: #667eea;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+}
+
+.input-area input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.input-area button {
+  padding: 15px 30px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.input-area button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+}
+
+.input-area button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.learning-tracker {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 20px;
+  border-radius: 12px;
+  margin-top: 20px;
+}
+
+.learning-tracker h4 {
+  color: #667eea;
+  margin-bottom: 15px;
+}
+
+.concepts-covered {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.concept-badge {
+  background: rgba(102, 126, 234, 0.2);
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-size: 0.85em;
+  color: #fff;
+  border: 1px solid rgba(102, 126, 234, 0.3);
+}
+
+.nse-quick-reference {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 25px;
+  border-radius: 12px;
+  margin-top: 20px;
+}
+
+.nse-quick-reference h4 {
+  color: #f093fb;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.reference-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+}
+
+.reference-item {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.reference-item strong {
+  color: #667eea;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.reference-item p {
+  font-size: 0.9em;
+  color: #ccc;
+  line-height: 1.4;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
