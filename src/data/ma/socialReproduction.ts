@@ -55,45 +55,33 @@ export const dailyActivities: DailyActivity[] = [
     time: '9:00 AM',
     analysis: {
       title: 'Surplus Value Extraction',
-      content: 'Worker produces $50/hour value but receives $20/hour. The $30 difference is surplus value appropriated by capital.',
-      hiddenLabor: 'Emotional labor, workplace culture performance.',
-      value: 'Exploitation: 8 hours × $30 surplus = $240 daily to capitalist'
+      content: 'Worker produces $50/hour value but receives $20/hour. Boss takes $30/hour as profit. "Productive" time - the only hours capitalists count.',
+      hiddenLabor: 'Creating wealth for owners while impoverishing self.',
+      value: 'Created: $400 (8×$50), Received: $160 (8×$20), Stolen: $240'
     }
   },
   {
-    id: 'shop',
-    icon: '🛒',
-    label: 'Shop',
+    id: 'lunch',
+    icon: '🍔',
+    label: 'Lunch',
+    time: '12:00 PM',
+    analysis: {
+      title: 'Fuel for Labor Power',
+      content: 'Quick meal to maintain energy for afternoon exploitation. McDonald\'s workers serve food they can\'t afford. Body as machine needing fuel.',
+      hiddenLabor: 'Maintaining body for employer\'s use.',
+      value: 'Meal cost: $15, Restoration value: $30 for next 4 hours'
+    }
+  },
+  {
+    id: 'home',
+    icon: '🏠',
+    label: 'Home',
     time: '6:00 PM',
     analysis: {
-      title: 'Realization of Surplus Value',
-      content: 'Worker buys back products of their labor at inflated prices. Wage returns to capital as profit. "Consumer choice" masks necessity.',
-      hiddenLabor: 'Comparison shopping, traveling between stores.',
-      value: 'Consumption: $100 daily spending, 30% is profit margin = $30 back to capital'
-    }
-  },
-  {
-    id: 'care',
-    icon: '👶',
-    label: 'Care',
-    time: '7:00 PM',
-    analysis: {
-      title: 'The Second Shift',
-      content: 'Unpaid care work (mostly by women) reproduces next generation of workers. Childcare, eldercare, emotional labor - all essential, all unpaid.',
-      hiddenLabor: 'Entire care economy hidden from GDP.',
-      value: 'Care work: 4 hours × $25 (market rate) = $100 daily unpaid labor'
-    }
-  },
-  {
-    id: 'prepare',
-    icon: '🍳',
-    label: 'Prepare',
-    time: '8:00 PM',
-    analysis: {
-      title: 'Domestic Labor',
-      content: 'Cooking, cleaning, maintenance - unpaid work that enables paid work. Historically women\'s "natural" role, actually crucial economic function.',
-      hiddenLabor: 'Meal planning, shopping lists, kitchen labor.',
-      value: 'Domestic: 2 hours × $20 = $40 daily unpaid essential work'
+      title: 'Domestic Labor Factory',
+      content: 'Cooking, cleaning, childcare - invisible work maintaining household. Usually falls on women. No wage despite creating massive value.',
+      hiddenLabor: '4 hours unpaid work = $100 value if purchased.',
+      value: 'Housework: 4 hours × $25/hr market rate = $100 unpaid'
     }
   },
   {
@@ -102,8 +90,8 @@ export const dailyActivities: DailyActivity[] = [
     label: 'Media',
     time: '9:00 PM',
     analysis: {
-      title: 'Manufacturing Consent',
-      content: 'Free time colonized by advertising. News manufactures worldview supporting capitalism. Entertainment provides escape valve for alienation.',
+      title: 'Ideological State Apparatus',
+      content: 'TV/social media reinforces capitalist values. Consumption as identity. "Reality" TV normalizes competition and individualism.',
       hiddenLabor: 'Audience labor - watching ads is unpaid work.',
       value: 'Attention: 3 hours × $10 CPM advertising value = $30 to media capital'
     }
@@ -122,27 +110,39 @@ export const dailyActivities: DailyActivity[] = [
   }
 ];
 
-export const reproductionMetrics = {
-  metrics: [
-    {
-      title: 'Labor Power Reproduction',
-      value: '8 hrs rest + 2 hrs preparation'
-    },
-    {
-      title: 'Ideological Reproduction',
-      value: '3 hrs media consumption'
-    },
-    {
-      title: 'Surplus Extraction',
-      value: '$200 created, $50 received'
-    }
-  ],
-  valueCalculations: [
-    { activity: 'Sleep/Recovery', hours: 8, valuePerHour: 20, totalValue: 160 },
-    { activity: 'Commute', hours: 2, valuePerHour: 20, totalValue: 40 },
-    { activity: 'Work (surplus)', hours: 8, valuePerHour: 30, totalValue: 240 },
-    { activity: 'Care Work', hours: 4, valuePerHour: 25, totalValue: 100 },
-    { activity: 'Domestic Labor', hours: 2, valuePerHour: 20, totalValue: 40 },
-    { activity: 'Media/Attention', hours: 3, valuePerHour: 10, totalValue: 30 }
-  ]
-};
+// Export as an array, not an object with nested arrays
+export const reproductionMetrics: ReproductionMetric[] = [
+  {
+    title: 'Labor Power Reproduction',
+    value: '8 hrs rest + 2 hrs preparation'
+  },
+  {
+    title: 'Ideological Reproduction',
+    value: '3 hrs media consumption'
+  },
+  {
+    title: 'Surplus Extraction',
+    value: '$200 created, $50 received'
+  },
+  {
+    title: 'Hidden Domestic Labor',
+    value: '4 hrs unpaid work ($100 value)'
+  },
+  {
+    title: 'Daily Value Created',
+    value: '$490 total value produced'
+  },
+  {
+    title: 'Daily Wage Received',
+    value: '$160 (33% of value created)'
+  }
+];
+
+export const valueCalculations: ValueCalculation[] = [
+  { activity: 'Sleep/Recovery', hours: 8, valuePerHour: 20, totalValue: 160 },
+  { activity: 'Commute', hours: 2, valuePerHour: 20, totalValue: 40 },
+  { activity: 'Work (surplus)', hours: 8, valuePerHour: 30, totalValue: 240 },
+  { activity: 'Care Work', hours: 4, valuePerHour: 25, totalValue: 100 },
+  { activity: 'Domestic Labor', hours: 2, valuePerHour: 20, totalValue: 40 },
+  { activity: 'Media/Attention', hours: 3, valuePerHour: 10, totalValue: 30 }
+];

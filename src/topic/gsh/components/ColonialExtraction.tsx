@@ -1,4 +1,4 @@
-// src/topic/gsh/ColonialExtraction.tsx
+// src/topic/gsh/components/ColonialExtraction.tsx
 
 import React, { useState, useEffect, useRef } from 'react';
 import styles from './ColonialExtraction.module.css';
@@ -7,8 +7,8 @@ import {
   colonyNodes, 
   metropoleNodes,
   globalImpactData 
-} from '../../data/gsh/colonialExtraction';
-import { ExtractionPeriod, ColonyNode, MetropoleNode } from '../../types/globalSouthHistory';
+} from '../../../data/gsh/colonialExtraction';
+import { ExtractionPeriod, ColonyNode, MetropoleNode } from '../../../types/globalSouthHistory';
 
 interface Props {
   showPopup: (content: string) => void;
@@ -23,7 +23,7 @@ const ColonialExtraction: React.FC<Props> = ({ showPopup }) => {
 
   useEffect(() => {
     drawFlowPaths();
-  }, [selectedPeriod]);
+  }, [selectedPeriod, animationActive]);
 
   const drawFlowPaths = () => {
     if (!svgRef.current || !containerRef.current) return;
@@ -110,6 +110,23 @@ const ColonialExtraction: React.FC<Props> = ({ showPopup }) => {
         <li><strong>Mechanism:</strong> Indigenous slavery, later African slavery</li>
         <li><strong>Legacy:</strong> Racial caste systems, inequality</li>
       </ul>
+      
+      <h3>French Model (West Africa)</h3>
+      <ul>
+        <li><strong>Method:</strong> Assimilation + Resource control</li>
+        <li><strong>Scale:</strong> CFA franc still controls 14 countries</li>
+        <li><strong>Mechanism:</strong> Monetary control, French-only education</li>
+        <li><strong>Legacy:</strong> Ongoing economic dependence</li>
+      </ul>
+      
+      <h3>Common Patterns</h3>
+      <ul>
+        <li>Destruction of local industries</li>
+        <li>Forced cultivation of cash crops</li>
+        <li>Extraction of precious resources</li>
+        <li>Creation of dependency structures</li>
+        <li>Cultural destruction and imposition</li>
+      </ul>
     `;
     showPopup(content);
   };
@@ -159,26 +176,26 @@ const ColonialExtraction: React.FC<Props> = ({ showPopup }) => {
             <h4>Current Selection</h4>
             {selectedNode ? (
               <div>
-                <h5 className={styles.nodeName}>{selectedNode.name}</h5>
+                <h5 style={{color: '#ff6b6b', marginBottom: '12px'}}>{selectedNode.name}</h5>
                 <div className={styles.dataItem}>
                   <span>Resources:</span>
-                  <span className={styles.dataValue}>{selectedNode.resources.join(', ')}</span>
+                  <span className={styles.dataValue} style={{fontSize: '0.85em'}}>{selectedNode.resources.join(', ')}</span>
                 </div>
                 <div className={styles.dataItem}>
                   <span>Colonizers:</span>
-                  <span className={styles.dataValue}>{selectedNode.colonizers.join(', ')}</span>
+                  <span className={styles.dataValue} style={{fontSize: '0.85em'}}>{selectedNode.colonizers.join(', ')}</span>
                 </div>
                 <div className={styles.dataItem}>
                   <span>Impact:</span>
                 </div>
-                <p className={styles.impactText}>{selectedNode.impact}</p>
-                <div className={styles.dataItem}>
+                <p style={{fontSize: '0.85em', color: 'rgba(255, 255, 255, 0.8)', marginTop: '8px'}}>{selectedNode.impact}</p>
+                <div className={styles.dataItem} style={{marginTop: '12px'}}>
                   <span>Resistance:</span>
                 </div>
-                <p className={styles.resistanceText}>{selectedNode.resistance}</p>
+                <p style={{fontSize: '0.85em', color: '#f9ca24', marginTop: '8px'}}>{selectedNode.resistance}</p>
               </div>
             ) : (
-              <p className={styles.placeholder}>Click on a node to see details</p>
+              <p style={{color: 'rgba(255, 255, 255, 0.6)', textAlign: 'center'}}>Click on a node to see details</p>
             )}
           </div>
           

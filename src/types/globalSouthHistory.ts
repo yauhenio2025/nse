@@ -1,126 +1,84 @@
-// types/globalSouthHistory.ts
+// src/types/globalSouthHistory.ts - Additional interfaces (if needed)
 
-export interface ExtractionPeriod {
-  id: string;
+// Extend existing GlobalSouthMode interface with any new properties
+export interface GlobalSouthMode {
+  id: 'extraction' | 'parallel' | 'counter' | 'decolonization' | 'solidarity';
   label: string;
-  timeRange: string;
-  totalExtracted: string;
-  livesLost: string;
-  resources: string;
-  flows: ExtractionFlow[];
-}
-
-export interface ExtractionFlow {
-  from: string;
-  to: string;
-  resource: string;
-  amount: string;
-}
-
-export interface ColonyNode {
-  id: string;
-  name: string;
-  position: { top: string; left: string };
   icon: string;
-  resources: string[];
-  colonizers: string[];
-  impact: string;
-  resistance: string;
+  completed?: boolean; // For progress tracking
 }
 
-export interface MetropoleNode {
-  id: string;
-  name: string;
-  position: { top: string; left: string };
-  icon: string;
+// Add progress tracking interface
+export interface ProgressState {
+  currentMode: GlobalSouthMode['id'];
+  completedModes: Set<GlobalSouthMode['id']>;
+  totalModes: number;
 }
 
-export interface HistoricalEvent {
-  id: string;
-  year: string;
-  title: string;
-  description: string;
-  type: 'resistance' | 'independence' | 'cultural' | 'economic';
-  icon: string;
-  region: string;
-  connections?: string[];
-  details?: EventDetails;
-}
-
-export interface EventDetails {
-  title: string;
+// Enhanced popup content interface
+export interface PopupContent {
+  title?: string;
   content: string;
-  causes?: string[];
-  keyFigures?: KeyFigure[];
-  impact?: string[];
-  globalConnections?: string;
+  type?: 'info' | 'help' | 'comparison' | 'details';
 }
 
-export interface KeyFigure {
-  name: string;
-  role: string;
+// Animation control interface
+export interface AnimationSettings {
+  particleCount: number;
+  animationSpeed: number;
+  enableBlur: boolean;
+  enableBackdropFilter: boolean;
 }
 
-export interface NarrativeSource {
-  id: string;
-  category: 'colonial' | 'indigenous' | 'scholarly' | 'material';
-  title: string;
-  icon: string;
-  perspective: string;
-  text: string;
-  bias: number;
+// Network tooltip interface for SolidarityNetworks
+export interface NetworkTooltip {
+  visible: boolean;
+  x: number;
+  y: number;
+  content: {
+    from: string;
+    to: string;
+    type: string;
+    description: string;
+  };
 }
 
-export interface DecolonizationFactors {
-  intPressure: number;
-  armedResistance: number;
-  civilDisobedience: number;
-  econPressure: number;
-  eliteNegotiation: number;
-}
-
-export interface DecolonizationOutcome {
-  timeline: string;
-  violenceLevel: string;
-  stabilityLevel: string;
-  narrative: string;
-  keyEvents: string[];
-}
-
-export interface DecolonizationPreset {
-  id: string;
-  name: string;
-  factors: DecolonizationFactors;
-  description: string;
-}
-
-export interface NetworkNode {
-  id: string;
-  name: string;
-  type: 'leader' | 'movement' | 'conference';
-  position: { top: string; left: string };
-  details?: NetworkNodeDetails;
-}
-
-export interface NetworkNodeDetails {
-  title: string;
-  content: string;
-  achievements?: string[];
-  philosophy?: string[];
-  connections?: string[];
-  legacy?: string;
-}
-
+// Enhanced connection interface
 export interface NetworkConnection {
   from: string;
   to: string;
   type: 'ideological' | 'conference' | 'support' | 'personal' | 'movement';
   strength: number;
   description: string;
+  visible?: boolean; // For filtering
 }
 
-export interface GlobalSouthMode {
-  id: 'extraction' | 'parallel' | 'counter' | 'decolonization' | 'solidarity';
-  label: string;
-  icon: string;
+// Component props interfaces
+export interface ComponentProps {
+  showPopup: (content: string) => void;
+  isActive?: boolean;
+  animationEnabled?: boolean;
+}
+
+// Help system interface
+export interface HelpContent {
+  id: string;
+  title: string;
+  content: string;
+  tags: string[];
+  relatedModes: GlobalSouthMode['id'][];
+}
+
+// Keyboard navigation interface
+export interface KeyboardControls {
+  modeKeys: Record<string, GlobalSouthMode['id']>;
+  specialKeys: Record<string, () => void>;
+}
+
+// Progress tracking state interface
+export interface ProgressTracker {
+  visited: Set<GlobalSouthMode['id']>;
+  timeSpent: Record<GlobalSouthMode['id'], number>;
+  interactionsCount: Record<GlobalSouthMode['id'], number>;
+  startTime: Date;
 }

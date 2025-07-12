@@ -1,4 +1,4 @@
-/* src/topic/gsh/InfoPopup.module.css */
+/* src/topic/gsh/components/InfoPopup.module.css */
 
 .infoPopup {
   position: fixed;
@@ -12,6 +12,7 @@
   justify-content: center;
   z-index: 1000;
   animation: fadeIn 0.3s ease;
+  backdrop-filter: blur(10px);
 }
 
 .popupContent {
@@ -25,6 +26,8 @@
   overflow-y: auto;
   position: relative;
   animation: slideIn 0.3s ease;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+  margin: 20px;
 }
 
 .popupContent::-webkit-scrollbar {
@@ -39,6 +42,10 @@
 .popupContent::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.2);
   border-radius: 4px;
+}
+
+.popupContent::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
 }
 
 .closePopup {
@@ -56,35 +63,48 @@
   justify-content: center;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .closePopup:hover {
   color: #fff;
   background: rgba(255, 255, 255, 0.1);
   transform: rotate(90deg);
+  border-color: #ff6b6b;
 }
 
-/* Content styles */
+/* Content Styles */
 .popupContent h2 {
   color: #ff6b6b;
   margin-bottom: 20px;
+  font-size: 1.8em;
+  font-weight: 600;
+  background: linear-gradient(135deg, #ff6b6b 0%, #f9ca24 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .popupContent h3 {
   color: #f9ca24;
   margin-top: 24px;
   margin-bottom: 16px;
+  font-size: 1.4em;
+  font-weight: 500;
 }
 
 .popupContent h4 {
   color: #ffb86c;
   margin-top: 20px;
   margin-bottom: 12px;
+  font-size: 1.2em;
+  font-weight: 500;
 }
 
 .popupContent p {
   line-height: 1.6;
   margin-bottom: 16px;
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .popupContent ul {
@@ -92,32 +112,98 @@
   margin-bottom: 16px;
 }
 
+.popupContent ol {
+  margin-left: 20px;
+  margin-bottom: 16px;
+}
+
 .popupContent li {
   margin-bottom: 8px;
   line-height: 1.5;
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .popupContent strong {
   color: #f9ca24;
+  font-weight: 600;
 }
 
+.popupContent em {
+  color: #ff6b6b;
+  font-style: italic;
+}
+
+/* Table Styles */
 .popupContent table {
   width: 100%;
   margin-top: 20px;
+  margin-bottom: 20px;
   border-collapse: collapse;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .popupContent th,
 .popupContent td {
   text-align: left;
-  padding: 10px;
+  padding: 12px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .popupContent th {
+  background: rgba(255, 107, 107, 0.2);
+  color: #fff;
+  font-weight: 600;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+.popupContent td {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.popupContent tr:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Code Blocks */
+.popupContent code {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  color: #f9ca24;
+  font-size: 0.9em;
+}
+
+.popupContent pre {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 16px;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 16px 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.popupContent pre code {
+  background: none;
+  padding: 0;
+  color: #fff;
+}
+
+/* Blockquotes */
+.popupContent blockquote {
+  border-left: 3px solid #ff6b6b;
+  margin: 20px 0;
+  padding-left: 20px;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 107, 107, 0.05);
+  padding: 16px 20px;
+  border-radius: 0 8px 8px 0;
+}
+
+/* Animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -138,9 +224,48 @@
   }
 }
 
+/* Responsive */
 @media (max-width: 768px) {
   .popupContent {
-    margin: 20px;
+    margin: 10px;
     padding: 24px;
+    max-width: none;
+    max-height: 90vh;
+  }
+  
+  .popupContent h2 {
+    font-size: 1.5em;
+  }
+  
+  .popupContent h3 {
+    font-size: 1.2em;
+  }
+  
+  .popupContent h4 {
+    font-size: 1.1em;
+  }
+  
+  .closePopup {
+    top: 15px;
+    right: 15px;
+    width: 32px;
+    height: 32px;
+    font-size: 1.3em;
+  }
+}
+
+@media (max-width: 480px) {
+  .popupContent {
+    margin: 5px;
+    padding: 20px;
+  }
+  
+  .popupContent table {
+    font-size: 0.8em;
+  }
+  
+  .popupContent th,
+  .popupContent td {
+    padding: 8px;
   }
 }

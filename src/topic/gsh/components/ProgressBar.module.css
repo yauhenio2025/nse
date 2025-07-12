@@ -1,4 +1,4 @@
-/* src/topic/gsh/ProgressBar.module.css */
+/* src/topic/gsh/components/ProgressBar.module.css */
 
 .progressBar {
   position: fixed;
@@ -31,6 +31,7 @@
   transition: all 0.3s ease;
   font-size: 1.15em;
   border: 2px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .progressStep::before {
@@ -42,7 +43,8 @@
   background: linear-gradient(135deg, #ff6b6b 0%, #f9ca24 50%, #f0932b 100%);
   opacity: 0;
   transform: scale(0);
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: -1;
 }
 
 .progressStep.completed::before {
@@ -54,21 +56,66 @@
   color: #fff;
   transform: scale(1.1);
   border-color: transparent;
+  box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+}
+
+.progressStep.current {
+  border-color: #f9ca24;
+  color: #f9ca24;
+  box-shadow: 0 0 20px rgba(249, 202, 36, 0.3);
+  animation: pulse-glow 2s ease-in-out infinite;
 }
 
 .progressStep span {
   position: relative;
   z-index: 1;
+  font-weight: 700;
+}
+
+.progressStep:hover {
+  transform: scale(1.05);
+  border-color: #f9ca24;
 }
 
 .progressLabel {
   margin-left: 20px;
   color: rgba(255, 255, 255, 0.7);
   font-weight: 500;
+  font-size: 1.1em;
+  letter-spacing: 0.5px;
 }
 
+/* Connection lines between steps */
+.progressStep:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  width: 28px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-50%);
+  transition: all 0.3s ease;
+}
+
+.progressStep.completed:not(:last-child)::after {
+  background: linear-gradient(90deg, #ff6b6b, #f9ca24);
+  box-shadow: 0 0 10px rgba(255, 107, 107, 0.3);
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(249, 202, 36, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(249, 202, 36, 0.6);
+  }
+}
+
+/* Responsive */
 @media (max-width: 768px) {
   .progressBar {
+    bottom: 20px;
     padding: 20px;
     gap: 20px;
   }
@@ -80,6 +127,33 @@
   }
   
   .progressLabel {
+    font-size: 1em;
+    margin-left: 16px;
+  }
+  
+  .progressStep:not(:last-child)::after {
+    width: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .progressBar {
+    bottom: 15px;
+    padding: 16px;
+    gap: 16px;
+  }
+  
+  .progressStep {
+    width: 36px;
+    height: 36px;
+    font-size: 0.9em;
+  }
+  
+  .progressLabel {
     display: none;
+  }
+  
+  .progressStep:not(:last-child)::after {
+    width: 16px;
   }
 }

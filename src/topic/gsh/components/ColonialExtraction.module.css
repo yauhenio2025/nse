@@ -1,4 +1,4 @@
-/* src/topic/gsh/ColonialExtraction.module.css */
+/* src/topic/gsh/components/ColonialExtraction.module.css */
 
 .extractionVisualizer {
   animation: fadeIn 0.5s ease;
@@ -29,6 +29,7 @@
   background: radial-gradient(ellipse at center, #0f1419 0%, #000 100%);
 }
 
+/* Enhanced Resource Nodes */
 .resourceNode {
   position: absolute;
   width: 80px;
@@ -41,6 +42,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   z-index: 10;
+  backdrop-filter: blur(10px);
 }
 
 .resourceNode::after {
@@ -68,13 +70,16 @@
 .colonyNode {
   background: radial-gradient(circle at 30% 30%, rgba(255, 107, 107, 0.9), rgba(255, 107, 107, 0.6));
   color: #ff6b6b;
+  border: 3px solid rgba(255, 107, 107, 0.8);
 }
 
 .metropoleNode {
   background: radial-gradient(circle at 30% 30%, rgba(74, 144, 226, 0.9), rgba(74, 144, 226, 0.6));
   color: #4a90e2;
+  border: 3px solid rgba(74, 144, 226, 0.8);
 }
 
+/* Flow Container */
 .flowContainer {
   position: absolute;
   top: 0;
@@ -88,13 +93,16 @@
   stroke-width: 3;
   fill: none;
   opacity: 0.7;
+  filter: drop-shadow(0 0 8px rgba(255, 107, 107, 0.6));
 }
 
 .flowParticle {
   filter: blur(1px);
   opacity: 0.8;
+  r: 4;
 }
 
+/* Enhanced Extraction Data Panel */
 .extractionDataPanel {
   position: absolute;
   top: 20px;
@@ -108,6 +116,7 @@
   max-height: 560px;
   overflow-y: auto;
   transition: all 0.3s ease;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
 }
 
 .extractionDataPanel::-webkit-scrollbar {
@@ -127,6 +136,9 @@
 .extractionDataPanel h3 {
   margin-bottom: 20px;
   text-align: center;
+  color: #f9ca24;
+  font-size: 1.2em;
+  font-weight: 600;
 }
 
 .dataSection {
@@ -145,6 +157,7 @@
   font-size: 0.95em;
   text-transform: uppercase;
   letter-spacing: 1px;
+  font-weight: 500;
 }
 
 .dataItem {
@@ -158,82 +171,82 @@
 .dataValue {
   color: #ff6b6b;
   font-weight: 600;
-  font-size: 0.85em;
 }
 
-.nodeName {
-  color: #ff6b6b;
-  margin-bottom: 12px;
-}
-
-.impactText,
-.resistanceText {
-  font-size: 0.85em;
-  color: rgba(255, 255, 255, 0.8);
-  margin-top: 8px;
-}
-
-.resistanceText {
-  color: #f9ca24;
-}
-
-.placeholder {
-  color: rgba(255, 255, 255, 0.6);
-  text-align: center;
-}
-
+/* Enhanced Controls */
 .extractionControls {
-  display: flex;
-  align-items: center;
-  gap: 20px;
   margin-top: 30px;
+  display: flex;
+  gap: 20px;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .timePeriodSelector {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .timePeriodSelector label {
   font-weight: 500;
+  color: #f9ca24;
 }
 
 .timePeriodSelector select {
-  padding: 8px 16px;
-  background: rgba(255, 255, 255, 0.1);
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
   color: white;
+  font-size: 0.9em;
   cursor: pointer;
+  backdrop-filter: blur(10px);
+}
+
+.timePeriodSelector select:focus {
+  outline: none;
+  border-color: #f9ca24;
+  box-shadow: 0 0 0 2px rgba(249, 202, 36, 0.2);
+}
+
+.timePeriodSelector option {
+  background: #1a1a2e;
+  color: white;
 }
 
 .controlBtn {
-  padding: 14px 28px;
+  padding: 12px 24px;
   background: rgba(255, 255, 255, 0.05);
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   color: #fff;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-size: 1.05em;
+  font-size: 1em;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-weight: 500;
 }
 
 .controlBtn:hover {
   background: rgba(255, 255, 255, 0.1);
   transform: translateY(-2px);
   box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+  border-color: #f9ca24;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { 
+    opacity: 0; 
+    transform: translateY(20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
 }
 
 /* Responsive */
@@ -242,5 +255,25 @@
     position: static;
     width: 100%;
     margin-top: 20px;
+    max-height: none;
+  }
+  
+  .mapContainer {
+    height: 400px;
+  }
+  
+  .resourceNode {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5em;
+  }
+  
+  .extractionControls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .timePeriodSelector {
+    justify-content: space-between;
   }
 }

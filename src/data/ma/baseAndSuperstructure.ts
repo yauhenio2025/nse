@@ -12,6 +12,13 @@ export interface BaseMode {
   superstructure: SuperstructureElement[];
 }
 
+export interface DialecticalMotion {
+  thesis: string;
+  antithesis: string;
+  synthesis: string;
+  example: string;
+}
+
 export const baseModes: BaseMode[] = [
   {
     id: 'capitalist-production',
@@ -30,12 +37,12 @@ export const baseModes: BaseMode[] = [
         description: 'Sorting mechanism for class positions'
       },
       {
-        icon: '🏛️',
+        icon: '🛍️',
         title: 'Individualist Ideology',
         description: 'Success/failure as personal responsibility'
       },
       {
-        icon: '💒',
+        icon: '👪',
         title: 'Nuclear Family',
         description: 'Privatized reproduction of labor power'
       },
@@ -47,128 +54,129 @@ export const baseModes: BaseMode[] = [
       {
         icon: '🎨',
         title: 'Commodified Art',
-        description: 'Culture as profitable entertainment'
+        description: 'Culture as investment and status symbol'
       }
     ]
   },
   {
-    id: 'feudal-agriculture',
-    title: 'Feudal Agriculture',
-    icon: '🌾',
-    description: 'Land ownership, serf labor, subsistence + surplus',
+    id: 'feudal-production',
+    title: 'Feudal Production',
+    icon: '🏰',
+    description: 'Land ownership, serf labor, personal bonds',
     superstructure: [
       {
         icon: '👑',
         title: 'Divine Right Monarchy',
-        description: 'God-ordained hierarchy'
+        description: 'King rules by God\'s will, absolute authority'
       },
       {
         icon: '⛪',
         title: 'Catholic Church',
-        description: 'Spiritual justification for material inequality'
+        description: 'Spiritual legitimation of social hierarchy'
       },
       {
-        icon: '⚔️',
+        icon: '🗡️',
         title: 'Chivalric Code',
-        description: 'Warrior ethics for ruling class'
-      },
-      {
-        icon: '🏰',
-        title: 'Manor Law',
-        description: 'Personal domination, not abstract law'
+        description: 'Honor, loyalty, personal service ideals'
       },
       {
         icon: '🎭',
-        title: 'Morality Plays',
-        description: 'Know your place messaging'
+        title: 'Great Chain of Being',
+        description: 'Natural hierarchy from God to peasants'
       },
       {
-        icon: '👨‍👩‍👧‍👦',
-        title: 'Extended Family',
-        description: 'Production and reproduction unit'
-      }
-    ]
-  },
-  {
-    id: 'socialist-planning',
-    title: 'Socialist Planning',
-    icon: '📊',
-    description: 'Collective ownership, planned production',
-    superstructure: [
-      {
-        icon: '🚩',
-        title: 'Workers\' Councils',
-        description: 'Direct democratic planning'
-      },
-      {
-        icon: '📚',
-        title: 'Polytechnic Education',
-        description: 'Combining mental and manual labor'
-      },
-      {
-        icon: '🤝',
-        title: 'Collectivist Ethics',
-        description: 'From each/to each according to...'
+        icon: '📜',
+        title: 'Customary Law',
+        description: 'Tradition and precedent over written law'
       },
       {
         icon: '🏘️',
-        title: 'Communal Living',
-        description: 'Socialized domestic labor'
-      },
-      {
-        icon: '🎨',
-        title: 'Socialist Realism',
-        description: 'Art serving social transformation'
-      },
-      {
-        icon: '⚕️',
-        title: 'Preventive Healthcare',
-        description: 'Health as social responsibility'
+        title: 'Manor System',
+        description: 'Self-sufficient communities under lord\'s control'
       }
     ]
   },
   {
-    id: 'hunter-gatherer',
-    title: 'Hunter-Gatherer',
-    icon: '🏹',
-    description: 'Immediate-return, egalitarian sharing',
+    id: 'socialist-production',
+    title: 'Socialist Production',
+    icon: '🏗️',
+    description: 'Social ownership, planned economy, worker control',
     superstructure: [
       {
-        icon: '🗣️',
-        title: 'Consensus Democracy',
-        description: 'No chiefs, collective decisions'
+        icon: '🏛️',
+        title: 'Democratic Centralism',
+        description: 'Worker participation in governance structures'
+      },
+      {
+        icon: '🎓',
+        title: 'Universal Education',
+        description: 'Free education for all social development'
       },
       {
         icon: '🌍',
-        title: 'Animist Spirituality',
-        description: 'Nature as kin, not resource'
-      },
-      {
-        icon: '🎁',
-        title: 'Gift Economy',
-        description: 'Status through giving, not having'
+        title: 'Internationalism',
+        description: 'Global solidarity over nationalism'
       },
       {
         icon: '👥',
-        title: 'Age-Set Organization',
-        description: 'Horizontal, not hierarchical'
+        title: 'Collective Identity',
+        description: 'Social cooperation over individual competition'
+      },
+      {
+        icon: '🎪',
+        title: 'Socialist Realism',
+        description: 'Art serves social progress and worker consciousness'
+      },
+      {
+        icon: '🏥',
+        title: 'Universal Services',
+        description: 'Healthcare, housing, transport as rights'
+      }
+    ]
+  },
+  {
+    id: 'primitive-communism',
+    title: 'Primitive Communism',
+    icon: '🌿',
+    description: 'Collective ownership, subsistence economy, egalitarian',
+    superstructure: [
+      {
+        icon: '🗣️',
+        title: 'Consensus Decision Making',
+        description: 'Collective discussion without formal hierarchy'
+      },
+      {
+        icon: '🌟',
+        title: 'Animistic Spirituality',
+        description: 'Sacred relationship with natural world'
+      },
+      {
+        icon: '🤝',
+        title: 'Gift Economy',
+        description: 'Reciprocity and sharing without money'
+      },
+      {
+        icon: '⚖️',
+        title: 'Gender Equality',
+        description: 'Complementary roles without dominance'
       },
       {
         icon: '🎵',
         title: 'Oral Traditions',
-        description: 'Collective memory and values'
+        description: 'Knowledge passed through stories and songs'
       },
       {
-        icon: '🏕️',
-        title: 'Nomadic Flexibility',
-        description: 'Move rather than deplete'
+        icon: '🌱',
+        title: 'Ecological Wisdom',
+        description: 'Sustainable relationship with environment'
       }
     ]
   }
 ];
 
-export const dialecticalMotion = {
-  thesis: 'The economic base (forces + relations of production) determines the superstructure (politics, law, culture, ideology).',
+// Add the missing dialecticalMotion export
+export const dialecticalMotion: DialecticalMotion = {
+  thesis: 'The economic base (forces and relations of production) determines the superstructure (politics, law, culture).',
   antithesis: 'The superstructure reinforces and legitimates the base, but can also become a fetter when base develops.',
   synthesis: 'Revolutionary transformation occurs when developing forces of production clash with existing relations, creating new base AND superstructure.',
   example: 'Rising bourgeoisie (new economic force) → Enlightenment ideas (new superstructure) → French Revolution (transformation)'

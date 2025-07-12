@@ -51,6 +51,23 @@ export const ClassConsciousnessLab: React.FC<Props> = ({ onShowPopup }) => {
     onShowPopup(content);
   };
 
+  const getConsciousnessStage = () => {
+    if (consciousnessLevel < 25) return 'False Consciousness';
+    if (consciousnessLevel < 50) return 'Trade Union Consciousness'; 
+    if (consciousnessLevel < 75) return 'Class Consciousness';
+    return 'Revolutionary Consciousness';
+  };
+
+  const getConsciousnessDescription = () => {
+    const descriptions: { [key: string]: string } = {
+      'False Consciousness': 'Believes capitalist ideology. Sees individual solutions to structural problems. Blames self for systemic issues.',
+      'Trade Union Consciousness': 'Recognizes need for collective action on wages/conditions. Still accepts capitalist framework.',
+      'Class Consciousness': 'Understands class position and exploitation. Sees capitalism as the problem, not just individual capitalists.',
+      'Revolutionary Consciousness': 'Recognizes need for fundamental transformation. Class for itself, not just in itself.'
+    };
+    return descriptions[getConsciousnessStage()];
+  };
+
   const analyzeClassConflict = () => {
     if (!selectedClass) {
       alert('Please select a class first!');
@@ -64,9 +81,9 @@ export const ClassConsciousnessLab: React.FC<Props> = ({ onShowPopup }) => {
         <h3>Current Position: {currentClass?.title}</h3>
         <p><strong>Material Interests:</strong></p>
         <ul>
-          {currentClass?.materialInterests.map((interest, idx) => (
+          {currentClass?.materialInterests?.map((interest, idx) => (
             <li key={idx}>{interest}</li>
-          ))}
+          )) || []}
         </ul>
         <p><strong>Consciousness Level:</strong> {consciousnessLevel}%</p>
         <p><strong>Revolutionary Potential:</strong> {
@@ -87,7 +104,7 @@ export const ClassConsciousnessLab: React.FC<Props> = ({ onShowPopup }) => {
 
   return (
     <div className="consciousness-lab">
-      <h2 className="section-title">?? Class Consciousness Laboratory</h2>
+      <h2 className="section-title">🧠 Class Consciousness Laboratory</h2>
       
       <div className="social-positions">
         {classPositions.map((position) => (
@@ -98,11 +115,11 @@ export const ClassConsciousnessLab: React.FC<Props> = ({ onShowPopup }) => {
           >
             <div className="class-icon">{position.icon}</div>
             <h3>{position.title}</h3>
-            <p>{position.description}</p>
+            <p dangerouslySetInnerHTML={{ __html: position.description }} />
             <div className="material-interests">
               <strong>Key Interests:</strong>
               <ul>
-                {position.materialInterests.slice(0, 3).map((interest, idx) => (
+                {(position.materialInterests || []).slice(0, 3).map((interest, idx) => (
                   <li key={idx}>{interest}</li>
                 ))}
               </ul>
@@ -146,10 +163,10 @@ export const ClassConsciousnessLab: React.FC<Props> = ({ onShowPopup }) => {
       
       <div className="lab-controls">
         <button className="control-btn" onClick={analyzeClassConflict}>
-          ?? Analyze Class Conflict
+          ⚔️ Analyze Class Conflict
         </button>
         <button className="control-btn" onClick={resetExperiment}>
-          ?? Reset Experiment
+          🔄 Reset Experiment
         </button>
       </div>
     </div>

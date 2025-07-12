@@ -1,4 +1,4 @@
-/* src/topic/gsh/SolidarityNetworks.module.css */
+/* src/topic/gsh/components/SolidarityNetworks.module.css */
 
 .solidarityNetworks {
   animation: fadeIn 0.5s ease;
@@ -19,6 +19,7 @@
   border-radius: 20px;
   overflow: hidden;
   margin-bottom: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .networkSvg {
@@ -27,9 +28,10 @@
   left: 0;
   width: 100%;
   height: 100%;
-  pointer-events: all;
+  z-index: 1;
 }
 
+/* Network Nodes */
 .networkNode {
   position: absolute;
   width: 90px;
@@ -45,22 +47,9 @@
   font-size: 0.85em;
   text-align: center;
   padding: 10px;
-  backdrop-filter: blur(10px);
-}
-
-.leaderNode {
-  background: radial-gradient(circle at 30% 30%, rgba(155, 89, 182, 0.9), rgba(155, 89, 182, 0.6));
-  border: 3px solid #9b59b6;
-}
-
-.movementNode {
-  background: radial-gradient(circle at 30% 30%, rgba(46, 213, 115, 0.9), rgba(46, 213, 115, 0.6));
-  border: 3px solid #2ed573;
-}
-
-.conferenceNode {
-  background: radial-gradient(circle at 30% 30%, rgba(241, 196, 15, 0.9), rgba(241, 196, 15, 0.6));
-  border: 3px solid #f1c40f;
+  backdrop-filter: blur(15px);
+  font-weight: 600;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
 }
 
 .networkNode:hover {
@@ -69,12 +58,52 @@
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
 }
 
+.leaderNode {
+  background: radial-gradient(circle at 30% 30%, rgba(155, 89, 182, 0.9), rgba(155, 89, 182, 0.6));
+  border: 3px solid #9b59b6;
+  color: #fff;
+}
+
+.leaderNode:hover {
+  border-color: #d63384;
+  box-shadow: 0 15px 40px rgba(155, 89, 182, 0.5);
+}
+
+.movementNode {
+  background: radial-gradient(circle at 30% 30%, rgba(46, 213, 115, 0.9), rgba(46, 213, 115, 0.6));
+  border: 3px solid #2ed573;
+  color: #fff;
+}
+
+.movementNode:hover {
+  border-color: #20c997;
+  box-shadow: 0 15px 40px rgba(46, 213, 115, 0.5);
+}
+
+.conferenceNode {
+  background: radial-gradient(circle at 30% 30%, rgba(241, 196, 15, 0.9), rgba(241, 196, 15, 0.6));
+  border: 3px solid #f1c40f;
+  color: #fff;
+}
+
+.conferenceNode:hover {
+  border-color: #ffc107;
+  box-shadow: 0 15px 40px rgba(241, 196, 15, 0.5);
+}
+
+/* Network Connections */
 .networkConnection {
   stroke: rgba(255, 255, 255, 0.2);
   stroke-width: 2;
   fill: none;
   transition: all 0.3s ease;
   cursor: pointer;
+}
+
+.networkConnection:hover {
+  stroke-width: 4;
+  stroke: rgba(255, 255, 255, 0.8);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
 }
 
 .networkConnection.ideological {
@@ -84,6 +113,7 @@
 
 .networkConnection.conference {
   stroke: rgba(241, 196, 15, 0.5);
+  stroke-width: 3;
 }
 
 .networkConnection.support {
@@ -98,30 +128,10 @@
 
 .networkConnection.movement {
   stroke: rgba(74, 144, 226, 0.5);
-  stroke-width: 2.5;
-}
-
-.networkConnection:hover {
   stroke-width: 4;
-  stroke: rgba(255, 255, 255, 0.8);
 }
 
-.connectionTooltip {
-  background: rgba(0, 0, 0, 0.9);
-  color: white;
-  padding: 10px;
-  border-radius: 8px;
-  font-size: 0.9em;
-  z-index: 1000;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  max-width: 200px;
-  pointer-events: none;
-}
-
-.connectionType {
-  color: #f9ca24;
-}
-
+/* Network Controls */
 .networkControls {
   display: flex;
   gap: 16px;
@@ -138,18 +148,90 @@
   cursor: pointer;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
+  font-weight: 500;
 }
 
 .filterBtn:hover {
   background: rgba(255, 255, 255, 0.1);
   border-color: #f9ca24;
   transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(249, 202, 36, 0.2);
 }
 
 .filterBtn.active {
-  background: rgba(255, 184, 108, 0.2);
-  border-color: #ffb86c;
+  background: rgba(249, 202, 36, 0.2);
+  border-color: #f9ca24;
+  color: #f9ca24;
+  box-shadow: 0 5px 20px rgba(249, 202, 36, 0.3);
 }
+
+/* Connection Tooltip */
+.connectionTooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.9em;
+  z-index: 1000;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 250px;
+  pointer-events: none;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.connectionTooltip strong {
+  color: #f9ca24;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.connectionTooltip .connectionType {
+  color: #ff6b6b;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+/* Legend */
+.networkLegend {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 0.9em;
+}
+
+.networkLegend h4 {
+  color: #f9ca24;
+  margin-bottom: 10px;
+  font-size: 1em;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.legendColor {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.legendColor.leader { background: #9b59b6; }
+.legendColor.movement { background: #2ed573; }
+.legendColor.conference { background: #f1c40f; }
 
 @keyframes fadeIn {
   from {
@@ -162,6 +244,7 @@
   }
 }
 
+/* Responsive */
 @media (max-width: 768px) {
   .networkCanvas {
     height: 500px;
@@ -171,5 +254,6395 @@
     width: 70px;
     height: 70px;
     font-size: 0.75em;
+    padding: 8px;
+  }
+  
+  .networkControls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filterBtn {
+    padding: 10px 20px;
+  }
+  
+  .networkLegend {
+    position: static;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .networkCanvas {
+    height: 400px;
+  }
+  
+  .networkNode {
+    width: 60px;
+    height: 60px;
+    font-size: 0.7em;
+  }
+  
+  .connectionTooltip {
+    max-width: 200px;
+    font-size: 0.8em;
+  }
+}/* src/topic/gsh/components/SolidarityNetworks.module.css */
+
+.solidarityNetworks {
+  animation: fadeIn 0.5s ease;
+}
+
+.sectionTitle {
+  font-size: 2em;
+  margin-bottom: 36px;
+  color: #fff;
+  text-align: center;
+  font-weight: 300;
+}
+
+.networkCanvas {
+  position: relative;
+  height: 650px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7));
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.networkSvg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Network Nodes */
+.networkNode {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  font-size: 0.85em;
+  text-align: center;
+  padding: 10px;
+  backdrop-filter: blur(15px);
+  font-weight: 600;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.networkNode:hover {
+  transform: scale(1.15);
+  z-index: 20;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+.leaderNode {
+  background: radial-gradient(circle at 30% 30%, rgba(155, 89, 182, 0.9), rgba(155, 89, 182, 0.6));
+  border: 3px solid #9b59b6;
+  color: #fff;
+}
+
+.leaderNode:hover {
+  border-color: #d63384;
+  box-shadow: 0 15px 40px rgba(155, 89, 182, 0.5);
+}
+
+.movementNode {
+  background: radial-gradient(circle at 30% 30%, rgba(46, 213, 115, 0.9), rgba(46, 213, 115, 0.6));
+  border: 3px solid #2ed573;
+  color: #fff;
+}
+
+.movementNode:hover {
+  border-color: #20c997;
+  box-shadow: 0 15px 40px rgba(46, 213, 115, 0.5);
+}
+
+.conferenceNode {
+  background: radial-gradient(circle at 30% 30%, rgba(241, 196, 15, 0.9), rgba(241, 196, 15, 0.6));
+  border: 3px solid #f1c40f;
+  color: #fff;
+}
+
+.conferenceNode:hover {
+  border-color: #ffc107;
+  box-shadow: 0 15px 40px rgba(241, 196, 15, 0.5);
+}
+
+/* Network Connections */
+.networkConnection {
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 2;
+  fill: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.networkConnection:hover {
+  stroke-width: 4;
+  stroke: rgba(255, 255, 255, 0.8);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+}
+
+.networkConnection.ideological {
+  stroke: rgba(155, 89, 182, 0.5);
+  stroke-dasharray: 5,5;
+}
+
+.networkConnection.conference {
+  stroke: rgba(241, 196, 15, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.support {
+  stroke: rgba(46, 213, 115, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.personal {
+  stroke: rgba(255, 107, 107, 0.5);
+  stroke-dasharray: 2,2;
+}
+
+.networkConnection.movement {
+  stroke: rgba(74, 144, 226, 0.5);
+  stroke-width: 4;
+}
+
+/* Network Controls */
+.networkControls {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  font-weight: 500;
+}
+
+.filterBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #f9ca24;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(249, 202, 36, 0.2);
+}
+
+.filterBtn.active {
+  background: rgba(249, 202, 36, 0.2);
+  border-color: #f9ca24;
+  color: #f9ca24;
+  box-shadow: 0 5px 20px rgba(249, 202, 36, 0.3);
+}
+
+/* Connection Tooltip */
+.connectionTooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.9em;
+  z-index: 1000;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 250px;
+  pointer-events: none;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.connectionTooltip strong {
+  color: #f9ca24;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.connectionTooltip .connectionType {
+  color: #ff6b6b;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+/* Legend */
+.networkLegend {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 0.9em;
+}
+
+.networkLegend h4 {
+  color: #f9ca24;
+  margin-bottom: 10px;
+  font-size: 1em;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.legendColor {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.legendColor.leader { background: #9b59b6; }
+.legendColor.movement { background: #2ed573; }
+.legendColor.conference { background: #f1c40f; }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .networkCanvas {
+    height: 500px;
+  }
+  
+  .networkNode {
+    width: 70px;
+    height: 70px;
+    font-size: 0.75em;
+    padding: 8px;
+  }
+  
+  .networkControls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filterBtn {
+    padding: 10px 20px;
+  }
+  
+  .networkLegend {
+    position: static;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .networkCanvas {
+    height: 400px;
+  }
+  
+  .networkNode {
+    width: 60px;
+    height: 60px;
+    font-size: 0.7em;
+  }
+  
+  .connectionTooltip {
+    max-width: 200px;
+    font-size: 0.8em;
+  }
+}/* src/topic/gsh/components/SolidarityNetworks.module.css */
+
+.solidarityNetworks {
+  animation: fadeIn 0.5s ease;
+}
+
+.sectionTitle {
+  font-size: 2em;
+  margin-bottom: 36px;
+  color: #fff;
+  text-align: center;
+  font-weight: 300;
+}
+
+.networkCanvas {
+  position: relative;
+  height: 650px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7));
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.networkSvg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Network Nodes */
+.networkNode {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  font-size: 0.85em;
+  text-align: center;
+  padding: 10px;
+  backdrop-filter: blur(15px);
+  font-weight: 600;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.networkNode:hover {
+  transform: scale(1.15);
+  z-index: 20;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+.leaderNode {
+  background: radial-gradient(circle at 30% 30%, rgba(155, 89, 182, 0.9), rgba(155, 89, 182, 0.6));
+  border: 3px solid #9b59b6;
+  color: #fff;
+}
+
+.leaderNode:hover {
+  border-color: #d63384;
+  box-shadow: 0 15px 40px rgba(155, 89, 182, 0.5);
+}
+
+.movementNode {
+  background: radial-gradient(circle at 30% 30%, rgba(46, 213, 115, 0.9), rgba(46, 213, 115, 0.6));
+  border: 3px solid #2ed573;
+  color: #fff;
+}
+
+.movementNode:hover {
+  border-color: #20c997;
+  box-shadow: 0 15px 40px rgba(46, 213, 115, 0.5);
+}
+
+.conferenceNode {
+  background: radial-gradient(circle at 30% 30%, rgba(241, 196, 15, 0.9), rgba(241, 196, 15, 0.6));
+  border: 3px solid #f1c40f;
+  color: #fff;
+}
+
+.conferenceNode:hover {
+  border-color: #ffc107;
+  box-shadow: 0 15px 40px rgba(241, 196, 15, 0.5);
+}
+
+/* Network Connections */
+.networkConnection {
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 2;
+  fill: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.networkConnection:hover {
+  stroke-width: 4;
+  stroke: rgba(255, 255, 255, 0.8);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+}
+
+.networkConnection.ideological {
+  stroke: rgba(155, 89, 182, 0.5);
+  stroke-dasharray: 5,5;
+}
+
+.networkConnection.conference {
+  stroke: rgba(241, 196, 15, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.support {
+  stroke: rgba(46, 213, 115, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.personal {
+  stroke: rgba(255, 107, 107, 0.5);
+  stroke-dasharray: 2,2;
+}
+
+.networkConnection.movement {
+  stroke: rgba(74, 144, 226, 0.5);
+  stroke-width: 4;
+}
+
+/* Network Controls */
+.networkControls {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  font-weight: 500;
+}
+
+.filterBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #f9ca24;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(249, 202, 36, 0.2);
+}
+
+.filterBtn.active {
+  background: rgba(249, 202, 36, 0.2);
+  border-color: #f9ca24;
+  color: #f9ca24;
+  box-shadow: 0 5px 20px rgba(249, 202, 36, 0.3);
+}
+
+/* Connection Tooltip */
+.connectionTooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.9em;
+  z-index: 1000;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 250px;
+  pointer-events: none;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.connectionTooltip strong {
+  color: #f9ca24;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.connectionTooltip .connectionType {
+  color: #ff6b6b;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+/* Legend */
+.networkLegend {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 0.9em;
+}
+
+.networkLegend h4 {
+  color: #f9ca24;
+  margin-bottom: 10px;
+  font-size: 1em;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.legendColor {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.legendColor.leader { background: #9b59b6; }
+.legendColor.movement { background: #2ed573; }
+.legendColor.conference { background: #f1c40f; }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .networkCanvas {
+    height: 500px;
+  }
+  
+  .networkNode {
+    width: 70px;
+    height: 70px;
+    font-size: 0.75em;
+    padding: 8px;
+  }
+  
+  .networkControls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filterBtn {
+    padding: 10px 20px;
+  }
+  
+  .networkLegend {
+    position: static;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .networkCanvas {
+    height: 400px;
+  }
+  
+  .networkNode {
+    width: 60px;
+    height: 60px;
+    font-size: 0.7em;
+  }
+  
+  .connectionTooltip {
+    max-width: 200px;
+    font-size: 0.8em;
+  }
+}/* src/topic/gsh/components/SolidarityNetworks.module.css */
+
+.solidarityNetworks {
+  animation: fadeIn 0.5s ease;
+}
+
+.sectionTitle {
+  font-size: 2em;
+  margin-bottom: 36px;
+  color: #fff;
+  text-align: center;
+  font-weight: 300;
+}
+
+.networkCanvas {
+  position: relative;
+  height: 650px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7));
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.networkSvg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Network Nodes */
+.networkNode {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  font-size: 0.85em;
+  text-align: center;
+  padding: 10px;
+  backdrop-filter: blur(15px);
+  font-weight: 600;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.networkNode:hover {
+  transform: scale(1.15);
+  z-index: 20;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+.leaderNode {
+  background: radial-gradient(circle at 30% 30%, rgba(155, 89, 182, 0.9), rgba(155, 89, 182, 0.6));
+  border: 3px solid #9b59b6;
+  color: #fff;
+}
+
+.leaderNode:hover {
+  border-color: #d63384;
+  box-shadow: 0 15px 40px rgba(155, 89, 182, 0.5);
+}
+
+.movementNode {
+  background: radial-gradient(circle at 30% 30%, rgba(46, 213, 115, 0.9), rgba(46, 213, 115, 0.6));
+  border: 3px solid #2ed573;
+  color: #fff;
+}
+
+.movementNode:hover {
+  border-color: #20c997;
+  box-shadow: 0 15px 40px rgba(46, 213, 115, 0.5);
+}
+
+.conferenceNode {
+  background: radial-gradient(circle at 30% 30%, rgba(241, 196, 15, 0.9), rgba(241, 196, 15, 0.6));
+  border: 3px solid #f1c40f;
+  color: #fff;
+}
+
+.conferenceNode:hover {
+  border-color: #ffc107;
+  box-shadow: 0 15px 40px rgba(241, 196, 15, 0.5);
+}
+
+/* Network Connections */
+.networkConnection {
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 2;
+  fill: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.networkConnection:hover {
+  stroke-width: 4;
+  stroke: rgba(255, 255, 255, 0.8);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+}
+
+.networkConnection.ideological {
+  stroke: rgba(155, 89, 182, 0.5);
+  stroke-dasharray: 5,5;
+}
+
+.networkConnection.conference {
+  stroke: rgba(241, 196, 15, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.support {
+  stroke: rgba(46, 213, 115, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.personal {
+  stroke: rgba(255, 107, 107, 0.5);
+  stroke-dasharray: 2,2;
+}
+
+.networkConnection.movement {
+  stroke: rgba(74, 144, 226, 0.5);
+  stroke-width: 4;
+}
+
+/* Network Controls */
+.networkControls {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  font-weight: 500;
+}
+
+.filterBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #f9ca24;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(249, 202, 36, 0.2);
+}
+
+.filterBtn.active {
+  background: rgba(249, 202, 36, 0.2);
+  border-color: #f9ca24;
+  color: #f9ca24;
+  box-shadow: 0 5px 20px rgba(249, 202, 36, 0.3);
+}
+
+/* Connection Tooltip */
+.connectionTooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.9em;
+  z-index: 1000;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 250px;
+  pointer-events: none;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.connectionTooltip strong {
+  color: #f9ca24;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.connectionTooltip .connectionType {
+  color: #ff6b6b;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+/* Legend */
+.networkLegend {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 0.9em;
+}
+
+.networkLegend h4 {
+  color: #f9ca24;
+  margin-bottom: 10px;
+  font-size: 1em;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.legendColor {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.legendColor.leader { background: #9b59b6; }
+.legendColor.movement { background: #2ed573; }
+.legendColor.conference { background: #f1c40f; }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .networkCanvas {
+    height: 500px;
+  }
+  
+  .networkNode {
+    width: 70px;
+    height: 70px;
+    font-size: 0.75em;
+    padding: 8px;
+  }
+  
+  .networkControls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filterBtn {
+    padding: 10px 20px;
+  }
+  
+  .networkLegend {
+    position: static;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .networkCanvas {
+    height: 400px;
+  }
+  
+  .networkNode {
+    width: 60px;
+    height: 60px;
+    font-size: 0.7em;
+  }
+  
+  .connectionTooltip {
+    max-width: 200px;
+    font-size: 0.8em;
+  }
+}/* src/topic/gsh/components/SolidarityNetworks.module.css */
+
+.solidarityNetworks {
+  animation: fadeIn 0.5s ease;
+}
+
+.sectionTitle {
+  font-size: 2em;
+  margin-bottom: 36px;
+  color: #fff;
+  text-align: center;
+  font-weight: 300;
+}
+
+.networkCanvas {
+  position: relative;
+  height: 650px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7));
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.networkSvg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Network Nodes */
+.networkNode {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  font-size: 0.85em;
+  text-align: center;
+  padding: 10px;
+  backdrop-filter: blur(15px);
+  font-weight: 600;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.networkNode:hover {
+  transform: scale(1.15);
+  z-index: 20;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+.leaderNode {
+  background: radial-gradient(circle at 30% 30%, rgba(155, 89, 182, 0.9), rgba(155, 89, 182, 0.6));
+  border: 3px solid #9b59b6;
+  color: #fff;
+}
+
+.leaderNode:hover {
+  border-color: #d63384;
+  box-shadow: 0 15px 40px rgba(155, 89, 182, 0.5);
+}
+
+.movementNode {
+  background: radial-gradient(circle at 30% 30%, rgba(46, 213, 115, 0.9), rgba(46, 213, 115, 0.6));
+  border: 3px solid #2ed573;
+  color: #fff;
+}
+
+.movementNode:hover {
+  border-color: #20c997;
+  box-shadow: 0 15px 40px rgba(46, 213, 115, 0.5);
+}
+
+.conferenceNode {
+  background: radial-gradient(circle at 30% 30%, rgba(241, 196, 15, 0.9), rgba(241, 196, 15, 0.6));
+  border: 3px solid #f1c40f;
+  color: #fff;
+}
+
+.conferenceNode:hover {
+  border-color: #ffc107;
+  box-shadow: 0 15px 40px rgba(241, 196, 15, 0.5);
+}
+
+/* Network Connections */
+.networkConnection {
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 2;
+  fill: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.networkConnection:hover {
+  stroke-width: 4;
+  stroke: rgba(255, 255, 255, 0.8);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+}
+
+.networkConnection.ideological {
+  stroke: rgba(155, 89, 182, 0.5);
+  stroke-dasharray: 5,5;
+}
+
+.networkConnection.conference {
+  stroke: rgba(241, 196, 15, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.support {
+  stroke: rgba(46, 213, 115, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.personal {
+  stroke: rgba(255, 107, 107, 0.5);
+  stroke-dasharray: 2,2;
+}
+
+.networkConnection.movement {
+  stroke: rgba(74, 144, 226, 0.5);
+  stroke-width: 4;
+}
+
+/* Network Controls */
+.networkControls {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  font-weight: 500;
+}
+
+.filterBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #f9ca24;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(249, 202, 36, 0.2);
+}
+
+.filterBtn.active {
+  background: rgba(249, 202, 36, 0.2);
+  border-color: #f9ca24;
+  color: #f9ca24;
+  box-shadow: 0 5px 20px rgba(249, 202, 36, 0.3);
+}
+
+/* Connection Tooltip */
+.connectionTooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.9em;
+  z-index: 1000;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 250px;
+  pointer-events: none;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.connectionTooltip strong {
+  color: #f9ca24;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.connectionTooltip .connectionType {
+  color: #ff6b6b;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+/* Legend */
+.networkLegend {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 0.9em;
+}
+
+.networkLegend h4 {
+  color: #f9ca24;
+  margin-bottom: 10px;
+  font-size: 1em;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.legendColor {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.legendColor.leader { background: #9b59b6; }
+.legendColor.movement { background: #2ed573; }
+.legendColor.conference { background: #f1c40f; }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .networkCanvas {
+    height: 500px;
+  }
+  
+  .networkNode {
+    width: 70px;
+    height: 70px;
+    font-size: 0.75em;
+    padding: 8px;
+  }
+  
+  .networkControls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filterBtn {
+    padding: 10px 20px;
+  }
+  
+  .networkLegend {
+    position: static;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .networkCanvas {
+    height: 400px;
+  }
+  
+  .networkNode {
+    width: 60px;
+    height: 60px;
+    font-size: 0.7em;
+  }
+  
+  .connectionTooltip {
+    max-width: 200px;
+    font-size: 0.8em;
+  }
+}/* src/topic/gsh/components/SolidarityNetworks.module.css */
+
+.solidarityNetworks {
+  animation: fadeIn 0.5s ease;
+}
+
+.sectionTitle {
+  font-size: 2em;
+  margin-bottom: 36px;
+  color: #fff;
+  text-align: center;
+  font-weight: 300;
+}
+
+.networkCanvas {
+  position: relative;
+  height: 650px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7));
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.networkSvg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Network Nodes */
+.networkNode {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  font-size: 0.85em;
+  text-align: center;
+  padding: 10px;
+  backdrop-filter: blur(15px);
+  font-weight: 600;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.networkNode:hover {
+  transform: scale(1.15);
+  z-index: 20;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+.leaderNode {
+  background: radial-gradient(circle at 30% 30%, rgba(155, 89, 182, 0.9), rgba(155, 89, 182, 0.6));
+  border: 3px solid #9b59b6;
+  color: #fff;
+}
+
+.leaderNode:hover {
+  border-color: #d63384;
+  box-shadow: 0 15px 40px rgba(155, 89, 182, 0.5);
+}
+
+.movementNode {
+  background: radial-gradient(circle at 30% 30%, rgba(46, 213, 115, 0.9), rgba(46, 213, 115, 0.6));
+  border: 3px solid #2ed573;
+  color: #fff;
+}
+
+.movementNode:hover {
+  border-color: #20c997;
+  box-shadow: 0 15px 40px rgba(46, 213, 115, 0.5);
+}
+
+.conferenceNode {
+  background: radial-gradient(circle at 30% 30%, rgba(241, 196, 15, 0.9), rgba(241, 196, 15, 0.6));
+  border: 3px solid #f1c40f;
+  color: #fff;
+}
+
+.conferenceNode:hover {
+  border-color: #ffc107;
+  box-shadow: 0 15px 40px rgba(241, 196, 15, 0.5);
+}
+
+/* Network Connections */
+.networkConnection {
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 2;
+  fill: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.networkConnection:hover {
+  stroke-width: 4;
+  stroke: rgba(255, 255, 255, 0.8);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+}
+
+.networkConnection.ideological {
+  stroke: rgba(155, 89, 182, 0.5);
+  stroke-dasharray: 5,5;
+}
+
+.networkConnection.conference {
+  stroke: rgba(241, 196, 15, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.support {
+  stroke: rgba(46, 213, 115, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.personal {
+  stroke: rgba(255, 107, 107, 0.5);
+  stroke-dasharray: 2,2;
+}
+
+.networkConnection.movement {
+  stroke: rgba(74, 144, 226, 0.5);
+  stroke-width: 4;
+}
+
+/* Network Controls */
+.networkControls {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  font-weight: 500;
+}
+
+.filterBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #f9ca24;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(249, 202, 36, 0.2);
+}
+
+.filterBtn.active {
+  background: rgba(249, 202, 36, 0.2);
+  border-color: #f9ca24;
+  color: #f9ca24;
+  box-shadow: 0 5px 20px rgba(249, 202, 36, 0.3);
+}
+
+/* Connection Tooltip */
+.connectionTooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.9em;
+  z-index: 1000;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 250px;
+  pointer-events: none;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.connectionTooltip strong {
+  color: #f9ca24;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.connectionTooltip .connectionType {
+  color: #ff6b6b;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+/* Legend */
+.networkLegend {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 0.9em;
+}
+
+.networkLegend h4 {
+  color: #f9ca24;
+  margin-bottom: 10px;
+  font-size: 1em;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.legendColor {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.legendColor.leader { background: #9b59b6; }
+.legendColor.movement { background: #2ed573; }
+.legendColor.conference { background: #f1c40f; }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .networkCanvas {
+    height: 500px;
+  }
+  
+  .networkNode {
+    width: 70px;
+    height: 70px;
+    font-size: 0.75em;
+    padding: 8px;
+  }
+  
+  .networkControls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filterBtn {
+    padding: 10px 20px;
+  }
+  
+  .networkLegend {
+    position: static;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .networkCanvas {
+    height: 400px;
+  }
+  
+  .networkNode {
+    width: 60px;
+    height: 60px;
+    font-size: 0.7em;
+  }
+  
+  .connectionTooltip {
+    max-width: 200px;
+    font-size: 0.8em;
+  }
+}/* src/topic/gsh/components/SolidarityNetworks.module.css */
+
+.solidarityNetworks {
+  animation: fadeIn 0.5s ease;
+}
+
+.sectionTitle {
+  font-size: 2em;
+  margin-bottom: 36px;
+  color: #fff;
+  text-align: center;
+  font-weight: 300;
+}
+
+.networkCanvas {
+  position: relative;
+  height: 650px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7));
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.networkSvg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Network Nodes */
+.networkNode {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  font-size: 0.85em;
+  text-align: center;
+  padding: 10px;
+  backdrop-filter: blur(15px);
+  font-weight: 600;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.networkNode:hover {
+  transform: scale(1.15);
+  z-index: 20;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+.leaderNode {
+  background: radial-gradient(circle at 30% 30%, rgba(155, 89, 182, 0.9), rgba(155, 89, 182, 0.6));
+  border: 3px solid #9b59b6;
+  color: #fff;
+}
+
+.leaderNode:hover {
+  border-color: #d63384;
+  box-shadow: 0 15px 40px rgba(155, 89, 182, 0.5);
+}
+
+.movementNode {
+  background: radial-gradient(circle at 30% 30%, rgba(46, 213, 115, 0.9), rgba(46, 213, 115, 0.6));
+  border: 3px solid #2ed573;
+  color: #fff;
+}
+
+.movementNode:hover {
+  border-color: #20c997;
+  box-shadow: 0 15px 40px rgba(46, 213, 115, 0.5);
+}
+
+.conferenceNode {
+  background: radial-gradient(circle at 30% 30%, rgba(241, 196, 15, 0.9), rgba(241, 196, 15, 0.6));
+  border: 3px solid #f1c40f;
+  color: #fff;
+}
+
+.conferenceNode:hover {
+  border-color: #ffc107;
+  box-shadow: 0 15px 40px rgba(241, 196, 15, 0.5);
+}
+
+/* Network Connections */
+.networkConnection {
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 2;
+  fill: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.networkConnection:hover {
+  stroke-width: 4;
+  stroke: rgba(255, 255, 255, 0.8);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+}
+
+.networkConnection.ideological {
+  stroke: rgba(155, 89, 182, 0.5);
+  stroke-dasharray: 5,5;
+}
+
+.networkConnection.conference {
+  stroke: rgba(241, 196, 15, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.support {
+  stroke: rgba(46, 213, 115, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.personal {
+  stroke: rgba(255, 107, 107, 0.5);
+  stroke-dasharray: 2,2;
+}
+
+.networkConnection.movement {
+  stroke: rgba(74, 144, 226, 0.5);
+  stroke-width: 4;
+}
+
+/* Network Controls */
+.networkControls {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  font-weight: 500;
+}
+
+.filterBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #f9ca24;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(249, 202, 36, 0.2);
+}
+
+.filterBtn.active {
+  background: rgba(249, 202, 36, 0.2);
+  border-color: #f9ca24;
+  color: #f9ca24;
+  box-shadow: 0 5px 20px rgba(249, 202, 36, 0.3);
+}
+
+/* Connection Tooltip */
+.connectionTooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.9em;
+  z-index: 1000;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 250px;
+  pointer-events: none;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.connectionTooltip strong {
+  color: #f9ca24;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.connectionTooltip .connectionType {
+  color: #ff6b6b;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+/* Legend */
+.networkLegend {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 0.9em;
+}
+
+.networkLegend h4 {
+  color: #f9ca24;
+  margin-bottom: 10px;
+  font-size: 1em;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.legendColor {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.legendColor.leader { background: #9b59b6; }
+.legendColor.movement { background: #2ed573; }
+.legendColor.conference { background: #f1c40f; }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .networkCanvas {
+    height: 500px;
+  }
+  
+  .networkNode {
+    width: 70px;
+    height: 70px;
+    font-size: 0.75em;
+    padding: 8px;
+  }
+  
+  .networkControls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filterBtn {
+    padding: 10px 20px;
+  }
+  
+  .networkLegend {
+    position: static;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .networkCanvas {
+    height: 400px;
+  }
+  
+  .networkNode {
+    width: 60px;
+    height: 60px;
+    font-size: 0.7em;
+  }
+  
+  .connectionTooltip {
+    max-width: 200px;
+    font-size: 0.8em;
+  }
+}/* src/topic/gsh/components/SolidarityNetworks.module.css */
+
+.solidarityNetworks {
+  animation: fadeIn 0.5s ease;
+}
+
+.sectionTitle {
+  font-size: 2em;
+  margin-bottom: 36px;
+  color: #fff;
+  text-align: center;
+  font-weight: 300;
+}
+
+.networkCanvas {
+  position: relative;
+  height: 650px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7));
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.networkSvg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Network Nodes */
+.networkNode {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  font-size: 0.85em;
+  text-align: center;
+  padding: 10px;
+  backdrop-filter: blur(15px);
+  font-weight: 600;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.networkNode:hover {
+  transform: scale(1.15);
+  z-index: 20;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+.leaderNode {
+  background: radial-gradient(circle at 30% 30%, rgba(155, 89, 182, 0.9), rgba(155, 89, 182, 0.6));
+  border: 3px solid #9b59b6;
+  color: #fff;
+}
+
+.leaderNode:hover {
+  border-color: #d63384;
+  box-shadow: 0 15px 40px rgba(155, 89, 182, 0.5);
+}
+
+.movementNode {
+  background: radial-gradient(circle at 30% 30%, rgba(46, 213, 115, 0.9), rgba(46, 213, 115, 0.6));
+  border: 3px solid #2ed573;
+  color: #fff;
+}
+
+.movementNode:hover {
+  border-color: #20c997;
+  box-shadow: 0 15px 40px rgba(46, 213, 115, 0.5);
+}
+
+.conferenceNode {
+  background: radial-gradient(circle at 30% 30%, rgba(241, 196, 15, 0.9), rgba(241, 196, 15, 0.6));
+  border: 3px solid #f1c40f;
+  color: #fff;
+}
+
+.conferenceNode:hover {
+  border-color: #ffc107;
+  box-shadow: 0 15px 40px rgba(241, 196, 15, 0.5);
+}
+
+/* Network Connections */
+.networkConnection {
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 2;
+  fill: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.networkConnection:hover {
+  stroke-width: 4;
+  stroke: rgba(255, 255, 255, 0.8);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+}
+
+.networkConnection.ideological {
+  stroke: rgba(155, 89, 182, 0.5);
+  stroke-dasharray: 5,5;
+}
+
+.networkConnection.conference {
+  stroke: rgba(241, 196, 15, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.support {
+  stroke: rgba(46, 213, 115, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.personal {
+  stroke: rgba(255, 107, 107, 0.5);
+  stroke-dasharray: 2,2;
+}
+
+.networkConnection.movement {
+  stroke: rgba(74, 144, 226, 0.5);
+  stroke-width: 4;
+}
+
+/* Network Controls */
+.networkControls {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  font-weight: 500;
+}
+
+.filterBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #f9ca24;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(249, 202, 36, 0.2);
+}
+
+.filterBtn.active {
+  background: rgba(249, 202, 36, 0.2);
+  border-color: #f9ca24;
+  color: #f9ca24;
+  box-shadow: 0 5px 20px rgba(249, 202, 36, 0.3);
+}
+
+/* Connection Tooltip */
+.connectionTooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.9em;
+  z-index: 1000;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 250px;
+  pointer-events: none;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.connectionTooltip strong {
+  color: #f9ca24;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.connectionTooltip .connectionType {
+  color: #ff6b6b;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+/* Legend */
+.networkLegend {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 0.9em;
+}
+
+.networkLegend h4 {
+  color: #f9ca24;
+  margin-bottom: 10px;
+  font-size: 1em;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.legendColor {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.legendColor.leader { background: #9b59b6; }
+.legendColor.movement { background: #2ed573; }
+.legendColor.conference { background: #f1c40f; }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .networkCanvas {
+    height: 500px;
+  }
+  
+  .networkNode {
+    width: 70px;
+    height: 70px;
+    font-size: 0.75em;
+    padding: 8px;
+  }
+  
+  .networkControls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filterBtn {
+    padding: 10px 20px;
+  }
+  
+  .networkLegend {
+    position: static;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .networkCanvas {
+    height: 400px;
+  }
+  
+  .networkNode {
+    width: 60px;
+    height: 60px;
+    font-size: 0.7em;
+  }
+  
+  .connectionTooltip {
+    max-width: 200px;
+    font-size: 0.8em;
+  }
+}/* src/topic/gsh/components/SolidarityNetworks.module.css */
+
+.solidarityNetworks {
+  animation: fadeIn 0.5s ease;
+}
+
+.sectionTitle {
+  font-size: 2em;
+  margin-bottom: 36px;
+  color: #fff;
+  text-align: center;
+  font-weight: 300;
+}
+
+.networkCanvas {
+  position: relative;
+  height: 650px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7));
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.networkSvg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Network Nodes */
+.networkNode {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  font-size: 0.85em;
+  text-align: center;
+  padding: 10px;
+  backdrop-filter: blur(15px);
+  font-weight: 600;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.networkNode:hover {
+  transform: scale(1.15);
+  z-index: 20;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+.leaderNode {
+  background: radial-gradient(circle at 30% 30%, rgba(155, 89, 182, 0.9), rgba(155, 89, 182, 0.6));
+  border: 3px solid #9b59b6;
+  color: #fff;
+}
+
+.leaderNode:hover {
+  border-color: #d63384;
+  box-shadow: 0 15px 40px rgba(155, 89, 182, 0.5);
+}
+
+.movementNode {
+  background: radial-gradient(circle at 30% 30%, rgba(46, 213, 115, 0.9), rgba(46, 213, 115, 0.6));
+  border: 3px solid #2ed573;
+  color: #fff;
+}
+
+.movementNode:hover {
+  border-color: #20c997;
+  box-shadow: 0 15px 40px rgba(46, 213, 115, 0.5);
+}
+
+.conferenceNode {
+  background: radial-gradient(circle at 30% 30%, rgba(241, 196, 15, 0.9), rgba(241, 196, 15, 0.6));
+  border: 3px solid #f1c40f;
+  color: #fff;
+}
+
+.conferenceNode:hover {
+  border-color: #ffc107;
+  box-shadow: 0 15px 40px rgba(241, 196, 15, 0.5);
+}
+
+/* Network Connections */
+.networkConnection {
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 2;
+  fill: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.networkConnection:hover {
+  stroke-width: 4;
+  stroke: rgba(255, 255, 255, 0.8);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+}
+
+.networkConnection.ideological {
+  stroke: rgba(155, 89, 182, 0.5);
+  stroke-dasharray: 5,5;
+}
+
+.networkConnection.conference {
+  stroke: rgba(241, 196, 15, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.support {
+  stroke: rgba(46, 213, 115, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.personal {
+  stroke: rgba(255, 107, 107, 0.5);
+  stroke-dasharray: 2,2;
+}
+
+.networkConnection.movement {
+  stroke: rgba(74, 144, 226, 0.5);
+  stroke-width: 4;
+}
+
+/* Network Controls */
+.networkControls {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  font-weight: 500;
+}
+
+.filterBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #f9ca24;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(249, 202, 36, 0.2);
+}
+
+.filterBtn.active {
+  background: rgba(249, 202, 36, 0.2);
+  border-color: #f9ca24;
+  color: #f9ca24;
+  box-shadow: 0 5px 20px rgba(249, 202, 36, 0.3);
+}
+
+/* Connection Tooltip */
+.connectionTooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.9em;
+  z-index: 1000;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 250px;
+  pointer-events: none;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.connectionTooltip strong {
+  color: #f9ca24;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.connectionTooltip .connectionType {
+  color: #ff6b6b;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+/* Legend */
+.networkLegend {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 0.9em;
+}
+
+.networkLegend h4 {
+  color: #f9ca24;
+  margin-bottom: 10px;
+  font-size: 1em;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.legendColor {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.legendColor.leader { background: #9b59b6; }
+.legendColor.movement { background: #2ed573; }
+.legendColor.conference { background: #f1c40f; }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .networkCanvas {
+    height: 500px;
+  }
+  
+  .networkNode {
+    width: 70px;
+    height: 70px;
+    font-size: 0.75em;
+    padding: 8px;
+  }
+  
+  .networkControls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filterBtn {
+    padding: 10px 20px;
+  }
+  
+  .networkLegend {
+    position: static;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .networkCanvas {
+    height: 400px;
+  }
+  
+  .networkNode {
+    width: 60px;
+    height: 60px;
+    font-size: 0.7em;
+  }
+  
+  .connectionTooltip {
+    max-width: 200px;
+    font-size: 0.8em;
+  }
+}/* src/topic/gsh/components/SolidarityNetworks.module.css */
+
+.solidarityNetworks {
+  animation: fadeIn 0.5s ease;
+}
+
+.sectionTitle {
+  font-size: 2em;
+  margin-bottom: 36px;
+  color: #fff;
+  text-align: center;
+  font-weight: 300;
+}
+
+.networkCanvas {
+  position: relative;
+  height: 650px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7));
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.networkSvg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Network Nodes */
+.networkNode {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  font-size: 0.85em;
+  text-align: center;
+  padding: 10px;
+  backdrop-filter: blur(15px);
+  font-weight: 600;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.networkNode:hover {
+  transform: scale(1.15);
+  z-index: 20;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+.leaderNode {
+  background: radial-gradient(circle at 30% 30%, rgba(155, 89, 182, 0.9), rgba(155, 89, 182, 0.6));
+  border: 3px solid #9b59b6;
+  color: #fff;
+}
+
+.leaderNode:hover {
+  border-color: #d63384;
+  box-shadow: 0 15px 40px rgba(155, 89, 182, 0.5);
+}
+
+.movementNode {
+  background: radial-gradient(circle at 30% 30%, rgba(46, 213, 115, 0.9), rgba(46, 213, 115, 0.6));
+  border: 3px solid #2ed573;
+  color: #fff;
+}
+
+.movementNode:hover {
+  border-color: #20c997;
+  box-shadow: 0 15px 40px rgba(46, 213, 115, 0.5);
+}
+
+.conferenceNode {
+  background: radial-gradient(circle at 30% 30%, rgba(241, 196, 15, 0.9), rgba(241, 196, 15, 0.6));
+  border: 3px solid #f1c40f;
+  color: #fff;
+}
+
+.conferenceNode:hover {
+  border-color: #ffc107;
+  box-shadow: 0 15px 40px rgba(241, 196, 15, 0.5);
+}
+
+/* Network Connections */
+.networkConnection {
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 2;
+  fill: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.networkConnection:hover {
+  stroke-width: 4;
+  stroke: rgba(255, 255, 255, 0.8);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+}
+
+.networkConnection.ideological {
+  stroke: rgba(155, 89, 182, 0.5);
+  stroke-dasharray: 5,5;
+}
+
+.networkConnection.conference {
+  stroke: rgba(241, 196, 15, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.support {
+  stroke: rgba(46, 213, 115, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.personal {
+  stroke: rgba(255, 107, 107, 0.5);
+  stroke-dasharray: 2,2;
+}
+
+.networkConnection.movement {
+  stroke: rgba(74, 144, 226, 0.5);
+  stroke-width: 4;
+}
+
+/* Network Controls */
+.networkControls {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  font-weight: 500;
+}
+
+.filterBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #f9ca24;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(249, 202, 36, 0.2);
+}
+
+.filterBtn.active {
+  background: rgba(249, 202, 36, 0.2);
+  border-color: #f9ca24;
+  color: #f9ca24;
+  box-shadow: 0 5px 20px rgba(249, 202, 36, 0.3);
+}
+
+/* Connection Tooltip */
+.connectionTooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.9em;
+  z-index: 1000;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 250px;
+  pointer-events: none;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.connectionTooltip strong {
+  color: #f9ca24;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.connectionTooltip .connectionType {
+  color: #ff6b6b;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+/* Legend */
+.networkLegend {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 0.9em;
+}
+
+.networkLegend h4 {
+  color: #f9ca24;
+  margin-bottom: 10px;
+  font-size: 1em;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.legendColor {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.legendColor.leader { background: #9b59b6; }
+.legendColor.movement { background: #2ed573; }
+.legendColor.conference { background: #f1c40f; }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .networkCanvas {
+    height: 500px;
+  }
+  
+  .networkNode {
+    width: 70px;
+    height: 70px;
+    font-size: 0.75em;
+    padding: 8px;
+  }
+  
+  .networkControls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filterBtn {
+    padding: 10px 20px;
+  }
+  
+  .networkLegend {
+    position: static;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .networkCanvas {
+    height: 400px;
+  }
+  
+  .networkNode {
+    width: 60px;
+    height: 60px;
+    font-size: 0.7em;
+  }
+  
+  .connectionTooltip {
+    max-width: 200px;
+    font-size: 0.8em;
+  }
+}/* src/topic/gsh/components/SolidarityNetworks.module.css */
+
+.solidarityNetworks {
+  animation: fadeIn 0.5s ease;
+}
+
+.sectionTitle {
+  font-size: 2em;
+  margin-bottom: 36px;
+  color: #fff;
+  text-align: center;
+  font-weight: 300;
+}
+
+.networkCanvas {
+  position: relative;
+  height: 650px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7));
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.networkSvg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Network Nodes */
+.networkNode {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  font-size: 0.85em;
+  text-align: center;
+  padding: 10px;
+  backdrop-filter: blur(15px);
+  font-weight: 600;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.networkNode:hover {
+  transform: scale(1.15);
+  z-index: 20;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+.leaderNode {
+  background: radial-gradient(circle at 30% 30%, rgba(155, 89, 182, 0.9), rgba(155, 89, 182, 0.6));
+  border: 3px solid #9b59b6;
+  color: #fff;
+}
+
+.leaderNode:hover {
+  border-color: #d63384;
+  box-shadow: 0 15px 40px rgba(155, 89, 182, 0.5);
+}
+
+.movementNode {
+  background: radial-gradient(circle at 30% 30%, rgba(46, 213, 115, 0.9), rgba(46, 213, 115, 0.6));
+  border: 3px solid #2ed573;
+  color: #fff;
+}
+
+.movementNode:hover {
+  border-color: #20c997;
+  box-shadow: 0 15px 40px rgba(46, 213, 115, 0.5);
+}
+
+.conferenceNode {
+  background: radial-gradient(circle at 30% 30%, rgba(241, 196, 15, 0.9), rgba(241, 196, 15, 0.6));
+  border: 3px solid #f1c40f;
+  color: #fff;
+}
+
+.conferenceNode:hover {
+  border-color: #ffc107;
+  box-shadow: 0 15px 40px rgba(241, 196, 15, 0.5);
+}
+
+/* Network Connections */
+.networkConnection {
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 2;
+  fill: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.networkConnection:hover {
+  stroke-width: 4;
+  stroke: rgba(255, 255, 255, 0.8);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+}
+
+.networkConnection.ideological {
+  stroke: rgba(155, 89, 182, 0.5);
+  stroke-dasharray: 5,5;
+}
+
+.networkConnection.conference {
+  stroke: rgba(241, 196, 15, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.support {
+  stroke: rgba(46, 213, 115, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.personal {
+  stroke: rgba(255, 107, 107, 0.5);
+  stroke-dasharray: 2,2;
+}
+
+.networkConnection.movement {
+  stroke: rgba(74, 144, 226, 0.5);
+  stroke-width: 4;
+}
+
+/* Network Controls */
+.networkControls {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  font-weight: 500;
+}
+
+.filterBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #f9ca24;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(249, 202, 36, 0.2);
+}
+
+.filterBtn.active {
+  background: rgba(249, 202, 36, 0.2);
+  border-color: #f9ca24;
+  color: #f9ca24;
+  box-shadow: 0 5px 20px rgba(249, 202, 36, 0.3);
+}
+
+/* Connection Tooltip */
+.connectionTooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.9em;
+  z-index: 1000;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 250px;
+  pointer-events: none;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.connectionTooltip strong {
+  color: #f9ca24;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.connectionTooltip .connectionType {
+  color: #ff6b6b;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+/* Legend */
+.networkLegend {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 0.9em;
+}
+
+.networkLegend h4 {
+  color: #f9ca24;
+  margin-bottom: 10px;
+  font-size: 1em;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.legendColor {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.legendColor.leader { background: #9b59b6; }
+.legendColor.movement { background: #2ed573; }
+.legendColor.conference { background: #f1c40f; }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .networkCanvas {
+    height: 500px;
+  }
+  
+  .networkNode {
+    width: 70px;
+    height: 70px;
+    font-size: 0.75em;
+    padding: 8px;
+  }
+  
+  .networkControls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filterBtn {
+    padding: 10px 20px;
+  }
+  
+  .networkLegend {
+    position: static;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .networkCanvas {
+    height: 400px;
+  }
+  
+  .networkNode {
+    width: 60px;
+    height: 60px;
+    font-size: 0.7em;
+  }
+  
+  .connectionTooltip {
+    max-width: 200px;
+    font-size: 0.8em;
+  }
+}/* src/topic/gsh/components/SolidarityNetworks.module.css */
+
+.solidarityNetworks {
+  animation: fadeIn 0.5s ease;
+}
+
+.sectionTitle {
+  font-size: 2em;
+  margin-bottom: 36px;
+  color: #fff;
+  text-align: center;
+  font-weight: 300;
+}
+
+.networkCanvas {
+  position: relative;
+  height: 650px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7));
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.networkSvg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Network Nodes */
+.networkNode {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  font-size: 0.85em;
+  text-align: center;
+  padding: 10px;
+  backdrop-filter: blur(15px);
+  font-weight: 600;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.networkNode:hover {
+  transform: scale(1.15);
+  z-index: 20;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+.leaderNode {
+  background: radial-gradient(circle at 30% 30%, rgba(155, 89, 182, 0.9), rgba(155, 89, 182, 0.6));
+  border: 3px solid #9b59b6;
+  color: #fff;
+}
+
+.leaderNode:hover {
+  border-color: #d63384;
+  box-shadow: 0 15px 40px rgba(155, 89, 182, 0.5);
+}
+
+.movementNode {
+  background: radial-gradient(circle at 30% 30%, rgba(46, 213, 115, 0.9), rgba(46, 213, 115, 0.6));
+  border: 3px solid #2ed573;
+  color: #fff;
+}
+
+.movementNode:hover {
+  border-color: #20c997;
+  box-shadow: 0 15px 40px rgba(46, 213, 115, 0.5);
+}
+
+.conferenceNode {
+  background: radial-gradient(circle at 30% 30%, rgba(241, 196, 15, 0.9), rgba(241, 196, 15, 0.6));
+  border: 3px solid #f1c40f;
+  color: #fff;
+}
+
+.conferenceNode:hover {
+  border-color: #ffc107;
+  box-shadow: 0 15px 40px rgba(241, 196, 15, 0.5);
+}
+
+/* Network Connections */
+.networkConnection {
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 2;
+  fill: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.networkConnection:hover {
+  stroke-width: 4;
+  stroke: rgba(255, 255, 255, 0.8);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+}
+
+.networkConnection.ideological {
+  stroke: rgba(155, 89, 182, 0.5);
+  stroke-dasharray: 5,5;
+}
+
+.networkConnection.conference {
+  stroke: rgba(241, 196, 15, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.support {
+  stroke: rgba(46, 213, 115, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.personal {
+  stroke: rgba(255, 107, 107, 0.5);
+  stroke-dasharray: 2,2;
+}
+
+.networkConnection.movement {
+  stroke: rgba(74, 144, 226, 0.5);
+  stroke-width: 4;
+}
+
+/* Network Controls */
+.networkControls {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  font-weight: 500;
+}
+
+.filterBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #f9ca24;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(249, 202, 36, 0.2);
+}
+
+.filterBtn.active {
+  background: rgba(249, 202, 36, 0.2);
+  border-color: #f9ca24;
+  color: #f9ca24;
+  box-shadow: 0 5px 20px rgba(249, 202, 36, 0.3);
+}
+
+/* Connection Tooltip */
+.connectionTooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.9em;
+  z-index: 1000;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 250px;
+  pointer-events: none;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.connectionTooltip strong {
+  color: #f9ca24;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.connectionTooltip .connectionType {
+  color: #ff6b6b;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+/* Legend */
+.networkLegend {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 0.9em;
+}
+
+.networkLegend h4 {
+  color: #f9ca24;
+  margin-bottom: 10px;
+  font-size: 1em;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.legendColor {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.legendColor.leader { background: #9b59b6; }
+.legendColor.movement { background: #2ed573; }
+.legendColor.conference { background: #f1c40f; }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .networkCanvas {
+    height: 500px;
+  }
+  
+  .networkNode {
+    width: 70px;
+    height: 70px;
+    font-size: 0.75em;
+    padding: 8px;
+  }
+  
+  .networkControls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filterBtn {
+    padding: 10px 20px;
+  }
+  
+  .networkLegend {
+    position: static;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .networkCanvas {
+    height: 400px;
+  }
+  
+  .networkNode {
+    width: 60px;
+    height: 60px;
+    font-size: 0.7em;
+  }
+  
+  .connectionTooltip {
+    max-width: 200px;
+    font-size: 0.8em;
+  }
+}/* src/topic/gsh/components/SolidarityNetworks.module.css */
+
+.solidarityNetworks {
+  animation: fadeIn 0.5s ease;
+}
+
+.sectionTitle {
+  font-size: 2em;
+  margin-bottom: 36px;
+  color: #fff;
+  text-align: center;
+  font-weight: 300;
+}
+
+.networkCanvas {
+  position: relative;
+  height: 650px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7));
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.networkSvg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Network Nodes */
+.networkNode {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  font-size: 0.85em;
+  text-align: center;
+  padding: 10px;
+  backdrop-filter: blur(15px);
+  font-weight: 600;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.networkNode:hover {
+  transform: scale(1.15);
+  z-index: 20;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+.leaderNode {
+  background: radial-gradient(circle at 30% 30%, rgba(155, 89, 182, 0.9), rgba(155, 89, 182, 0.6));
+  border: 3px solid #9b59b6;
+  color: #fff;
+}
+
+.leaderNode:hover {
+  border-color: #d63384;
+  box-shadow: 0 15px 40px rgba(155, 89, 182, 0.5);
+}
+
+.movementNode {
+  background: radial-gradient(circle at 30% 30%, rgba(46, 213, 115, 0.9), rgba(46, 213, 115, 0.6));
+  border: 3px solid #2ed573;
+  color: #fff;
+}
+
+.movementNode:hover {
+  border-color: #20c997;
+  box-shadow: 0 15px 40px rgba(46, 213, 115, 0.5);
+}
+
+.conferenceNode {
+  background: radial-gradient(circle at 30% 30%, rgba(241, 196, 15, 0.9), rgba(241, 196, 15, 0.6));
+  border: 3px solid #f1c40f;
+  color: #fff;
+}
+
+.conferenceNode:hover {
+  border-color: #ffc107;
+  box-shadow: 0 15px 40px rgba(241, 196, 15, 0.5);
+}
+
+/* Network Connections */
+.networkConnection {
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 2;
+  fill: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.networkConnection:hover {
+  stroke-width: 4;
+  stroke: rgba(255, 255, 255, 0.8);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+}
+
+.networkConnection.ideological {
+  stroke: rgba(155, 89, 182, 0.5);
+  stroke-dasharray: 5,5;
+}
+
+.networkConnection.conference {
+  stroke: rgba(241, 196, 15, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.support {
+  stroke: rgba(46, 213, 115, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.personal {
+  stroke: rgba(255, 107, 107, 0.5);
+  stroke-dasharray: 2,2;
+}
+
+.networkConnection.movement {
+  stroke: rgba(74, 144, 226, 0.5);
+  stroke-width: 4;
+}
+
+/* Network Controls */
+.networkControls {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  font-weight: 500;
+}
+
+.filterBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #f9ca24;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(249, 202, 36, 0.2);
+}
+
+.filterBtn.active {
+  background: rgba(249, 202, 36, 0.2);
+  border-color: #f9ca24;
+  color: #f9ca24;
+  box-shadow: 0 5px 20px rgba(249, 202, 36, 0.3);
+}
+
+/* Connection Tooltip */
+.connectionTooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.9em;
+  z-index: 1000;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 250px;
+  pointer-events: none;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.connectionTooltip strong {
+  color: #f9ca24;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.connectionTooltip .connectionType {
+  color: #ff6b6b;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+/* Legend */
+.networkLegend {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 0.9em;
+}
+
+.networkLegend h4 {
+  color: #f9ca24;
+  margin-bottom: 10px;
+  font-size: 1em;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.legendColor {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.legendColor.leader { background: #9b59b6; }
+.legendColor.movement { background: #2ed573; }
+.legendColor.conference { background: #f1c40f; }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .networkCanvas {
+    height: 500px;
+  }
+  
+  .networkNode {
+    width: 70px;
+    height: 70px;
+    font-size: 0.75em;
+    padding: 8px;
+  }
+  
+  .networkControls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filterBtn {
+    padding: 10px 20px;
+  }
+  
+  .networkLegend {
+    position: static;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .networkCanvas {
+    height: 400px;
+  }
+  
+  .networkNode {
+    width: 60px;
+    height: 60px;
+    font-size: 0.7em;
+  }
+  
+  .connectionTooltip {
+    max-width: 200px;
+    font-size: 0.8em;
+  }
+}/* src/topic/gsh/components/SolidarityNetworks.module.css */
+
+.solidarityNetworks {
+  animation: fadeIn 0.5s ease;
+}
+
+.sectionTitle {
+  font-size: 2em;
+  margin-bottom: 36px;
+  color: #fff;
+  text-align: center;
+  font-weight: 300;
+}
+
+.networkCanvas {
+  position: relative;
+  height: 650px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7));
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.networkSvg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Network Nodes */
+.networkNode {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  font-size: 0.85em;
+  text-align: center;
+  padding: 10px;
+  backdrop-filter: blur(15px);
+  font-weight: 600;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.networkNode:hover {
+  transform: scale(1.15);
+  z-index: 20;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+.leaderNode {
+  background: radial-gradient(circle at 30% 30%, rgba(155, 89, 182, 0.9), rgba(155, 89, 182, 0.6));
+  border: 3px solid #9b59b6;
+  color: #fff;
+}
+
+.leaderNode:hover {
+  border-color: #d63384;
+  box-shadow: 0 15px 40px rgba(155, 89, 182, 0.5);
+}
+
+.movementNode {
+  background: radial-gradient(circle at 30% 30%, rgba(46, 213, 115, 0.9), rgba(46, 213, 115, 0.6));
+  border: 3px solid #2ed573;
+  color: #fff;
+}
+
+.movementNode:hover {
+  border-color: #20c997;
+  box-shadow: 0 15px 40px rgba(46, 213, 115, 0.5);
+}
+
+.conferenceNode {
+  background: radial-gradient(circle at 30% 30%, rgba(241, 196, 15, 0.9), rgba(241, 196, 15, 0.6));
+  border: 3px solid #f1c40f;
+  color: #fff;
+}
+
+.conferenceNode:hover {
+  border-color: #ffc107;
+  box-shadow: 0 15px 40px rgba(241, 196, 15, 0.5);
+}
+
+/* Network Connections */
+.networkConnection {
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 2;
+  fill: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.networkConnection:hover {
+  stroke-width: 4;
+  stroke: rgba(255, 255, 255, 0.8);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+}
+
+.networkConnection.ideological {
+  stroke: rgba(155, 89, 182, 0.5);
+  stroke-dasharray: 5,5;
+}
+
+.networkConnection.conference {
+  stroke: rgba(241, 196, 15, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.support {
+  stroke: rgba(46, 213, 115, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.personal {
+  stroke: rgba(255, 107, 107, 0.5);
+  stroke-dasharray: 2,2;
+}
+
+.networkConnection.movement {
+  stroke: rgba(74, 144, 226, 0.5);
+  stroke-width: 4;
+}
+
+/* Network Controls */
+.networkControls {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  font-weight: 500;
+}
+
+.filterBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #f9ca24;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(249, 202, 36, 0.2);
+}
+
+.filterBtn.active {
+  background: rgba(249, 202, 36, 0.2);
+  border-color: #f9ca24;
+  color: #f9ca24;
+  box-shadow: 0 5px 20px rgba(249, 202, 36, 0.3);
+}
+
+/* Connection Tooltip */
+.connectionTooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.9em;
+  z-index: 1000;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 250px;
+  pointer-events: none;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.connectionTooltip strong {
+  color: #f9ca24;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.connectionTooltip .connectionType {
+  color: #ff6b6b;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+/* Legend */
+.networkLegend {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 0.9em;
+}
+
+.networkLegend h4 {
+  color: #f9ca24;
+  margin-bottom: 10px;
+  font-size: 1em;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.legendColor {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.legendColor.leader { background: #9b59b6; }
+.legendColor.movement { background: #2ed573; }
+.legendColor.conference { background: #f1c40f; }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .networkCanvas {
+    height: 500px;
+  }
+  
+  .networkNode {
+    width: 70px;
+    height: 70px;
+    font-size: 0.75em;
+    padding: 8px;
+  }
+  
+  .networkControls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filterBtn {
+    padding: 10px 20px;
+  }
+  
+  .networkLegend {
+    position: static;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .networkCanvas {
+    height: 400px;
+  }
+  
+  .networkNode {
+    width: 60px;
+    height: 60px;
+    font-size: 0.7em;
+  }
+  
+  .connectionTooltip {
+    max-width: 200px;
+    font-size: 0.8em;
+  }
+}/* src/topic/gsh/components/SolidarityNetworks.module.css */
+
+.solidarityNetworks {
+  animation: fadeIn 0.5s ease;
+}
+
+.sectionTitle {
+  font-size: 2em;
+  margin-bottom: 36px;
+  color: #fff;
+  text-align: center;
+  font-weight: 300;
+}
+
+.networkCanvas {
+  position: relative;
+  height: 650px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7));
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.networkSvg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Network Nodes */
+.networkNode {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  font-size: 0.85em;
+  text-align: center;
+  padding: 10px;
+  backdrop-filter: blur(15px);
+  font-weight: 600;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.networkNode:hover {
+  transform: scale(1.15);
+  z-index: 20;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+.leaderNode {
+  background: radial-gradient(circle at 30% 30%, rgba(155, 89, 182, 0.9), rgba(155, 89, 182, 0.6));
+  border: 3px solid #9b59b6;
+  color: #fff;
+}
+
+.leaderNode:hover {
+  border-color: #d63384;
+  box-shadow: 0 15px 40px rgba(155, 89, 182, 0.5);
+}
+
+.movementNode {
+  background: radial-gradient(circle at 30% 30%, rgba(46, 213, 115, 0.9), rgba(46, 213, 115, 0.6));
+  border: 3px solid #2ed573;
+  color: #fff;
+}
+
+.movementNode:hover {
+  border-color: #20c997;
+  box-shadow: 0 15px 40px rgba(46, 213, 115, 0.5);
+}
+
+.conferenceNode {
+  background: radial-gradient(circle at 30% 30%, rgba(241, 196, 15, 0.9), rgba(241, 196, 15, 0.6));
+  border: 3px solid #f1c40f;
+  color: #fff;
+}
+
+.conferenceNode:hover {
+  border-color: #ffc107;
+  box-shadow: 0 15px 40px rgba(241, 196, 15, 0.5);
+}
+
+/* Network Connections */
+.networkConnection {
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 2;
+  fill: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.networkConnection:hover {
+  stroke-width: 4;
+  stroke: rgba(255, 255, 255, 0.8);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+}
+
+.networkConnection.ideological {
+  stroke: rgba(155, 89, 182, 0.5);
+  stroke-dasharray: 5,5;
+}
+
+.networkConnection.conference {
+  stroke: rgba(241, 196, 15, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.support {
+  stroke: rgba(46, 213, 115, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.personal {
+  stroke: rgba(255, 107, 107, 0.5);
+  stroke-dasharray: 2,2;
+}
+
+.networkConnection.movement {
+  stroke: rgba(74, 144, 226, 0.5);
+  stroke-width: 4;
+}
+
+/* Network Controls */
+.networkControls {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  font-weight: 500;
+}
+
+.filterBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #f9ca24;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(249, 202, 36, 0.2);
+}
+
+.filterBtn.active {
+  background: rgba(249, 202, 36, 0.2);
+  border-color: #f9ca24;
+  color: #f9ca24;
+  box-shadow: 0 5px 20px rgba(249, 202, 36, 0.3);
+}
+
+/* Connection Tooltip */
+.connectionTooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.9em;
+  z-index: 1000;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 250px;
+  pointer-events: none;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.connectionTooltip strong {
+  color: #f9ca24;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.connectionTooltip .connectionType {
+  color: #ff6b6b;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+/* Legend */
+.networkLegend {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 0.9em;
+}
+
+.networkLegend h4 {
+  color: #f9ca24;
+  margin-bottom: 10px;
+  font-size: 1em;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.legendColor {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.legendColor.leader { background: #9b59b6; }
+.legendColor.movement { background: #2ed573; }
+.legendColor.conference { background: #f1c40f; }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .networkCanvas {
+    height: 500px;
+  }
+  
+  .networkNode {
+    width: 70px;
+    height: 70px;
+    font-size: 0.75em;
+    padding: 8px;
+  }
+  
+  .networkControls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filterBtn {
+    padding: 10px 20px;
+  }
+  
+  .networkLegend {
+    position: static;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .networkCanvas {
+    height: 400px;
+  }
+  
+  .networkNode {
+    width: 60px;
+    height: 60px;
+    font-size: 0.7em;
+  }
+  
+  .connectionTooltip {
+    max-width: 200px;
+    font-size: 0.8em;
+  }
+}/* src/topic/gsh/components/SolidarityNetworks.module.css */
+
+.solidarityNetworks {
+  animation: fadeIn 0.5s ease;
+}
+
+.sectionTitle {
+  font-size: 2em;
+  margin-bottom: 36px;
+  color: #fff;
+  text-align: center;
+  font-weight: 300;
+}
+
+.networkCanvas {
+  position: relative;
+  height: 650px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7));
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.networkSvg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Network Nodes */
+.networkNode {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  font-size: 0.85em;
+  text-align: center;
+  padding: 10px;
+  backdrop-filter: blur(15px);
+  font-weight: 600;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.networkNode:hover {
+  transform: scale(1.15);
+  z-index: 20;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+.leaderNode {
+  background: radial-gradient(circle at 30% 30%, rgba(155, 89, 182, 0.9), rgba(155, 89, 182, 0.6));
+  border: 3px solid #9b59b6;
+  color: #fff;
+}
+
+.leaderNode:hover {
+  border-color: #d63384;
+  box-shadow: 0 15px 40px rgba(155, 89, 182, 0.5);
+}
+
+.movementNode {
+  background: radial-gradient(circle at 30% 30%, rgba(46, 213, 115, 0.9), rgba(46, 213, 115, 0.6));
+  border: 3px solid #2ed573;
+  color: #fff;
+}
+
+.movementNode:hover {
+  border-color: #20c997;
+  box-shadow: 0 15px 40px rgba(46, 213, 115, 0.5);
+}
+
+.conferenceNode {
+  background: radial-gradient(circle at 30% 30%, rgba(241, 196, 15, 0.9), rgba(241, 196, 15, 0.6));
+  border: 3px solid #f1c40f;
+  color: #fff;
+}
+
+.conferenceNode:hover {
+  border-color: #ffc107;
+  box-shadow: 0 15px 40px rgba(241, 196, 15, 0.5);
+}
+
+/* Network Connections */
+.networkConnection {
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 2;
+  fill: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.networkConnection:hover {
+  stroke-width: 4;
+  stroke: rgba(255, 255, 255, 0.8);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+}
+
+.networkConnection.ideological {
+  stroke: rgba(155, 89, 182, 0.5);
+  stroke-dasharray: 5,5;
+}
+
+.networkConnection.conference {
+  stroke: rgba(241, 196, 15, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.support {
+  stroke: rgba(46, 213, 115, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.personal {
+  stroke: rgba(255, 107, 107, 0.5);
+  stroke-dasharray: 2,2;
+}
+
+.networkConnection.movement {
+  stroke: rgba(74, 144, 226, 0.5);
+  stroke-width: 4;
+}
+
+/* Network Controls */
+.networkControls {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  font-weight: 500;
+}
+
+.filterBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #f9ca24;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(249, 202, 36, 0.2);
+}
+
+.filterBtn.active {
+  background: rgba(249, 202, 36, 0.2);
+  border-color: #f9ca24;
+  color: #f9ca24;
+  box-shadow: 0 5px 20px rgba(249, 202, 36, 0.3);
+}
+
+/* Connection Tooltip */
+.connectionTooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.9em;
+  z-index: 1000;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 250px;
+  pointer-events: none;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.connectionTooltip strong {
+  color: #f9ca24;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.connectionTooltip .connectionType {
+  color: #ff6b6b;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+/* Legend */
+.networkLegend {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 0.9em;
+}
+
+.networkLegend h4 {
+  color: #f9ca24;
+  margin-bottom: 10px;
+  font-size: 1em;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.legendColor {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.legendColor.leader { background: #9b59b6; }
+.legendColor.movement { background: #2ed573; }
+.legendColor.conference { background: #f1c40f; }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .networkCanvas {
+    height: 500px;
+  }
+  
+  .networkNode {
+    width: 70px;
+    height: 70px;
+    font-size: 0.75em;
+    padding: 8px;
+  }
+  
+  .networkControls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filterBtn {
+    padding: 10px 20px;
+  }
+  
+  .networkLegend {
+    position: static;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .networkCanvas {
+    height: 400px;
+  }
+  
+  .networkNode {
+    width: 60px;
+    height: 60px;
+    font-size: 0.7em;
+  }
+  
+  .connectionTooltip {
+    max-width: 200px;
+    font-size: 0.8em;
+  }
+}/* src/topic/gsh/components/SolidarityNetworks.module.css */
+
+.solidarityNetworks {
+  animation: fadeIn 0.5s ease;
+}
+
+.sectionTitle {
+  font-size: 2em;
+  margin-bottom: 36px;
+  color: #fff;
+  text-align: center;
+  font-weight: 300;
+}
+
+.networkCanvas {
+  position: relative;
+  height: 650px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7));
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.networkSvg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Network Nodes */
+.networkNode {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  font-size: 0.85em;
+  text-align: center;
+  padding: 10px;
+  backdrop-filter: blur(15px);
+  font-weight: 600;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.networkNode:hover {
+  transform: scale(1.15);
+  z-index: 20;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+.leaderNode {
+  background: radial-gradient(circle at 30% 30%, rgba(155, 89, 182, 0.9), rgba(155, 89, 182, 0.6));
+  border: 3px solid #9b59b6;
+  color: #fff;
+}
+
+.leaderNode:hover {
+  border-color: #d63384;
+  box-shadow: 0 15px 40px rgba(155, 89, 182, 0.5);
+}
+
+.movementNode {
+  background: radial-gradient(circle at 30% 30%, rgba(46, 213, 115, 0.9), rgba(46, 213, 115, 0.6));
+  border: 3px solid #2ed573;
+  color: #fff;
+}
+
+.movementNode:hover {
+  border-color: #20c997;
+  box-shadow: 0 15px 40px rgba(46, 213, 115, 0.5);
+}
+
+.conferenceNode {
+  background: radial-gradient(circle at 30% 30%, rgba(241, 196, 15, 0.9), rgba(241, 196, 15, 0.6));
+  border: 3px solid #f1c40f;
+  color: #fff;
+}
+
+.conferenceNode:hover {
+  border-color: #ffc107;
+  box-shadow: 0 15px 40px rgba(241, 196, 15, 0.5);
+}
+
+/* Network Connections */
+.networkConnection {
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 2;
+  fill: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.networkConnection:hover {
+  stroke-width: 4;
+  stroke: rgba(255, 255, 255, 0.8);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+}
+
+.networkConnection.ideological {
+  stroke: rgba(155, 89, 182, 0.5);
+  stroke-dasharray: 5,5;
+}
+
+.networkConnection.conference {
+  stroke: rgba(241, 196, 15, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.support {
+  stroke: rgba(46, 213, 115, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.personal {
+  stroke: rgba(255, 107, 107, 0.5);
+  stroke-dasharray: 2,2;
+}
+
+.networkConnection.movement {
+  stroke: rgba(74, 144, 226, 0.5);
+  stroke-width: 4;
+}
+
+/* Network Controls */
+.networkControls {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  font-weight: 500;
+}
+
+.filterBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #f9ca24;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(249, 202, 36, 0.2);
+}
+
+.filterBtn.active {
+  background: rgba(249, 202, 36, 0.2);
+  border-color: #f9ca24;
+  color: #f9ca24;
+  box-shadow: 0 5px 20px rgba(249, 202, 36, 0.3);
+}
+
+/* Connection Tooltip */
+.connectionTooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.9em;
+  z-index: 1000;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 250px;
+  pointer-events: none;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.connectionTooltip strong {
+  color: #f9ca24;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.connectionTooltip .connectionType {
+  color: #ff6b6b;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+/* Legend */
+.networkLegend {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 0.9em;
+}
+
+.networkLegend h4 {
+  color: #f9ca24;
+  margin-bottom: 10px;
+  font-size: 1em;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.legendColor {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.legendColor.leader { background: #9b59b6; }
+.legendColor.movement { background: #2ed573; }
+.legendColor.conference { background: #f1c40f; }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .networkCanvas {
+    height: 500px;
+  }
+  
+  .networkNode {
+    width: 70px;
+    height: 70px;
+    font-size: 0.75em;
+    padding: 8px;
+  }
+  
+  .networkControls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filterBtn {
+    padding: 10px 20px;
+  }
+  
+  .networkLegend {
+    position: static;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .networkCanvas {
+    height: 400px;
+  }
+  
+  .networkNode {
+    width: 60px;
+    height: 60px;
+    font-size: 0.7em;
+  }
+  
+  .connectionTooltip {
+    max-width: 200px;
+    font-size: 0.8em;
+  }
+}/* src/topic/gsh/components/SolidarityNetworks.module.css */
+
+.solidarityNetworks {
+  animation: fadeIn 0.5s ease;
+}
+
+.sectionTitle {
+  font-size: 2em;
+  margin-bottom: 36px;
+  color: #fff;
+  text-align: center;
+  font-weight: 300;
+}
+
+.networkCanvas {
+  position: relative;
+  height: 650px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7));
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.networkSvg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Network Nodes */
+.networkNode {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  font-size: 0.85em;
+  text-align: center;
+  padding: 10px;
+  backdrop-filter: blur(15px);
+  font-weight: 600;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.networkNode:hover {
+  transform: scale(1.15);
+  z-index: 20;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+.leaderNode {
+  background: radial-gradient(circle at 30% 30%, rgba(155, 89, 182, 0.9), rgba(155, 89, 182, 0.6));
+  border: 3px solid #9b59b6;
+  color: #fff;
+}
+
+.leaderNode:hover {
+  border-color: #d63384;
+  box-shadow: 0 15px 40px rgba(155, 89, 182, 0.5);
+}
+
+.movementNode {
+  background: radial-gradient(circle at 30% 30%, rgba(46, 213, 115, 0.9), rgba(46, 213, 115, 0.6));
+  border: 3px solid #2ed573;
+  color: #fff;
+}
+
+.movementNode:hover {
+  border-color: #20c997;
+  box-shadow: 0 15px 40px rgba(46, 213, 115, 0.5);
+}
+
+.conferenceNode {
+  background: radial-gradient(circle at 30% 30%, rgba(241, 196, 15, 0.9), rgba(241, 196, 15, 0.6));
+  border: 3px solid #f1c40f;
+  color: #fff;
+}
+
+.conferenceNode:hover {
+  border-color: #ffc107;
+  box-shadow: 0 15px 40px rgba(241, 196, 15, 0.5);
+}
+
+/* Network Connections */
+.networkConnection {
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 2;
+  fill: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.networkConnection:hover {
+  stroke-width: 4;
+  stroke: rgba(255, 255, 255, 0.8);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+}
+
+.networkConnection.ideological {
+  stroke: rgba(155, 89, 182, 0.5);
+  stroke-dasharray: 5,5;
+}
+
+.networkConnection.conference {
+  stroke: rgba(241, 196, 15, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.support {
+  stroke: rgba(46, 213, 115, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.personal {
+  stroke: rgba(255, 107, 107, 0.5);
+  stroke-dasharray: 2,2;
+}
+
+.networkConnection.movement {
+  stroke: rgba(74, 144, 226, 0.5);
+  stroke-width: 4;
+}
+
+/* Network Controls */
+.networkControls {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  font-weight: 500;
+}
+
+.filterBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #f9ca24;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(249, 202, 36, 0.2);
+}
+
+.filterBtn.active {
+  background: rgba(249, 202, 36, 0.2);
+  border-color: #f9ca24;
+  color: #f9ca24;
+  box-shadow: 0 5px 20px rgba(249, 202, 36, 0.3);
+}
+
+/* Connection Tooltip */
+.connectionTooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.9em;
+  z-index: 1000;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 250px;
+  pointer-events: none;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.connectionTooltip strong {
+  color: #f9ca24;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.connectionTooltip .connectionType {
+  color: #ff6b6b;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+/* Legend */
+.networkLegend {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 0.9em;
+}
+
+.networkLegend h4 {
+  color: #f9ca24;
+  margin-bottom: 10px;
+  font-size: 1em;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.legendColor {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.legendColor.leader { background: #9b59b6; }
+.legendColor.movement { background: #2ed573; }
+.legendColor.conference { background: #f1c40f; }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .networkCanvas {
+    height: 500px;
+  }
+  
+  .networkNode {
+    width: 70px;
+    height: 70px;
+    font-size: 0.75em;
+    padding: 8px;
+  }
+  
+  .networkControls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filterBtn {
+    padding: 10px 20px;
+  }
+  
+  .networkLegend {
+    position: static;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .networkCanvas {
+    height: 400px;
+  }
+  
+  .networkNode {
+    width: 60px;
+    height: 60px;
+    font-size: 0.7em;
+  }
+  
+  .connectionTooltip {
+    max-width: 200px;
+    font-size: 0.8em;
+  }
+}/* src/topic/gsh/components/SolidarityNetworks.module.css */
+
+.solidarityNetworks {
+  animation: fadeIn 0.5s ease;
+}
+
+.sectionTitle {
+  font-size: 2em;
+  margin-bottom: 36px;
+  color: #fff;
+  text-align: center;
+  font-weight: 300;
+}
+
+.networkCanvas {
+  position: relative;
+  height: 650px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7));
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.networkSvg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Network Nodes */
+.networkNode {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  font-size: 0.85em;
+  text-align: center;
+  padding: 10px;
+  backdrop-filter: blur(15px);
+  font-weight: 600;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.networkNode:hover {
+  transform: scale(1.15);
+  z-index: 20;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+.leaderNode {
+  background: radial-gradient(circle at 30% 30%, rgba(155, 89, 182, 0.9), rgba(155, 89, 182, 0.6));
+  border: 3px solid #9b59b6;
+  color: #fff;
+}
+
+.leaderNode:hover {
+  border-color: #d63384;
+  box-shadow: 0 15px 40px rgba(155, 89, 182, 0.5);
+}
+
+.movementNode {
+  background: radial-gradient(circle at 30% 30%, rgba(46, 213, 115, 0.9), rgba(46, 213, 115, 0.6));
+  border: 3px solid #2ed573;
+  color: #fff;
+}
+
+.movementNode:hover {
+  border-color: #20c997;
+  box-shadow: 0 15px 40px rgba(46, 213, 115, 0.5);
+}
+
+.conferenceNode {
+  background: radial-gradient(circle at 30% 30%, rgba(241, 196, 15, 0.9), rgba(241, 196, 15, 0.6));
+  border: 3px solid #f1c40f;
+  color: #fff;
+}
+
+.conferenceNode:hover {
+  border-color: #ffc107;
+  box-shadow: 0 15px 40px rgba(241, 196, 15, 0.5);
+}
+
+/* Network Connections */
+.networkConnection {
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 2;
+  fill: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.networkConnection:hover {
+  stroke-width: 4;
+  stroke: rgba(255, 255, 255, 0.8);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+}
+
+.networkConnection.ideological {
+  stroke: rgba(155, 89, 182, 0.5);
+  stroke-dasharray: 5,5;
+}
+
+.networkConnection.conference {
+  stroke: rgba(241, 196, 15, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.support {
+  stroke: rgba(46, 213, 115, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.personal {
+  stroke: rgba(255, 107, 107, 0.5);
+  stroke-dasharray: 2,2;
+}
+
+.networkConnection.movement {
+  stroke: rgba(74, 144, 226, 0.5);
+  stroke-width: 4;
+}
+
+/* Network Controls */
+.networkControls {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  font-weight: 500;
+}
+
+.filterBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #f9ca24;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(249, 202, 36, 0.2);
+}
+
+.filterBtn.active {
+  background: rgba(249, 202, 36, 0.2);
+  border-color: #f9ca24;
+  color: #f9ca24;
+  box-shadow: 0 5px 20px rgba(249, 202, 36, 0.3);
+}
+
+/* Connection Tooltip */
+.connectionTooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.9em;
+  z-index: 1000;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 250px;
+  pointer-events: none;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.connectionTooltip strong {
+  color: #f9ca24;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.connectionTooltip .connectionType {
+  color: #ff6b6b;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+/* Legend */
+.networkLegend {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 0.9em;
+}
+
+.networkLegend h4 {
+  color: #f9ca24;
+  margin-bottom: 10px;
+  font-size: 1em;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.legendColor {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.legendColor.leader { background: #9b59b6; }
+.legendColor.movement { background: #2ed573; }
+.legendColor.conference { background: #f1c40f; }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .networkCanvas {
+    height: 500px;
+  }
+  
+  .networkNode {
+    width: 70px;
+    height: 70px;
+    font-size: 0.75em;
+    padding: 8px;
+  }
+  
+  .networkControls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filterBtn {
+    padding: 10px 20px;
+  }
+  
+  .networkLegend {
+    position: static;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .networkCanvas {
+    height: 400px;
+  }
+  
+  .networkNode {
+    width: 60px;
+    height: 60px;
+    font-size: 0.7em;
+  }
+  
+  .connectionTooltip {
+    max-width: 200px;
+    font-size: 0.8em;
+  }
+}/* src/topic/gsh/components/SolidarityNetworks.module.css */
+
+.solidarityNetworks {
+  animation: fadeIn 0.5s ease;
+}
+
+.sectionTitle {
+  font-size: 2em;
+  margin-bottom: 36px;
+  color: #fff;
+  text-align: center;
+  font-weight: 300;
+}
+
+.networkCanvas {
+  position: relative;
+  height: 650px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7));
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.networkSvg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Network Nodes */
+.networkNode {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  font-size: 0.85em;
+  text-align: center;
+  padding: 10px;
+  backdrop-filter: blur(15px);
+  font-weight: 600;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.networkNode:hover {
+  transform: scale(1.15);
+  z-index: 20;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+.leaderNode {
+  background: radial-gradient(circle at 30% 30%, rgba(155, 89, 182, 0.9), rgba(155, 89, 182, 0.6));
+  border: 3px solid #9b59b6;
+  color: #fff;
+}
+
+.leaderNode:hover {
+  border-color: #d63384;
+  box-shadow: 0 15px 40px rgba(155, 89, 182, 0.5);
+}
+
+.movementNode {
+  background: radial-gradient(circle at 30% 30%, rgba(46, 213, 115, 0.9), rgba(46, 213, 115, 0.6));
+  border: 3px solid #2ed573;
+  color: #fff;
+}
+
+.movementNode:hover {
+  border-color: #20c997;
+  box-shadow: 0 15px 40px rgba(46, 213, 115, 0.5);
+}
+
+.conferenceNode {
+  background: radial-gradient(circle at 30% 30%, rgba(241, 196, 15, 0.9), rgba(241, 196, 15, 0.6));
+  border: 3px solid #f1c40f;
+  color: #fff;
+}
+
+.conferenceNode:hover {
+  border-color: #ffc107;
+  box-shadow: 0 15px 40px rgba(241, 196, 15, 0.5);
+}
+
+/* Network Connections */
+.networkConnection {
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 2;
+  fill: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.networkConnection:hover {
+  stroke-width: 4;
+  stroke: rgba(255, 255, 255, 0.8);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+}
+
+.networkConnection.ideological {
+  stroke: rgba(155, 89, 182, 0.5);
+  stroke-dasharray: 5,5;
+}
+
+.networkConnection.conference {
+  stroke: rgba(241, 196, 15, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.support {
+  stroke: rgba(46, 213, 115, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.personal {
+  stroke: rgba(255, 107, 107, 0.5);
+  stroke-dasharray: 2,2;
+}
+
+.networkConnection.movement {
+  stroke: rgba(74, 144, 226, 0.5);
+  stroke-width: 4;
+}
+
+/* Network Controls */
+.networkControls {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  font-weight: 500;
+}
+
+.filterBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #f9ca24;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(249, 202, 36, 0.2);
+}
+
+.filterBtn.active {
+  background: rgba(249, 202, 36, 0.2);
+  border-color: #f9ca24;
+  color: #f9ca24;
+  box-shadow: 0 5px 20px rgba(249, 202, 36, 0.3);
+}
+
+/* Connection Tooltip */
+.connectionTooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.9em;
+  z-index: 1000;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 250px;
+  pointer-events: none;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.connectionTooltip strong {
+  color: #f9ca24;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.connectionTooltip .connectionType {
+  color: #ff6b6b;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+/* Legend */
+.networkLegend {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 0.9em;
+}
+
+.networkLegend h4 {
+  color: #f9ca24;
+  margin-bottom: 10px;
+  font-size: 1em;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.legendColor {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.legendColor.leader { background: #9b59b6; }
+.legendColor.movement { background: #2ed573; }
+.legendColor.conference { background: #f1c40f; }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .networkCanvas {
+    height: 500px;
+  }
+  
+  .networkNode {
+    width: 70px;
+    height: 70px;
+    font-size: 0.75em;
+    padding: 8px;
+  }
+  
+  .networkControls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filterBtn {
+    padding: 10px 20px;
+  }
+  
+  .networkLegend {
+    position: static;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .networkCanvas {
+    height: 400px;
+  }
+  
+  .networkNode {
+    width: 60px;
+    height: 60px;
+    font-size: 0.7em;
+  }
+  
+  .connectionTooltip {
+    max-width: 200px;
+    font-size: 0.8em;
+  }
+}/* src/topic/gsh/components/SolidarityNetworks.module.css */
+
+.solidarityNetworks {
+  animation: fadeIn 0.5s ease;
+}
+
+.sectionTitle {
+  font-size: 2em;
+  margin-bottom: 36px;
+  color: #fff;
+  text-align: center;
+  font-weight: 300;
+}
+
+.networkCanvas {
+  position: relative;
+  height: 650px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7));
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.networkSvg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Network Nodes */
+.networkNode {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  font-size: 0.85em;
+  text-align: center;
+  padding: 10px;
+  backdrop-filter: blur(15px);
+  font-weight: 600;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.networkNode:hover {
+  transform: scale(1.15);
+  z-index: 20;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+.leaderNode {
+  background: radial-gradient(circle at 30% 30%, rgba(155, 89, 182, 0.9), rgba(155, 89, 182, 0.6));
+  border: 3px solid #9b59b6;
+  color: #fff;
+}
+
+.leaderNode:hover {
+  border-color: #d63384;
+  box-shadow: 0 15px 40px rgba(155, 89, 182, 0.5);
+}
+
+.movementNode {
+  background: radial-gradient(circle at 30% 30%, rgba(46, 213, 115, 0.9), rgba(46, 213, 115, 0.6));
+  border: 3px solid #2ed573;
+  color: #fff;
+}
+
+.movementNode:hover {
+  border-color: #20c997;
+  box-shadow: 0 15px 40px rgba(46, 213, 115, 0.5);
+}
+
+.conferenceNode {
+  background: radial-gradient(circle at 30% 30%, rgba(241, 196, 15, 0.9), rgba(241, 196, 15, 0.6));
+  border: 3px solid #f1c40f;
+  color: #fff;
+}
+
+.conferenceNode:hover {
+  border-color: #ffc107;
+  box-shadow: 0 15px 40px rgba(241, 196, 15, 0.5);
+}
+
+/* Network Connections */
+.networkConnection {
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 2;
+  fill: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.networkConnection:hover {
+  stroke-width: 4;
+  stroke: rgba(255, 255, 255, 0.8);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+}
+
+.networkConnection.ideological {
+  stroke: rgba(155, 89, 182, 0.5);
+  stroke-dasharray: 5,5;
+}
+
+.networkConnection.conference {
+  stroke: rgba(241, 196, 15, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.support {
+  stroke: rgba(46, 213, 115, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.personal {
+  stroke: rgba(255, 107, 107, 0.5);
+  stroke-dasharray: 2,2;
+}
+
+.networkConnection.movement {
+  stroke: rgba(74, 144, 226, 0.5);
+  stroke-width: 4;
+}
+
+/* Network Controls */
+.networkControls {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  font-weight: 500;
+}
+
+.filterBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #f9ca24;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(249, 202, 36, 0.2);
+}
+
+.filterBtn.active {
+  background: rgba(249, 202, 36, 0.2);
+  border-color: #f9ca24;
+  color: #f9ca24;
+  box-shadow: 0 5px 20px rgba(249, 202, 36, 0.3);
+}
+
+/* Connection Tooltip */
+.connectionTooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.9em;
+  z-index: 1000;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 250px;
+  pointer-events: none;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.connectionTooltip strong {
+  color: #f9ca24;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.connectionTooltip .connectionType {
+  color: #ff6b6b;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+/* Legend */
+.networkLegend {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 0.9em;
+}
+
+.networkLegend h4 {
+  color: #f9ca24;
+  margin-bottom: 10px;
+  font-size: 1em;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.legendColor {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.legendColor.leader { background: #9b59b6; }
+.legendColor.movement { background: #2ed573; }
+.legendColor.conference { background: #f1c40f; }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .networkCanvas {
+    height: 500px;
+  }
+  
+  .networkNode {
+    width: 70px;
+    height: 70px;
+    font-size: 0.75em;
+    padding: 8px;
+  }
+  
+  .networkControls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filterBtn {
+    padding: 10px 20px;
+  }
+  
+  .networkLegend {
+    position: static;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .networkCanvas {
+    height: 400px;
+  }
+  
+  .networkNode {
+    width: 60px;
+    height: 60px;
+    font-size: 0.7em;
+  }
+  
+  .connectionTooltip {
+    max-width: 200px;
+    font-size: 0.8em;
+  }
+}/* src/topic/gsh/components/SolidarityNetworks.module.css */
+
+.solidarityNetworks {
+  animation: fadeIn 0.5s ease;
+}
+
+.sectionTitle {
+  font-size: 2em;
+  margin-bottom: 36px;
+  color: #fff;
+  text-align: center;
+  font-weight: 300;
+}
+
+.networkCanvas {
+  position: relative;
+  height: 650px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7));
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.networkSvg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Network Nodes */
+.networkNode {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  font-size: 0.85em;
+  text-align: center;
+  padding: 10px;
+  backdrop-filter: blur(15px);
+  font-weight: 600;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.networkNode:hover {
+  transform: scale(1.15);
+  z-index: 20;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+.leaderNode {
+  background: radial-gradient(circle at 30% 30%, rgba(155, 89, 182, 0.9), rgba(155, 89, 182, 0.6));
+  border: 3px solid #9b59b6;
+  color: #fff;
+}
+
+.leaderNode:hover {
+  border-color: #d63384;
+  box-shadow: 0 15px 40px rgba(155, 89, 182, 0.5);
+}
+
+.movementNode {
+  background: radial-gradient(circle at 30% 30%, rgba(46, 213, 115, 0.9), rgba(46, 213, 115, 0.6));
+  border: 3px solid #2ed573;
+  color: #fff;
+}
+
+.movementNode:hover {
+  border-color: #20c997;
+  box-shadow: 0 15px 40px rgba(46, 213, 115, 0.5);
+}
+
+.conferenceNode {
+  background: radial-gradient(circle at 30% 30%, rgba(241, 196, 15, 0.9), rgba(241, 196, 15, 0.6));
+  border: 3px solid #f1c40f;
+  color: #fff;
+}
+
+.conferenceNode:hover {
+  border-color: #ffc107;
+  box-shadow: 0 15px 40px rgba(241, 196, 15, 0.5);
+}
+
+/* Network Connections */
+.networkConnection {
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 2;
+  fill: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.networkConnection:hover {
+  stroke-width: 4;
+  stroke: rgba(255, 255, 255, 0.8);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+}
+
+.networkConnection.ideological {
+  stroke: rgba(155, 89, 182, 0.5);
+  stroke-dasharray: 5,5;
+}
+
+.networkConnection.conference {
+  stroke: rgba(241, 196, 15, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.support {
+  stroke: rgba(46, 213, 115, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.personal {
+  stroke: rgba(255, 107, 107, 0.5);
+  stroke-dasharray: 2,2;
+}
+
+.networkConnection.movement {
+  stroke: rgba(74, 144, 226, 0.5);
+  stroke-width: 4;
+}
+
+/* Network Controls */
+.networkControls {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  font-weight: 500;
+}
+
+.filterBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #f9ca24;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(249, 202, 36, 0.2);
+}
+
+.filterBtn.active {
+  background: rgba(249, 202, 36, 0.2);
+  border-color: #f9ca24;
+  color: #f9ca24;
+  box-shadow: 0 5px 20px rgba(249, 202, 36, 0.3);
+}
+
+/* Connection Tooltip */
+.connectionTooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.9em;
+  z-index: 1000;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 250px;
+  pointer-events: none;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.connectionTooltip strong {
+  color: #f9ca24;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.connectionTooltip .connectionType {
+  color: #ff6b6b;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+/* Legend */
+.networkLegend {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 0.9em;
+}
+
+.networkLegend h4 {
+  color: #f9ca24;
+  margin-bottom: 10px;
+  font-size: 1em;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.legendColor {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.legendColor.leader { background: #9b59b6; }
+.legendColor.movement { background: #2ed573; }
+.legendColor.conference { background: #f1c40f; }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .networkCanvas {
+    height: 500px;
+  }
+  
+  .networkNode {
+    width: 70px;
+    height: 70px;
+    font-size: 0.75em;
+    padding: 8px;
+  }
+  
+  .networkControls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filterBtn {
+    padding: 10px 20px;
+  }
+  
+  .networkLegend {
+    position: static;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .networkCanvas {
+    height: 400px;
+  }
+  
+  .networkNode {
+    width: 60px;
+    height: 60px;
+    font-size: 0.7em;
+  }
+  
+  .connectionTooltip {
+    max-width: 200px;
+    font-size: 0.8em;
+  }
+}/* src/topic/gsh/components/SolidarityNetworks.module.css */
+
+.solidarityNetworks {
+  animation: fadeIn 0.5s ease;
+}
+
+.sectionTitle {
+  font-size: 2em;
+  margin-bottom: 36px;
+  color: #fff;
+  text-align: center;
+  font-weight: 300;
+}
+
+.networkCanvas {
+  position: relative;
+  height: 650px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7));
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.networkSvg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Network Nodes */
+.networkNode {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  font-size: 0.85em;
+  text-align: center;
+  padding: 10px;
+  backdrop-filter: blur(15px);
+  font-weight: 600;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.networkNode:hover {
+  transform: scale(1.15);
+  z-index: 20;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+.leaderNode {
+  background: radial-gradient(circle at 30% 30%, rgba(155, 89, 182, 0.9), rgba(155, 89, 182, 0.6));
+  border: 3px solid #9b59b6;
+  color: #fff;
+}
+
+.leaderNode:hover {
+  border-color: #d63384;
+  box-shadow: 0 15px 40px rgba(155, 89, 182, 0.5);
+}
+
+.movementNode {
+  background: radial-gradient(circle at 30% 30%, rgba(46, 213, 115, 0.9), rgba(46, 213, 115, 0.6));
+  border: 3px solid #2ed573;
+  color: #fff;
+}
+
+.movementNode:hover {
+  border-color: #20c997;
+  box-shadow: 0 15px 40px rgba(46, 213, 115, 0.5);
+}
+
+.conferenceNode {
+  background: radial-gradient(circle at 30% 30%, rgba(241, 196, 15, 0.9), rgba(241, 196, 15, 0.6));
+  border: 3px solid #f1c40f;
+  color: #fff;
+}
+
+.conferenceNode:hover {
+  border-color: #ffc107;
+  box-shadow: 0 15px 40px rgba(241, 196, 15, 0.5);
+}
+
+/* Network Connections */
+.networkConnection {
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 2;
+  fill: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.networkConnection:hover {
+  stroke-width: 4;
+  stroke: rgba(255, 255, 255, 0.8);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+}
+
+.networkConnection.ideological {
+  stroke: rgba(155, 89, 182, 0.5);
+  stroke-dasharray: 5,5;
+}
+
+.networkConnection.conference {
+  stroke: rgba(241, 196, 15, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.support {
+  stroke: rgba(46, 213, 115, 0.5);
+  stroke-width: 3;
+}
+
+.networkConnection.personal {
+  stroke: rgba(255, 107, 107, 0.5);
+  stroke-dasharray: 2,2;
+}
+
+.networkConnection.movement {
+  stroke: rgba(74, 144, 226, 0.5);
+  stroke-width: 4;
+}
+
+/* Network Controls */
+.networkControls {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  font-weight: 500;
+}
+
+.filterBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #f9ca24;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(249, 202, 36, 0.2);
+}
+
+.filterBtn.active {
+  background: rgba(249, 202, 36, 0.2);
+  border-color: #f9ca24;
+  color: #f9ca24;
+  box-shadow: 0 5px 20px rgba(249, 202, 36, 0.3);
+}
+
+/* Connection Tooltip */
+.connectionTooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.9em;
+  z-index: 1000;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 250px;
+  pointer-events: none;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.connectionTooltip strong {
+  color: #f9ca24;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.connectionTooltip .connectionType {
+  color: #ff6b6b;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+/* Legend */
+.networkLegend {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 0.9em;
+}
+
+.networkLegend h4 {
+  color: #f9ca24;
+  margin-bottom: 10px;
+  font-size: 1em;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.legendColor {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.legendColor.leader { background: #9b59b6; }
+.legendColor.movement { background: #2ed573; }
+.legendColor.conference { background: #f1c40f; }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .networkCanvas {
+    height: 500px;
+  }
+  
+  .networkNode {
+    width: 70px;
+    height: 70px;
+    font-size: 0.75em;
+    padding: 8px;
+  }
+  
+  .networkControls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filterBtn {
+    padding: 10px 20px;
+  }
+  
+  .networkLegend {
+    position: static;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .networkCanvas {
+    height: 400px;
+  }
+  
+  .networkNode {
+    width: 60px;
+    height: 60px;
+    font-size: 0.7em;
+  }
+  
+  .connectionTooltip {
+    max-width: 200px;
+    font-size: 0.8em;
   }
 }

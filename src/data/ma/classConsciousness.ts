@@ -29,21 +29,21 @@ export const classPositions: ClassPosition[] = [
   {
     id: 'worker',
     title: 'Industrial Worker',
-    icon: '👷',
+    icon: 'ðŸ‘·',
     description: 'Sells labor power<br />No means of production<br />Creates surplus value',
     baseConsciousness: 20
   },
   {
     id: 'petty-bourgeois',
     title: 'Petty Bourgeois',
-    icon: '🏪',
+    icon: 'ðŸª',
     description: 'Small business owner<br />Works + owns<br />Contradictory position',
     baseConsciousness: 10
   },
   {
     id: 'capitalist',
     title: 'Capitalist',
-    icon: '💼',
+    icon: 'ðŸ’¼',
     description: 'Owns means of production<br />Purchases labor power<br />Appropriates surplus',
     baseConsciousness: 5
   }
@@ -53,7 +53,7 @@ export const materialConditions: MaterialCondition[] = [
   {
     id: 'crisis',
     title: 'Economic Crisis',
-    icon: '💰',
+    icon: 'ðŸ’°',
     description: 'Unemployment rises, wages fall',
     effects: {
       'worker': 20,
@@ -69,7 +69,7 @@ export const materialConditions: MaterialCondition[] = [
   {
     id: 'victory',
     title: 'Strike Victory',
-    icon: '✊',
+    icon: 'âœŠ',
     description: 'Collective action succeeds',
     effects: {
       'worker': 30,
@@ -85,7 +85,7 @@ export const materialConditions: MaterialCondition[] = [
   {
     id: 'education',
     title: 'Political Education',
-    icon: '📚',
+    icon: 'ðŸ“š',
     description: 'Study groups, theory reading',
     effects: {
       'worker': 25,
@@ -101,7 +101,7 @@ export const materialConditions: MaterialCondition[] = [
   {
     id: 'repression',
     title: 'State Repression',
-    icon: '🔒',
+    icon: 'ðŸ”’',
     description: 'Police violence, union busting',
     effects: {
       'worker': -10,
