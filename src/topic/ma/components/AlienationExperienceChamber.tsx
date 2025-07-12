@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { alienationScenarios, AlienationScenario } from '../../data/ma/alienation';
+import { alienationScenarios, AlienationScenario } from '@/data/ma/alienation';
 import './AlienationExperienceChamber.css';
 
 interface Props {
@@ -52,39 +52,49 @@ export const AlienationExperienceChamber: React.FC<Props> = ({ onShowPopup }) =>
       
       <div className="experience-viewer">
         {currentScenario ? (
-          <>
-            <h2>{currentScenario.title}</h2>
-            <div className="scenario-content">
-              <h3>{currentScenario.scenario.setting}</h3>
-              <div className="scenario-narrative">
-                <p><em>{currentScenario.scenario.narrative}</em></p>
-                <div className="scenario-details">
-                  {currentScenario.scenario.details.map((detail, index) => (
-                    <p key={index}><strong>{detail.label}:</strong> {detail.value}</p>
-                  ))}
-                </div>
-                <p className="alienation-effect">
-                  <strong>The Alienation:</strong> {currentScenario.scenario.alienationEffect}
-                </p>
+          <div className="scenario-content">
+            <h2>{currentScenario.title} Experience</h2>
+            <h3>{currentScenario.scenario.setting}</h3>
+            
+            <div className="scenario-narrative">
+              <em>{currentScenario.scenario.narrative}</em>
+              
+              <div className="scenario-details">
+                {currentScenario.scenario.details.map((detail, idx) => (
+                  <p key={idx}>
+                    <strong>{detail.label}:</strong> {detail.value}
+                  </p>
+                ))}
               </div>
-              <p><strong>Marx's Analysis:</strong> "{currentScenario.marxQuote}"</p>
-              <p className="historical-parallel">
-                <strong>Historical Parallel:</strong> {currentScenario.historicalParallel}
-              </p>
             </div>
+            
+            <div className="alienation-effect">
+              <strong>Alienation Effect:</strong> {currentScenario.scenario.alienationEffect}
+            </div>
+            
+            <div className="historical-parallel">
+              <strong>Marx on this form of alienation:</strong> "{currentScenario.marxQuote}"
+            </div>
+            
+            <div className="historical-parallel">
+              <strong>Historical Parallel:</strong> {currentScenario.historicalParallel}
+            </div>
+            
             <div className="solution-button">
-              <button className="control-btn" onClick={showAlienationSolutions}>
-                💡 Explore Solutions
+              <button className="btn" onClick={showAlienationSolutions}>
+                🛠️ Explore Solutions
               </button>
             </div>
-          </>
+          </div>
         ) : (
-          <>
-            <h3>Select an alienation type to begin...</h3>
-            <p>Experience how capitalism transforms human relationships and consciousness through interactive scenarios.</p>
-          </>
+          <div>
+            <h3>Select an alienation type above to explore worker experiences</h3>
+            <p>Marx identified four forms of alienation under capitalism. Each represents a different way that workers become estranged from their human essence through the capitalist production process.</p>
+          </div>
         )}
       </div>
     </div>
   );
 };
+
+export default AlienationExperienceChamber;

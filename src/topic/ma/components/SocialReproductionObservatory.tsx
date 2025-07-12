@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { dailyActivities, reproductionMetrics } from '../../data/ma/socialReproduction';
+import { dailyActivities, reproductionMetrics } from '@/data/ma/socialReproduction';
 import './SocialReproductionObservatory.css';
 
 interface Props {
@@ -80,18 +80,17 @@ export const SocialReproductionObservatory: React.FC<Props> = ({ onShowPopup }) 
         <p><strong>Total Daily Wage Received:</strong> $160</p>
         <p><strong>Appropriation Rate:</strong> 73%</p>
         <p className="key-insight">
-          <strong>Key Insight:</strong> Capitalism depends on massive amounts of unpaid labor, especially from women, to reproduce the workforce. This hidden abode of reproduction is as crucial as the visible factory floor.
+          <strong>Key Insight:</strong> Capitalism depends on massive amounts of unpaid labor, especially from women, to reproduce the workforce.
         </p>
       </div>
     );
     onShowPopup(content);
   };
 
-  const calculateTotalValue = () => {
-    const calculations = reproductionMetrics.valueCalculations;
+  const calculateDailyValue = () => {
     const content = (
       <div className="value-calculation">
-        <h2>Total Value Calculation</h2>
+        <h2>Daily Value Creation Analysis</h2>
         <table>
           <thead>
             <tr>
@@ -102,104 +101,108 @@ export const SocialReproductionObservatory: React.FC<Props> = ({ onShowPopup }) 
             </tr>
           </thead>
           <tbody>
-            {calculations.map((calc, index) => (
-              <tr key={index}>
-                <td>{calc.activity}</td>
-                <td>{calc.hours}</td>
-                <td>${calc.valuePerHour}</td>
-                <td>${calc.totalValue}</td>
-              </tr>
-            ))}
+            <tr>
+              <td>Paid Work</td>
+              <td>8</td>
+              <td>$20</td>
+              <td>$160 (wage)</td>
+            </tr>
+            <tr>
+              <td>Commute</td>
+              <td>2</td>
+              <td>$20</td>
+              <td>$40 (unpaid)</td>
+            </tr>
+            <tr>
+              <td>Care Work</td>
+              <td>4</td>
+              <td>$25</td>
+              <td>$100 (unpaid)</td>
+            </tr>
+            <tr>
+              <td>Domestic Work</td>
+              <td>2</td>
+              <td>$15</td>
+              <td>$30 (unpaid)</td>
+            </tr>
+            <tr>
+              <td>Sleep/Recovery</td>
+              <td>8</td>
+              <td>$20</td>
+              <td>$160 (unpaid)</td>
+            </tr>
           </tbody>
         </table>
-        <p className="total-summary">
-          <strong>Daily Value Created:</strong> ${calculations.reduce((sum, calc) => sum + calc.totalValue, 0)}<br />
-          <strong>Daily Wage Received:</strong> $160<br />
-          <strong>Surplus Extracted:</strong> ${calculations.reduce((sum, calc) => sum + calc.totalValue, 0) - 160}
-        </p>
+        <div className="total-summary">
+          <strong>Total Value Created Daily:</strong> $490<br/>
+          <strong>Total Wage Received:</strong> $160<br/>
+          <strong>Surplus Value Rate:</strong> 206%
+        </div>
       </div>
     );
     onShowPopup(content);
   };
 
-  // Calculate positions for circular layout
-  const getActivityPosition = (index: number, total: number) => {
-    const angle = (index / total) * 2 * Math.PI - Math.PI / 2;
-    const radius = 40; // percentage
-    const x = 50 + radius * Math.cos(angle);
-    const y = 50 + radius * Math.sin(angle);
-    return { left: `${x}%`, top: `${y}%` };
-  };
-
   return (
     <div className="reproduction-observatory">
-      <h2 className="section-title">🔄 Observe How Capitalism Reproduces Itself Daily</h2>
+      <h2 className="section-title">🔄 Social Reproduction Observatory</h2>
       
-      <div className="daily-cycle">
+      <div className={`daily-cycle ${cycleRunning ? 'running' : ''}`}>
         <div className="cycle-center">
-          <span>💰</span>
+          {cycleRunning ? '⚡' : '👤'}
         </div>
         
         {dailyActivities.map((activity, index) => {
-          const position = getActivityPosition(index, dailyActivities.length);
+          const angle = (index / dailyActivities.length) * 360;
+          const radius = 200;
+          const x = Math.cos((angle - 90) * Math.PI / 180) * radius;
+          const y = Math.sin((angle - 90) * Math.PI / 180) * radius;
+          
           return (
             <div
               key={activity.id}
-              className={`activity-node ${selectedActivity === activity.id ? 'selected' : ''}`}
-              style={position}
+              className={`activity-node ${selectedActivity === activity.id ? 'active' : ''}`}
+              style={{
+                position: 'absolute',
+                left: `calc(50% + ${x}px)`,
+                top: `calc(50% + ${y}px)`,
+                transform: 'translate(-50%, -50%)'
+              }}
               onClick={() => analyzeActivity(activity.id)}
             >
-              <span>{activity.icon}</span>
-              <small>{activity.label}</small>
+              <div className="activity-icon">{activity.icon}</div>
+              <div className="activity-label">{activity.label}</div>
+              <div className="activity-time">{activity.time}</div>
             </div>
           );
         })}
-        
-        {/* Flow lines */}
-        {dailyActivities.map((_, index) => {
-          const angle = (index / dailyActivities.length) * 2 * Math.PI;
-          return (
-            <div
-              key={`flow-${index}`}
-              className="flow-line"
-              style={{
-                transform: `rotate(${angle}rad)`,
-                transformOrigin: 'center',
-                position: 'absolute',
-                left: '50%',
-                top: '50%',
-                width: '40%',
-                marginLeft: '-20%'
-              }}
-            />
-          );
-        })}
       </div>
       
-      <div className="reproduction-analysis">
-        {reproductionMetrics.metrics.map((metric, index) => (
-          <div key={index} className="analysis-metric">
-            <h4>{metric.title}</h4>
-            <p>{metric.value}</p>
-          </div>
-        ))}
-      </div>
-      
-      <div className="reproduction-controls">
-        <button 
-          className="control-btn" 
-          onClick={runFullCycle}
-          disabled={cycleRunning}
-        >
-          ▶️ Run 24-Hour Cycle
+      <div className="observatory-controls">
+        <button className="control-btn" onClick={runFullCycle}>
+          ▶️ Run Full Cycle
         </button>
         <button className="control-btn" onClick={showHiddenLabor}>
-          👁️ Reveal Hidden Labor
+          🧊 Reveal Hidden Labor
         </button>
-        <button className="control-btn" onClick={calculateTotalValue}>
-          💵 Calculate Total Value
+        <button className="control-btn" onClick={calculateDailyValue}>
+          💰 Calculate Daily Value
         </button>
+      </div>
+      
+      <div className="reproduction-metrics">
+        <h3>Reproduction Metrics</h3>
+        <div className="metrics-grid">
+          {reproductionMetrics.map((metric, idx) => (
+            <div key={idx} className="metric-card">
+              <h4>{metric.title}</h4>
+              <p>{metric.value}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
 };
+
+export default SocialReproductionObservatory;

@@ -2,13 +2,6 @@ import { Field, FieldData } from '@/types';
 
 export const FIELDS: Field[] = [
   {
-    id: 'nse',
-    name: 'New Structural Economics',
-    icon: '📊',
-    description: 'Development theory, comparative advantage, structural transformation',
-    shortCode: 'NSE'
-  },
-  {
     id: 'gsh',
     name: 'Global South History',
     icon: '🌍',
@@ -21,6 +14,13 @@ export const FIELDS: Field[] = [
     icon: '⚒️',
     description: 'Historical materialism, modes of production, class consciousness',
     shortCode: 'MA'
+  },
+  {
+    id: 'nse',
+    name: 'New Structural Economics',
+    icon: '📊',
+    description: 'Development theory, comparative advantage, structural transformation',
+    shortCode: 'NSE'
   }
 ];
 

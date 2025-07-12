@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { strataLayers, modesComparison, StrataLayer } from '../../data/ma/modesOfProduction';
+import { strataLayers, modesComparison, StrataLayer } from '@/data/ma/modesOfProduction';
 import './ModeOfProductionArchaeologist.css';
 
 interface Props {
@@ -11,45 +11,24 @@ export const ModeOfProductionArchaeologist: React.FC<Props> = ({ onShowPopup }) 
   const [currentAnalysis, setCurrentAnalysis] = useState<string>('Click on the layers above to excavate different modes of production. Each artifact reveals the social relations and contradictions of its era.');
 
   const handleLayerClick = (layer: StrataLayer) => {
-    setSelectedMode(layer.mode);
-    const analysis = `
-      <h3>${layer.title} (${layer.dateRange})</h3>
-      <p><strong>Forces of Production:</strong> ${layer.analysis.forces}</p>
-      <p><strong>Relations of Production:</strong> ${layer.analysis.relations}</p>
-      <p><strong>Key Contradictions:</strong></p>
-      <ul>
-        ${layer.analysis.contradictions.map(c => `<li>${c}</li>`).join('')}
-      </ul>
-      <p><strong>Forms of Resistance:</strong> ${layer.analysis.resistance}</p>
-    `;
-    setCurrentAnalysis(analysis);
+    setSelectedMode(layer.id);
+    setCurrentAnalysis(layer.analysis);
   };
 
   const compareModesOfProduction = () => {
     const content = (
-      <div>
-        <h2>Comparative Analysis of Modes of Production</h2>
-        <table className="comparison-table">
-          <thead>
-            <tr>
-              {modesComparison.headers.map((header, i) => (
-                <th key={i}>{header}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {modesComparison.rows.map((row, i) => (
-              <tr key={i}>
-                {row.map((cell, j) => (
-                  <td key={j}>{cell}</td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <p className="key-insight">
-          <strong>Key Insight:</strong> Each mode contains contradictions that eventually lead to its transformation into a new mode. The engine of history is class struggle arising from these contradictions.
-        </p>
+      <div className="modes-comparison">
+        <h2>Comparative Analysis of Production Modes</h2>
+        <div className="comparison-grid">
+          {modesComparison.map((mode, idx) => (
+            <div key={idx} className="mode-comparison-card">
+              <h3>{mode.era}</h3>
+              <p><strong>Dominant Class Relations:</strong> {mode.relations}</p>
+              <p><strong>Key Contradiction:</strong> {mode.contradiction}</p>
+              <p><strong>Historical Resolution:</strong> {mode.resolution}</p>
+            </div>
+          ))}
+        </div>
       </div>
     );
     onShowPopup(content);
@@ -57,28 +36,27 @@ export const ModeOfProductionArchaeologist: React.FC<Props> = ({ onShowPopup }) 
 
   const traceEvolution = () => {
     const content = (
-      <div>
-        <h2>Evolution of Labor Through History</h2>
+      <div className="evolution-trace">
+        <h2>Evolution of Labor Relations</h2>
         <div className="evolution-timeline">
-          <div className="evolution-stage">
-            <h3>🏹 Primitive Communism</h3>
-            <p>Collective labor for collective benefit. No exploitation.</p>
-          </div>
-          <div className="evolution-arrow">↓</div>
-          <div className="evolution-stage">
-            <h3>🏰 Feudalism</h3>
-            <p>Personal bondage. Direct surplus extraction through corvée.</p>
-          </div>
-          <div className="evolution-arrow">↓</div>
-          <div className="evolution-stage">
-            <h3>🏭 Capitalism</h3>
-            <p>"Free" wage labor. Hidden surplus extraction through wage system.</p>
-          </div>
-          <div className="evolution-arrow">↓</div>
-          <div className="evolution-stage">
-            <h3>🚩 Socialism</h3>
-            <p>Associated producers. Conscious planning for social needs.</p>
-          </div>
+          {strataLayers.map((layer, idx) => (
+            <div key={idx} className="evolution-stage">
+              <h3>{layer.title}</h3>
+              <p><strong>Labor Form:</strong> {layer.laborForm}</p>
+              <p><strong>Property Relations:</strong> {layer.propertyForm}</p>
+              <p><strong>Surplus Extraction:</strong> {layer.surplusForm}</p>
+              {idx < strataLayers.length - 1 && <div className="evolution-arrow">↓</div>}
+            </div>
+          ))}
+        </div>
+        <div className="contradictions-analysis">
+          <h3>Primary Contradictions</h3>
+          <ul>
+            <li><strong>Primitive Communism:</strong> Scarcity vs. egalitarian distribution</li>
+            <li><strong>Feudalism:</strong> Personal bonds vs. market relations</li>
+            <li><strong>Capitalism:</strong> Social production vs. private appropriation</li>
+            <li><strong>Socialism:</strong> National planning vs. global markets</li>
+          </ul>
         </div>
       </div>
     );
@@ -86,19 +64,31 @@ export const ModeOfProductionArchaeologist: React.FC<Props> = ({ onShowPopup }) 
   };
 
   const analyzeContradictions = () => {
+    if (!selectedMode) {
+      alert('Please select a mode of production first!');
+      return;
+    }
+
+    const layer = strataLayers.find(l => l.id === selectedMode);
+    if (!layer) return;
+
     const content = (
-      <div>
-        <h2>Contradictions Driving Historical Change</h2>
-        <div className="contradictions-analysis">
-          <h3>Capitalism's Central Contradictions</h3>
+      <div className="contradiction-analysis">
+        <h2>Contradictions in {layer.title}</h2>
+        <p><strong>Primary Contradiction:</strong> {layer.primaryContradiction}</p>
+        <div className="contradiction-details">
+          <h3>Internal Tensions:</h3>
           <ul>
-            <li><strong>Social Production vs. Private Appropriation:</strong> Workers cooperate to produce, but capitalists own the results</li>
-            <li><strong>Use Value vs. Exchange Value:</strong> Human needs subordinated to profit</li>
-            <li><strong>Forces vs. Relations:</strong> Technology enables abundance, but property relations enforce scarcity</li>
-            <li><strong>Capital vs. Labor:</strong> System needs workers as consumers but drives down wages</li>
+            {layer.contradictions.map((contradiction, idx) => (
+              <li key={idx}>
+                <strong>{contradiction.aspect}:</strong> {contradiction.description}
+              </li>
+            ))}
           </ul>
-          <h3>Resolution Through Crisis</h3>
-          <p>These contradictions intensify until revolutionary transformation becomes necessary.</p>
+        </div>
+        <div className="resolution">
+          <h3>Historical Resolution:</h3>
+          <p>{layer.historicalOutcome}</p>
         </div>
       </div>
     );
@@ -106,14 +96,14 @@ export const ModeOfProductionArchaeologist: React.FC<Props> = ({ onShowPopup }) 
   };
 
   return (
-    <div className="production-archaeologist">
-      <h2 className="section-title">⛏️ Excavate the Layers of Human History</h2>
+    <div className="mode-archaeologist">
+      <h2 className="section-title">🛠️ Mode of Production Archaeologist</h2>
       
-      <div className="dig-site">
-        {strataLayers.map((layer) => (
+      <div className="archaeological-site">
+        {strataLayers.map((layer, index) => (
           <div
             key={layer.id}
-            className={`strata-layer ${selectedMode === layer.mode ? 'selected' : ''}`}
+            className={`strata-layer ${layer.id} ${selectedMode === layer.id ? 'selected' : ''}`}
             style={layer.style}
             onClick={() => handleLayerClick(layer)}
             data-mode={layer.mode}
@@ -151,3 +141,5 @@ export const ModeOfProductionArchaeologist: React.FC<Props> = ({ onShowPopup }) 
     </div>
   );
 };
+
+export default ModeOfProductionArchaeologist;

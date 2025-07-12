@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { baseModes, dialecticalMotion, BaseMode } from '../../data/ma/baseAndSuperstructure';
+import { baseModes, dialecticalMotion, BaseMode } from '@/data/ma/baseAndSuperstructure';
 import './BaseSuperstuctureEngine.css';
 
 interface Props {
@@ -66,55 +66,58 @@ export const BaseSuperstuctureEngine: React.FC<Props> = ({ onShowPopup }) => {
       return;
     }
     
-    const predictions: { [key: string]: string } = {
-      'capitalist-production': 'Automation and AI create conditions for post-scarcity, making socialist planning feasible',
-      'feudal-agriculture': 'Merchant capital and urban growth dissolve feudal bonds, creating capitalism',
-      'socialist-planning': 'Either democratic deepening toward communism or market reforms toward capitalism',
-      'hunter-gatherer': 'Agricultural revolution creates surplus, enabling class society'
-    };
-    
     const content = (
       <div>
-        <h2>Predicted Transformation</h2>
-        <p><strong>Current Base:</strong> {currentSuperstructure.title}</p>
-        <p><strong>Transformation Path:</strong> {predictions[currentSuperstructure.id]}</p>
-        <p><strong>Key Factor:</strong> Development of productive forces beyond current relations</p>
+        <h2>Predicting Historical Transformation</h2>
+        <p>Based on the current contradictions in <strong>{currentSuperstructure.title}</strong>:</p>
+        <div className="transformation-prediction">
+          <h3>Likely Direction:</h3>
+          <p>The internal contradictions suggest movement toward a new mode of production that resolves current tensions between forces and relations of production.</p>
+          
+          <h3>Key Factors:</h3>
+          <ul>
+            <li>Development of productive forces</li>
+            <li>Class struggle intensity</li>
+            <li>Ideological hegemony breakdown</li>
+            <li>International conditions</li>
+          </ul>
+        </div>
       </div>
     );
     onShowPopup(content);
   };
 
   return (
-    <div className="dialectic-engine">
-      <h2 className="section-title">⚙️ See How Economic Base Shapes Cultural Superstructure</h2>
+    <div className="base-superstructure-engine">
+      <h2 className="section-title">⚙️ Base-Superstructure Dialectic</h2>
       
       <div className="dialectic-container">
         <div className="base-section">
-          <h3>Economic Base</h3>
-          {baseModes.map((base) => (
-            <div
-              key={base.id}
-              className={`base-element ${selectedBase === base.id ? 'selected' : ''}`}
-              onClick={() => selectBase(base.id)}
-            >
-              <strong>{base.icon} {base.title}</strong><br />
-              {base.description}
-            </div>
-          ))}
-        </div>
-        
-        <div className="dialectic-arrows">
-          <div className="arrow-up">⬆️</div>
-          <div className="arrow-label">
-            Determines<br />&<br />Shapes
+          <h3>🏗️ Economic Base</h3>
+          <p>The material foundation of society - how people produce to survive</p>
+          
+          <div className="base-modes">
+            {baseModes.map((mode) => (
+              <div
+                key={mode.id}
+                className={`base-mode ${selectedBase === mode.id ? 'active' : ''}`}
+                onClick={() => selectBase(mode.id)}
+              >
+                <span className="mode-icon">{mode.icon}</span>
+                <div className="mode-info">
+                  <strong>{mode.title}</strong><br />
+                  {mode.description}
+                </div>
+              </div>
+            ))}
           </div>
-          <div className="arrow-down">⬇️</div>
-          <div className="arrow-label">Reinforces</div>
         </div>
         
         <div className="superstructure-section">
-          <h3>Cultural Superstructure</h3>
-          <div id="superstructureElements">
+          <h3>🏛️ Superstructure</h3>
+          <p>Legal, political, and cultural institutions that arise from the base</p>
+          
+          <div className="superstructure-elements">
             {currentSuperstructure ? (
               currentSuperstructure.superstructure.map((element, index) => (
                 <div key={index} className="super-element">
@@ -145,3 +148,5 @@ export const BaseSuperstuctureEngine: React.FC<Props> = ({ onShowPopup }) => {
     </div>
   );
 };
+
+export default BaseSuperstuctureEngine;

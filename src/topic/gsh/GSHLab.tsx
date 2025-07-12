@@ -1,265 +1,216 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import './GSHLab.css';
 
+// Import all your GSH mock data
+import { extractionPeriods, colonyNodes, metropoleNodes } from '@/data/gsh/colonialExtraction';
+import { regions, yearMarkers, historicalEvents } from '@/data/gsh/parallelHistories';
+import { narrativeSources } from '@/data/gsh/counterNarratives';
+import { decolonizationPresets } from '@/data/gsh/decolonizationDynamics';
+import { networkNodes, networkConnections } from '@/data/gsh/solidarityNetworks';
+
+interface GlobalSouthMode {
+  id: 'extraction' | 'parallel' | 'counter' | 'decolonization' | 'solidarity';
+  label: string;
+  icon: string;
+}
+
+const modes: GlobalSouthMode[] = [
+  { id: 'extraction', label: 'Colonial Extraction', icon: '🌍' },
+  { id: 'parallel', label: 'Parallel Histories', icon: '⚡' },
+  { id: 'counter', label: 'Counter-Narratives', icon: '📖' },
+  { id: 'decolonization', label: 'Decolonization Paths', icon: '🕊️' },
+  { id: 'solidarity', label: 'Solidarity Networks', icon: '🤝' }
+];
+
 const GSHLab: React.FC = () => {
-  const [activeModule, setActiveModule] = useState('colonial-extraction');
+  const [currentMode, setCurrentMode] = useState<GlobalSouthMode['id']>('extraction');
+  const [showInfoPopup, setShowInfoPopup] = useState(false);
+  const [popupContent, setPopupContent] = useState('');
+
+  const handleModeChange = useCallback((mode: GlobalSouthMode['id']) => {
+    setCurrentMode(mode);
+  }, []);
+
+  const showInfo = useCallback((content: string) => {
+    setPopupContent(content);
+    setShowInfoPopup(true);
+  }, []);
+
+  const renderCurrentMode = () => {
+    switch (currentMode) {
+      case 'extraction':
+        return (
+          <div className="mode-content">
+            <h2>Colonial Extraction Visualizer</h2>
+            <p>Explore the flow of wealth from colonies to imperial centers</p>
+            <div className="extraction-overview">
+              <div className="stats-grid">
+                <div className="stat-card">
+                  <h3>Total Extracted</h3>
+                  <p>$2.4 trillion (inflation-adjusted)</p>
+                </div>
+                <div className="stat-card">
+                  <h3>Lives Lost</h3>
+                  <p>15-20 million</p>
+                </div>
+                <div className="stat-card">
+                  <h3>Key Resources</h3>
+                  <p>Gold, silver, spices, slaves</p>
+                </div>
+                <div className="stat-card">
+                  <h3>Time Period</h3>
+                  <p>Early Colonial Period (1500-1650)</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      
+      case 'parallel':
+        return (
+          <div className="mode-content">
+            <h2>Parallel Histories</h2>
+            <p>Discover simultaneous resistance movements across the Global South</p>
+            <div className="parallel-overview">
+              <div className="timeline-preview">
+                <h3>Interconnected Movements</h3>
+                <ul>
+                  <li>1857 - Indian Rebellion & Taiping Rebellion</li>
+                  <li>1916 - Easter Rising & Arab Revolt</li>
+                  <li>1947-1949 - Indian Independence & Indonesian Revolution</li>
+                  <li>1960s - African Independence & Latin American Liberation</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'counter':
+        return (
+          <div className="mode-content">
+            <h2>Counter-Narratives</h2>
+            <p>Challenge dominant historical narratives with alternative perspectives</p>
+            <div className="counter-overview">
+              <div className="narrative-types">
+                <div className="narrative-card">
+                  <h3>🏛️ Colonial Sources</h3>
+                  <p>Official imperial records and colonial administrators</p>
+                </div>
+                <div className="narrative-card">
+                  <h3>🌿 Indigenous Sources</h3>
+                  <p>Oral traditions and indigenous historical accounts</p>
+                </div>
+                <div className="narrative-card">
+                  <h3>📚 Scholarly Sources</h3>
+                  <p>Modern academic research and historical analysis</p>
+                </div>
+                <div className="narrative-card">
+                  <h3>🏺 Material Sources</h3>
+                  <p>Archaeological evidence and material culture</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'decolonization':
+        return (
+          <div className="mode-content">
+            <h2>Decolonization Paths</h2>
+            <p>Simulate different paths to independence and their outcomes</p>
+            <div className="decolonization-overview">
+              <div className="path-options">
+                <div className="path-card">
+                  <h3>Negotiated Independence</h3>
+                  <p>Peaceful transition through diplomatic means</p>
+                </div>
+                <div className="path-card">
+                  <h3>Armed Struggle</h3>
+                  <p>Liberation through organized resistance</p>
+                </div>
+                <div className="path-card">
+                  <h3>Civil Disobedience</h3>
+                  <p>Non-violent mass resistance movements</p>
+                </div>
+                <div className="path-card">
+                  <h3>Economic Pressure</h3>
+                  <p>Independence through economic leverage</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'solidarity':
+        return (
+          <div className="mode-content">
+            <h2>Solidarity Networks</h2>
+            <p>Map the connections between liberation movements worldwide</p>
+            <div className="solidarity-overview">
+              <div className="network-preview">
+                <h3>Key Connections</h3>
+                <ul>
+                  <li>Pan-African Congress (1919-1945)</li>
+                  <li>Bandung Conference (1955)</li>
+                  <li>Tricontinental Conference (1966)</li>
+                  <li>Non-Aligned Movement (1961-present)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        );
+
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className="gsh-lab">
-      <div className="gsh-background">
-        <div className="wave"></div>
-      </div>
-      
-      <header className="gsh-header">
-        <h1>Global South History Laboratory</h1>
-        <p>Explore resistance, resilience, and revolution through interactive learning</p>
-        <p className="subtitle">Decolonizing historical narratives through active engagement</p>
-      </header>
-      
-      <nav className="gsh-nav">
-        <button 
-          className={`module-btn ${activeModule === 'colonial-extraction' ? 'active' : ''}`}
-          onClick={() => setActiveModule('colonial-extraction')}
-        >
-          🌍 Colonial Extraction
-        </button>
-        <button 
-          className={`module-btn ${activeModule === 'parallel-histories' ? 'active' : ''}`}
-          onClick={() => setActiveModule('parallel-histories')}
-        >
-          ⚡ Parallel Histories
-        </button>
-        <button 
-          className={`module-btn ${activeModule === 'counter-narrative' ? 'active' : ''}`}
-          onClick={() => setActiveModule('counter-narrative')}
-        >
-          📖 Counter-Narratives
-        </button>
-        <button 
-          className={`module-btn ${activeModule === 'decolonization' ? 'active' : ''}`}
-          onClick={() => setActiveModule('decolonization')}
-        >
-          🎯 Decolonization Paths
-        </button>
-        <button 
-          className={`module-btn ${activeModule === 'solidarity' ? 'active' : ''}`}
-          onClick={() => setActiveModule('solidarity')}
-        >
-          🤝 Solidarity Networks
-        </button>
-      </nav>
-      
-      <main className="gsh-content">
-        <div className="module-container">
-          {activeModule === 'colonial-extraction' && <ColonialExtractionModule />}
-          {activeModule === 'parallel-histories' && <ParallelHistoriesModule />}
-          {activeModule === 'counter-narrative' && <CounterNarrativeModule />}
-          {activeModule === 'decolonization' && <DecolonizationModule />}
-          {activeModule === 'solidarity' && <SolidarityModule />}
-        </div>
-      </main>
-      
-      <div className="progress-indicator">
-        <div className="progress-step completed">1</div>
-        <div className="progress-step">2</div>
-        <div className="progress-step">3</div>
-        <div className="progress-step">4</div>
-        <div className="progress-step">5</div>
-        <span className="progress-label">Your Learning Journey</span>
+      <div className="lab-container">
+        <header className="lab-header">
+          <h1>Global South History Laboratory</h1>
+          <p className="lab-subtitle">
+            Explore resistance, resilience, and revolution through interactive learning
+          </p>
+          <p className="lab-description">
+            Decolonizing historical narratives through active engagement
+          </p>
+        </header>
+
+        <nav className="mode-selector">
+          {modes.map((mode) => (
+            <button
+              key={mode.id}
+              className={`mode-btn ${currentMode === mode.id ? 'active' : ''}`}
+              onClick={() => handleModeChange(mode.id)}
+            >
+              <span className="mode-icon">{mode.icon}</span>
+              <span className="mode-label">{mode.label}</span>
+            </button>
+          ))}
+        </nav>
+
+        <main className="learning-area">
+          {renderCurrentMode()}
+        </main>
+
+        {showInfoPopup && (
+          <div className="info-popup-overlay" onClick={() => setShowInfoPopup(false)}>
+            <div className="info-popup" onClick={(e) => e.stopPropagation()}>
+              <button 
+                className="close-btn"
+                onClick={() => setShowInfoPopup(false)}
+              >
+                ×
+              </button>
+              <div dangerouslySetInnerHTML={{ __html: popupContent }} />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
 };
-
-// Module Components
-const ColonialExtractionModule: React.FC = () => (
-  <div className="module-content">
-    <h2 className="module-title">🌍 Trace the Flows of Colonial Extraction</h2>
-    <div className="extraction-map">
-      <div className="world-map">
-        <div className="resource-node colony" style={{ top: '60%', left: '20%' }}>
-          <span>🌴</span>
-          <div className="node-label">West Africa</div>
-        </div>
-        <div className="resource-node colony" style={{ top: '70%', left: '45%' }}>
-          <span>💎</span>
-          <div className="node-label">Congo</div>
-        </div>
-        <div className="resource-node colony" style={{ top: '50%', left: '65%' }}>
-          <span>🌾</span>
-          <div className="node-label">India</div>
-        </div>
-        <div className="resource-node metropole" style={{ top: '20%', left: '40%' }}>
-          <span>🏛️</span>
-          <div className="node-label">London</div>
-        </div>
-        <div className="resource-node metropole" style={{ top: '25%', left: '45%' }}>
-          <span>🗼</span>
-          <div className="node-label">Paris</div>
-        </div>
-      </div>
-      <div className="extraction-panel">
-        <h3>Extraction Data</h3>
-        <div className="data-section">
-          <h4>Time Period: 1800-1900</h4>
-          <div className="data-item">
-            <span>Total Extracted:</span>
-            <span className="value">$45 trillion</span>
-          </div>
-          <div className="data-item">
-            <span>Lives Lost:</span>
-            <span className="value">47 million</span>
-          </div>
-          <div className="data-item">
-            <span>Resources Taken:</span>
-            <span className="value">Immeasurable</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-);
-
-const ParallelHistoriesModule: React.FC = () => (
-  <div className="module-content">
-    <h2 className="module-title">⚡ Discover Simultaneous Struggles</h2>
-    <div className="timeline-container">
-      <div className="timeline-header">
-        <div className="year-marker">1857</div>
-        <div className="year-marker">1884</div>
-        <div className="year-marker">1919</div>
-        <div className="year-marker">1955</div>
-        <div className="year-marker">1960</div>
-      </div>
-      <div className="regions-grid">
-        <div className="region-column">
-          <h3>🇮🇳 South Asia</h3>
-          <div className="event-card resistance">
-            <h4>1857: Sepoy Rebellion</h4>
-            <p>First war of independence</p>
-          </div>
-          <div className="event-card cultural">
-            <h4>1885: Indian National Congress</h4>
-            <p>Political awakening</p>
-          </div>
-        </div>
-        <div className="region-column">
-          <h3>🌍 Africa</h3>
-          <div className="event-card resistance">
-            <h4>1823-1900: Ashanti Resistance</h4>
-            <p>Century-long resistance</p>
-          </div>
-          <div className="event-card independence">
-            <h4>1960: Year of Africa</h4>
-            <p>17 nations gain independence</p>
-          </div>
-        </div>
-        <div className="region-column">
-          <h3>🌎 Latin America</h3>
-          <div className="event-card independence">
-            <h4>1791-1804: Haitian Revolution</h4>
-            <p>First successful slave revolt</p>
-          </div>
-          <div className="event-card resistance">
-            <h4>1910: Mexican Revolution</h4>
-            <p>Zapata: "Land and Liberty!"</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-);
-
-const CounterNarrativeModule: React.FC = () => (
-  <div className="module-content">
-    <h2 className="module-title">📖 Build History from Multiple Perspectives</h2>
-    <div className="narrative-builder">
-      <div className="source-selector">
-        <h3>Select Your Sources:</h3>
-        <div className="source-item">📜 Colonial Archives</div>
-        <div className="source-item selected">🗣️ Oral Histories</div>
-        <div className="source-item selected">✊ Resistance Letters</div>
-        <div className="source-item">📚 Academic Analysis</div>
-      </div>
-      <div className="narrative-display">
-        <h3>The 1857 Rebellion</h3>
-        <div className="narrative-section">
-          <div className="perspective-tag">Indigenous Memory</div>
-          <p>Our elders spoke of 1857 as the year the earth trembled with righteous anger...</p>
-        </div>
-        <div className="narrative-section">
-          <div className="perspective-tag">Resistance Letter</div>
-          <p>Brothers and sisters, we fight not merely against greased cartridges but against systematic plunder...</p>
-        </div>
-      </div>
-    </div>
-  </div>
-);
-
-const DecolonizationModule: React.FC = () => (
-  <div className="module-content">
-    <h2 className="module-title">🎯 Simulate Paths to Independence</h2>
-    <div className="dynamics-simulator">
-      <div className="factor-controls">
-        <h3>Adjust Factors:</h3>
-        <div className="factor-slider">
-          <label>International Pressure</label>
-          <input type="range" min="0" max="100" defaultValue="50" />
-          <span className="value">50%</span>
-        </div>
-        <div className="factor-slider">
-          <label>Armed Resistance</label>
-          <input type="range" min="0" max="100" defaultValue="30" />
-          <span className="value">30%</span>
-        </div>
-        <div className="factor-slider">
-          <label>Civil Disobedience</label>
-          <input type="range" min="0" max="100" defaultValue="70" />
-          <span className="value">70%</span>
-        </div>
-      </div>
-      <div className="outcome-display">
-        <h3>Projected Outcome</h3>
-        <p>Mass civil disobedience creates unstoppable moral pressure...</p>
-        <div className="metrics">
-          <div>Timeline: 15-20 years</div>
-          <div>Violence Level: Low</div>
-          <div>Stability: High</div>
-        </div>
-      </div>
-    </div>
-  </div>
-);
-
-const SolidarityModule: React.FC = () => (
-  <div className="module-content">
-    <h2 className="module-title">🤝 Trace Connections of Resistance</h2>
-    <div className="network-visualization">
-      <div className="network-canvas">
-        <div className="network-node leader" style={{ top: '20%', left: '30%' }}>
-          Gandhi
-        </div>
-        <div className="network-node leader" style={{ top: '40%', left: '50%' }}>
-          Nkrumah
-        </div>
-        <div className="network-node leader" style={{ top: '60%', left: '25%' }}>
-          Castro
-        </div>
-        <div className="network-node movement" style={{ top: '50%', left: '70%' }}>
-          Non-Aligned
-        </div>
-        <div className="network-node conference" style={{ top: '35%', left: '45%' }}>
-          Bandung 1955
-        </div>
-      </div>
-      <div className="connection-filters">
-        <button className="filter-btn active">All Connections</button>
-        <button className="filter-btn">Ideological</button>
-        <button className="filter-btn">Conferences</button>
-        <button className="filter-btn">Support</button>
-      </div>
-    </div>
-  </div>
-);
 
 export default GSHLab;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { classPositions, materialConditions, ConsciousnessEffect } from '../../data/ma/classConsciousness';
+import { classPositions, materialConditions, ConsciousnessEffect } from '@/data/ma/classConsciousness';
 import './ClassConsciousnessLab.css';
 
 interface Props {
@@ -48,92 +48,112 @@ export const ClassConsciousnessLab: React.FC<Props> = ({ onShowPopup }) => {
         <p>{condition.analysis[selectedClass!]}</p>
       </div>
     );
-    
-    // Show temporary popup
-    const popup = document.createElement('div');
-    popup.className = 'temporary-popup';
-    popup.innerHTML = content.props.children.toString();
-    document.body.appendChild(popup);
-    setTimeout(() => popup.remove(), 4000);
+    onShowPopup(content);
   };
 
-  const getConsciousnessStage = () => {
-    if (consciousnessLevel < 33) return 'False Consciousness';
-    if (consciousnessLevel < 66) return 'Trade Union Consciousness';
-    return 'Revolutionary Consciousness';
+  const analyzeClassConflict = () => {
+    if (!selectedClass) {
+      alert('Please select a class first!');
+      return;
+    }
+
+    const currentClass = classPositions.find(c => c.id === selectedClass);
+    const content = (
+      <div>
+        <h2>Class Conflict Analysis</h2>
+        <h3>Current Position: {currentClass?.title}</h3>
+        <p><strong>Material Interests:</strong></p>
+        <ul>
+          {currentClass?.materialInterests.map((interest, idx) => (
+            <li key={idx}>{interest}</li>
+          ))}
+        </ul>
+        <p><strong>Consciousness Level:</strong> {consciousnessLevel}%</p>
+        <p><strong>Revolutionary Potential:</strong> {
+          consciousnessLevel > 70 ? 'High - Ready for organized action' :
+          consciousnessLevel > 40 ? 'Medium - Developing awareness' :
+          'Low - Focus on building class solidarity'
+        }</p>
+      </div>
+    );
+    onShowPopup(content);
   };
 
-  const getConsciousnessDescription = () => {
-    const stage = getConsciousnessStage();
-    const descriptions: { [key: string]: string } = {
-      'False Consciousness': 'Accepts capitalist ideology as natural. Sees poverty as personal failure, wealth as personal virtue. May even oppose own class interests.',
-      'Trade Union Consciousness': 'Recognizes need for collective action for immediate gains (wages, conditions) but doesn\'t question system itself. "A fair day\'s wage for a fair day\'s work."',
-      'Revolutionary Consciousness': 'Understands capitalism as historically specific system of exploitation. Recognizes need for fundamental transformation. Class for itself, not just in itself.'
-    };
-    return descriptions[stage];
+  const resetExperiment = () => {
+    setSelectedClass(null);
+    setConsciousnessLevel(10);
+    setAppliedConditions([]);
   };
 
   return (
     <div className="consciousness-lab">
-      <h2 className="section-title">🧠 Trace the Development of Class Consciousness</h2>
+      <h2 className="section-title">?? Class Consciousness Laboratory</h2>
       
       <div className="social-positions">
         {classPositions.map((position) => (
           <div
             key={position.id}
-            className={`class-position ${selectedClass === position.id ? 'selected' : ''}`}
+            className={`class-position ${selectedClass === position.id ? 'active' : ''}`}
             onClick={() => selectClass(position.id)}
           >
-            <h3>{position.icon} {position.title}</h3>
-            <p dangerouslySetInnerHTML={{ __html: position.description }} />
-          </div>
-        ))}
-      </div>
-      
-      <div className="consciousness-spectrum">
-        <div 
-          className="consciousness-marker" 
-          style={{ left: `${consciousnessLevel}%` }}
-        />
-      </div>
-      <div className="spectrum-labels">
-        <span>False Consciousness</span>
-        <span>Trade Union Consciousness</span>
-        <span>Revolutionary Consciousness</span>
-      </div>
-      
-      <div className="material-conditions">
-        {materialConditions.map((condition) => (
-          <div key={condition.id} className="condition-card">
-            <span className="condition-icon">{condition.icon}</span>
-            <div>
-              <h4>{condition.title}</h4>
-              <p>{condition.description}</p>
-              <button 
-                className="control-btn apply-btn"
-                onClick={() => applyCondition(condition.id)}
-                disabled={appliedConditions.includes(condition.id)}
-              >
-                {appliedConditions.includes(condition.id) ? 'Applied' : 'Apply'}
-              </button>
+            <div className="class-icon">{position.icon}</div>
+            <h3>{position.title}</h3>
+            <p>{position.description}</p>
+            <div className="material-interests">
+              <strong>Key Interests:</strong>
+              <ul>
+                {position.materialInterests.slice(0, 3).map((interest, idx) => (
+                  <li key={idx}>{interest}</li>
+                ))}
+              </ul>
             </div>
           </div>
         ))}
       </div>
       
-      <div className="consciousness-analysis">
-        <h3>Current Consciousness Analysis</h3>
-        {selectedClass ? (
-          <>
-            <p><strong>Current Stage:</strong> {getConsciousnessStage()}</p>
-            <p><strong>Consciousness Level:</strong> {consciousnessLevel}%</p>
-            <p><strong>Class:</strong> {classPositions.find(c => c.id === selectedClass)?.title}</p>
-            <p className="consciousness-description">{getConsciousnessDescription()}</p>
-          </>
-        ) : (
-          <p>Select a class position to begin exploring how material conditions shape consciousness...</p>
-        )}
+      <div className="consciousness-meter">
+        <h3>Class Consciousness Level: {consciousnessLevel}%</h3>
+        <div className="consciousness-bar">
+          <div 
+            className="consciousness-fill" 
+            style={{ width: `${consciousnessLevel}%` }}
+          ></div>
+        </div>
+        <div className="consciousness-description">
+          {consciousnessLevel < 25 && "False consciousness dominates - individual explanations for collective problems"}
+          {consciousnessLevel >= 25 && consciousnessLevel < 50 && "Growing awareness of shared conditions and interests"}
+          {consciousnessLevel >= 50 && consciousnessLevel < 75 && "Clear understanding of class position and antagonisms"}
+          {consciousnessLevel >= 75 && "Revolutionary consciousness - ready for collective action"}
+        </div>
+      </div>
+      
+      <div className="material-conditions">
+        <h3>Apply Material Conditions</h3>
+        <div className="conditions-grid">
+          {materialConditions.map((condition) => (
+            <div
+              key={condition.id}
+              className={`condition-btn ${appliedConditions.includes(condition.id) ? 'applied' : ''}`}
+              onClick={() => applyCondition(condition.id)}
+            >
+              <span className="condition-icon">{condition.icon}</span>
+              <strong>{condition.title}</strong>
+              <p>{condition.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+      
+      <div className="lab-controls">
+        <button className="control-btn" onClick={analyzeClassConflict}>
+          ?? Analyze Class Conflict
+        </button>
+        <button className="control-btn" onClick={resetExperiment}>
+          ?? Reset Experiment
+        </button>
       </div>
     </div>
   );
 };
+
+export default ClassConsciousnessLab;
