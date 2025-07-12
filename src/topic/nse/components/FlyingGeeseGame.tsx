@@ -1,150 +1,371 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   flyingGeeseData,
+  industriesDatabase,
   canTransferIndustry,
   calculateTransferImpact,
-  type Country
+  attemptIndustryUpgrade,
+  checkMiddleIncomeTrap,
+  generateRandomEvent,
+  type Country,
+  type Industry,
+  type GameEvent,
+  type Challenge
 } from '../../../data/nse/flyingGeeseData';
 
 import './FlyingGeeseGame.css';
 
 interface GameState {
   year: number;
-  transfers: number;
-  score: number;
   countries: Record<string, Country>;
   transferHistory: Array<{
     from: string;
     to: string;
     industry: string;
     year: number;
+    type: 'transfer' | 'upgrade';
   }>;
+  score: number;
+  currentEvent?: GameEvent;
+  selectedTransfer?: {
+    from: string;
+    industry: string;
+  };
+  selectedUpgrade?: {
+    country: string;
+    fromIndustry: string;
+  };
+  mode: 'transfer' | 'upgrade' | 'policy';
 }
 
 const FlyingGeeseGame: React.FC = () => {
+  const availableYears = Object.keys(flyingGeeseData.countries || {}).map(Number).sort();
+  const [selectedYear, setSelectedYear] = useState(availableYears[0] || 1960);
+  
+  const initialCountries = flyingGeeseData.countries?.[selectedYear] || {};
+  
   const [gameState, setGameState] = useState<GameState>({
-    year: 1960,
-    transfers: 0,
+    year: selectedYear,
+    countries: initialCountries,
+    transferHistory: [],
     score: 0,
-    countries: flyingGeeseData.countries[1960],
-    transferHistory: []
+    mode: 'transfer'
   });
   
-  const [selectedTransfer, setSelectedTransfer] = useState<{
-    from: string;
-    industry: string;
-  } | null>(null);
   const [showFeedback, setShowFeedback] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState('');
-  const [selectedYear, setSelectedYear] = useState(1960);
-  const [showHistoricalComparison, setShowHistoricalComparison] = useState(false);
+  const [showTrapAnalysis, setShowTrapAnalysis] = useState<string | null>(null);
+  const [showIndustryDetails, setShowIndustryDetails] = useState(false);
 
-  const availableYears = Object.keys(flyingGeeseData.countries).map(Number).sort();
+  // Check for random events
+  useEffect(() => {
+    if (!gameState.countries || Object.keys(gameState.countries).length === 0) return;
+    
+    const eventCheck = setInterval(() => {
+      const event = generateRandomEvent(Object.values(gameState.countries));
+      if (event && !gameState.currentEvent) {
+        setGameState(prev => ({ ...prev, currentEvent: event }));
+      }
+    }, 30000); // Check every 30 seconds
+    
+    return () => clearInterval(eventCheck);
+  }, [gameState.countries, gameState.currentEvent]);
 
   const handleYearChange = (year: number) => {
+    const yearData = flyingGeeseData.countries[year];
+    if (!yearData) {
+      console.error(`No data found for year ${year}`);
+      return;
+    }
+    
     setSelectedYear(year);
     setGameState({
       ...gameState,
       year,
-      countries: flyingGeeseData.countries[year]
+      countries: yearData,
+      transferHistory: [],
+      score: 0,
+      selectedTransfer: undefined,
+      selectedUpgrade: undefined
     });
-    setSelectedTransfer(null);
   };
 
   const handleTransferClick = (fromCountry: string, industry: string) => {
-    if (selectedTransfer?.from === fromCountry && selectedTransfer?.industry === industry) {
-      setSelectedTransfer(null);
+    if (gameState.mode !== 'transfer') return;
+    
+    if (gameState.selectedTransfer?.from === fromCountry && 
+        gameState.selectedTransfer?.industry === industry) {
+      setGameState(prev => ({ ...prev, selectedTransfer: undefined }));
       return;
     }
-    setSelectedTransfer({ from: fromCountry, industry });
+    
+    setGameState(prev => ({ 
+      ...prev, 
+      selectedTransfer: { from: fromCountry, industry },
+      selectedUpgrade: undefined 
+    }));
+  };
+
+  const handleUpgradeClick = (countryId: string, fromIndustry: string) => {
+    if (gameState.mode !== 'upgrade') return;
+    
+    if (gameState.selectedUpgrade?.country === countryId && 
+        gameState.selectedUpgrade?.fromIndustry === fromIndustry) {
+      setGameState(prev => ({ ...prev, selectedUpgrade: undefined }));
+      return;
+    }
+    
+    setGameState(prev => ({ 
+      ...prev, 
+      selectedUpgrade: { country: countryId, fromIndustry },
+      selectedTransfer: undefined 
+    }));
   };
 
   const handleCountryClick = (toCountryId: string) => {
-    if (!selectedTransfer) return;
+    if (gameState.selectedTransfer && gameState.mode === 'transfer') {
+      performTransfer(toCountryId);
+    }
+  };
+
+  const performTransfer = (toCountryId: string) => {
+    if (!gameState.selectedTransfer) return;
     
-    const fromCountry = gameState.countries[selectedTransfer.from];
+    const fromCountry = gameState.countries[gameState.selectedTransfer.from];
     const toCountry = gameState.countries[toCountryId];
-    
-    if (!fromCountry || !toCountry) return;
     
     const transferCheck = canTransferIndustry(
       fromCountry,
       toCountry,
-      selectedTransfer.industry
+      gameState.selectedTransfer.industry
     );
     
     if (!transferCheck.canTransfer) {
-      setFeedbackMessage(`[X] ${transferCheck.reason}`);
-      setShowFeedback(true);
-      setTimeout(() => setShowFeedback(false), 3000);
+      showFeedbackMessage(`❌ ${transferCheck.reason}`, 'error');
       return;
     }
     
-    // Calculate impact
-    const impact = calculateTransferImpact(
+    const result = calculateTransferImpact(
       fromCountry,
       toCountry,
-      selectedTransfer.industry
+      gameState.selectedTransfer.industry
     );
     
-    // Update game state
-    const newState = { ...gameState };
-    newState.countries[selectedTransfer.from] = impact.fromCountry;
-    newState.countries[toCountryId] = impact.toCountry;
-    newState.transfers++;
-    newState.score += 100;
-    newState.transferHistory.push({
-      from: selectedTransfer.from,
-      to: toCountryId,
-      industry: selectedTransfer.industry,
-      year: gameState.year
+    if (result.success) {
+      const newCountries = {
+        ...gameState.countries,
+        [gameState.selectedTransfer.from]: result.fromCountry,
+        [toCountryId]: result.toCountry
+      };
+      
+      setGameState(prev => ({
+        ...prev,
+        countries: newCountries,
+        transferHistory: [...prev.transferHistory, {
+          from: gameState.selectedTransfer!.from,
+          to: toCountryId,
+          industry: gameState.selectedTransfer!.industry,
+          year: gameState.year,
+          type: 'transfer'
+        }],
+        score: prev.score + 100,
+        selectedTransfer: undefined
+      }));
+      
+      showFeedbackMessage(`✅ ${result.narrative}`, 'success');
+      
+      if (result.sideEffects && result.sideEffects.length > 0) {
+        setTimeout(() => {
+          showFeedbackMessage(
+            `⚠️ Side effects: ${result.sideEffects.map(e => e.description).join(', ')}`,
+            'warning'
+          );
+        }, 3000);
+      }
+    }
+  };
+
+  const performUpgrade = (toIndustry: string) => {
+    if (!gameState.selectedUpgrade) return;
+    
+    const country = gameState.countries[gameState.selectedUpgrade.country];
+    const result = attemptIndustryUpgrade(
+      country,
+      gameState.selectedUpgrade.fromIndustry,
+      toIndustry
+    );
+    
+    if (!result.success) {
+      showFeedbackMessage(`❌ ${result.reason}`, 'error');
+      return;
+    }
+    
+    const newCountries = {
+      ...gameState.countries,
+      [gameState.selectedUpgrade.country]: result.updatedCountry!
+    };
+    
+    setGameState(prev => ({
+      ...prev,
+      countries: newCountries,
+      transferHistory: [...prev.transferHistory, {
+        from: gameState.selectedUpgrade!.country,
+        to: toIndustry,
+        industry: `${gameState.selectedUpgrade!.fromIndustry} → ${toIndustry}`,
+        year: gameState.year,
+        type: 'upgrade'
+      }],
+      score: prev.score + 150,
+      selectedUpgrade: undefined
+    }));
+    
+    showFeedbackMessage(
+      `✅ ${country.name} upgraded from ${gameState.selectedUpgrade.fromIndustry} to ${toIndustry}!`,
+      'success'
+    );
+  };
+
+  const handleEventChoice = (choiceIndex: number) => {
+    if (!gameState.currentEvent || !gameState.currentEvent.choices) return;
+    
+    const choice = gameState.currentEvent.choices[choiceIndex];
+    
+    // Apply consequences
+    const updatedCountries = { ...gameState.countries };
+    choice.consequences.forEach(effect => {
+      if (effect.countryId === 'all') {
+        Object.keys(updatedCountries).forEach(id => {
+          if (effect.gdpChange) {
+            updatedCountries[id] = {
+              ...updatedCountries[id],
+              gdp: Math.round(updatedCountries[id].gdp * (1 + effect.gdpChange / 100))
+            };
+          }
+        });
+      }
     });
     
-    setGameState(newState);
-    setFeedbackMessage(`[SUCCESS] ${impact.narrative}`);
+    setGameState(prev => ({
+      ...prev,
+      countries: updatedCountries,
+      currentEvent: undefined
+    }));
+    
+    showFeedbackMessage(`Applied: ${choice.label}`, 'info');
+  };
+
+  const showFeedbackMessage = (message: string, type: 'success' | 'error' | 'warning' | 'info') => {
+    setFeedbackMessage(message);
     setShowFeedback(true);
-    setSelectedTransfer(null);
     setTimeout(() => setShowFeedback(false), 5000);
   };
 
-  const getHistoricalContext = () => {
-    return flyingGeeseData.historicalTransfers.filter(
-      t => Math.abs(t.year - gameState.year) <= 10
-    );
+  const getStageColor = (stage: string) => {
+    const colors = {
+      'pre-industrial': '#6c757d',
+      'early-industrial': '#17a2b8',
+      'industrial': '#28a745',
+      'advanced': '#007bff',
+      'innovation': '#6f42c1',
+      'middle-income-trap': '#dc3545'
+    };
+    return colors[stage] || '#6c757d';
   };
 
-  const getStageInfo = (country: Country) => {
-    return flyingGeeseData.stageLessons[country.stage];
+  const getIndustryIcon = (type: string | undefined) => {
+    const icons = {
+      'labor-intensive': '👷',
+      'capital-intensive': '🏭',
+      'technology-intensive': '💻',
+      'knowledge-intensive': '🧬'
+    };
+    return icons[type || 'labor-intensive'] || '📦';
   };
 
   const countryFlags: Record<string, string> = {
-    japan: 'JP',
-    korea: 'KR',
-    taiwan: 'TW',
-    china: 'CN',
-    india: 'IN',
-    bangladesh: 'BD',
-    vietnam: 'VN',
-    singapore: 'SG',
-    malaysia: 'MY'
+    japan: '🇯🇵',
+    korea: '🇰🇷',
+    taiwan: '🇹🇼',
+    china: '🇨🇳',
+    india: '🇮🇳',
+    bangladesh: '🇧🇩',
+    vietnam: '🇻🇳',
+    singapore: '🇸🇬',
+    malaysia: '🇲🇾',
+    ethiopia: '🇪🇹',
+    mexico: '🇲🇽'
   };
 
-  const countryColors: Record<string, string> = {
-    japan: 'linear-gradient(135deg, #ff6b6b, #ee5a24)',
-    korea: 'linear-gradient(135deg, #f093fb, #f5576c)',
-    taiwan: 'linear-gradient(135deg, #667eea, #764ba2)',
-    china: 'linear-gradient(135deg, #fa709a, #fee140)',
-    india: 'linear-gradient(135deg, #f77062, #fe5196)',
-    bangladesh: 'linear-gradient(135deg, #4facfe, #00f2fe)',
-    vietnam: 'linear-gradient(135deg, #43e97b, #38f9d7)',
-    singapore: 'linear-gradient(135deg, #667eea, #00d2ff)',
-    malaysia: 'linear-gradient(135deg, #fccb90, #d57eeb)'
+  const calculateGlobalStats = () => {
+    const countries = gameState.countries ? Object.values(gameState.countries) : [];
+    if (countries.length === 0) {
+      return { totalGDP: 0, avgWage: 0, avgPollution: 0, industrialJobs: 0 };
+    }
+    
+    const totalGDP = countries.reduce((sum, c) => sum + c.gdp, 0);
+    const avgWage = countries.reduce((sum, c) => sum + c.wageLevel, 0) / countries.length;
+    const avgPollution = countries.reduce((sum, c) => sum + c.environmentalHealth, 0) / countries.length;
+    const industrialJobs = countries.reduce((sum, c) => 
+      sum + c.industries.reduce((s, i) => s + i.employmentShare, 0), 0
+    );
+    
+    return { totalGDP, avgWage, avgPollution, industrialJobs };
   };
+
+  const globalStats = calculateGlobalStats();
+
+  if (!flyingGeeseData.countries || availableYears.length === 0) {
+    return (
+      <div className="flying-geese-game">
+        <div className="error-state">
+          <h2>Loading error: No data available</h2>
+          <p>The Flying Geese data could not be loaded</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!gameState.countries || Object.keys(gameState.countries).length === 0) {
+    return (
+      <div className="flying-geese-game">
+        <div className="error-state">
+          <h2>No data available for the selected year</h2>
+          <p>Please select a different time period</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flying-geese-game">
-      <h2 className="module-title">Master the Flying Geese Pattern</h2>
+      <div className="game-header">
+        <h2>Master the Flying Geese Pattern</h2>
+        <p className="subtitle">Navigate industrialization, avoid the middle-income trap, and achieve sustainable development</p>
+      </div>
       
+      {/* Game Mode Selector */}
+      <div className="mode-selector">
+        <button 
+          className={`mode-btn ${gameState.mode === 'transfer' ? 'active' : ''}`}
+          onClick={() => setGameState(prev => ({ ...prev, mode: 'transfer' }))}
+        >
+          🔄 Transfer Industries
+        </button>
+        <button 
+          className={`mode-btn ${gameState.mode === 'upgrade' ? 'active' : ''}`}
+          onClick={() => setGameState(prev => ({ ...prev, mode: 'upgrade' }))}
+        >
+          ⬆️ Upgrade Industries
+        </button>
+        <button 
+          className={`mode-btn ${gameState.mode === 'policy' ? 'active' : ''}`}
+          onClick={() => setGameState(prev => ({ ...prev, mode: 'policy' }))}
+        >
+          📋 Policy Analysis
+        </button>
+      </div>
+      
+      {/* Year Selector */}
       <div className="year-selector">
         <h3>Select Time Period:</h3>
         <div className="year-buttons">
@@ -160,164 +381,327 @@ const FlyingGeeseGame: React.FC = () => {
         </div>
       </div>
       
-      <div className="pattern-visualizer">
-        <div className="industry-flow" style={{ top: '20px' }}></div>
-        <div className="industry-flow" style={{ top: '80px', animationDelay: '0.5s' }}></div>
-        <div className="industry-flow" style={{ top: '140px', animationDelay: '1s' }}></div>
-      </div>
-      
-      <div className="game-stats">
+      {/* Global Statistics */}
+      <div className="global-stats">
         <div className="stat-card">
-          <h4>Transfers Made</h4>
-          <div className="stat-value">{gameState.transfers}</div>
+          <h4>Global GDP</h4>
+          <div className="stat-value">${(globalStats.totalGDP / 1000).toFixed(1)}K</div>
+          <div className="stat-change">Per capita</div>
         </div>
         <div className="stat-card">
-          <h4>Current Year</h4>
-          <div className="stat-value">{gameState.year}s</div>
+          <h4>Average Wage</h4>
+          <div className="stat-value">${globalStats.avgWage.toFixed(0)}</div>
+          <div className="stat-change">Monthly</div>
         </div>
         <div className="stat-card">
-          <h4>Active Countries</h4>
-          <div className="stat-value">{Object.keys(gameState.countries).length}</div>
+          <h4>Environmental Health</h4>
+          <div className="stat-value">{globalStats.avgPollution.toFixed(0)}%</div>
+          <div className="stat-change" style={{color: globalStats.avgPollution < 50 ? '#dc3545' : '#28a745'}}>
+            {globalStats.avgPollution < 50 ? 'Degrading' : 'Stable'}
+          </div>
         </div>
         <div className="stat-card">
           <h4>Development Score</h4>
           <div className="stat-value">{gameState.score}</div>
+          <div className="stat-change">Points</div>
         </div>
       </div>
       
+      {/* Countries Grid */}
       <div className="countries-grid">
-        {Object.values(gameState.countries).map(country => (
-          <div 
-            key={country.id} 
-            className={`country-card ${country.stage} ${selectedTransfer?.from === country.id ? 'selected' : ''}`}
-            onClick={() => selectedTransfer && handleCountryClick(country.id)}
-          >
-            <div className="country-header">
-              <span className="country-flag">[{countryFlags[country.id] || country.flag}]</span>
-              <span className="country-gdp">${country.gdp}/capita</span>
-            </div>
-            <h3>{country.name}</h3>
-            
-            <div className="stage-indicator">
-              Stage: <strong>{country.stage}</strong>
-            </div>
-            
-            <div className="industries-list">
-              <h4>Industries:</h4>
-              {country.industries.map((industry, index) => {
-                const rules = flyingGeeseData.transferRules[industry];
-                const canTransfer = rules && country.canTransferTo && 
-                  country.industries.includes(industry);
-                
-                return (
-                  <span 
-                    key={index}
-                    className={`industry-chip ${canTransfer ? 'transferable' : ''} ${
-                      selectedTransfer?.from === country.id && 
-                      selectedTransfer?.industry === industry ? 'selected' : ''
-                    }`}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (canTransfer) handleTransferClick(country.id, industry);
-                    }}
-                  >
-                    {industry}
-                  </span>
-                );
-              })}
-            </div>
-            
-            {country.historicalNote && (
-              <div className="historical-note">
-                <em>{country.historicalNote}</em>
+        {gameState.countries && Object.values(gameState.countries).map(country => {
+          const trapAnalysis = checkMiddleIncomeTrap(country);
+          
+          return (
+            <div 
+              key={country.id} 
+              className={`country-card ${country.stage} ${
+                gameState.selectedTransfer?.from === country.id ? 'selected' : ''
+              } ${trapAnalysis.inTrap ? 'middle-income-trap' : ''}`}
+              onClick={() => handleCountryClick(country.id)}
+              style={{ borderColor: getStageColor(country.stage) }}
+            >
+              <div className="country-header">
+                <span className="country-flag">{countryFlags[country.id]}</span>
+                <span className="country-name">{country.name}</span>
+                <span className="country-gdp">${country.gdp}/capita</span>
               </div>
-            )}
-          </div>
-        ))}
+              
+              <div className="country-metrics">
+                <div className="metric">
+                  <span className="metric-label">Wage:</span>
+                  <span className="metric-value">${country.wageLevel}/mo</span>
+                </div>
+                <div className="metric">
+                  <span className="metric-label">Stability:</span>
+                  <span className="metric-value">{country.politicalStability}%</span>
+                </div>
+                <div className="metric">
+                  <span className="metric-label">Infrastructure:</span>
+                  <span className="metric-value">{country.infrastructure.overall.toFixed(0)}%</span>
+                </div>
+              </div>
+              
+              <div className="stage-indicator">
+                <span className="stage-badge" style={{ backgroundColor: getStageColor(country.stage) }}>
+                  {country.stage.replace('-', ' ')}
+                </span>
+                {trapAnalysis.inTrap && <span className="trap-warning">⚠️ Trap Risk</span>}
+              </div>
+              
+              <div className="industries-section">
+                <h4>Industries:</h4>
+                <div className="industries-grid">
+                  {country.industries && country.industries.filter(industry => industry && industry.name).map((industry, idx) => {
+                    const canTransfer = gameState.mode === 'transfer' && 
+                      industry.transferable === true && 
+                      country.canTransferTo && 
+                      country.canTransferTo.length > 0 &&
+                      flyingGeeseData.transferRules[industry.name];
+                    
+                    const canUpgrade = gameState.mode === 'upgrade' && 
+                      country.canUpgrade === true;
+                    
+                    const isClickable = canTransfer || canUpgrade;
+                    
+                    return (
+                      <div 
+                        key={idx}
+                        className={`industry-chip ${
+                          canTransfer ? 'transferable' : ''
+                        } ${canUpgrade ? 'upgradeable' : ''} ${
+                          (gameState.selectedTransfer?.from === country.id && 
+                           gameState.selectedTransfer?.industry === industry.name) ||
+                          (gameState.selectedUpgrade?.country === country.id && 
+                           gameState.selectedUpgrade?.fromIndustry === industry.name) ? 'selected' : ''
+                        }`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (canTransfer) handleTransferClick(country.id, industry.name);
+                          if (canUpgrade) handleUpgradeClick(country.id, industry.name);
+                        }}
+                        style={{ cursor: isClickable ? 'pointer' : 'default' }}
+                        title={`Tech Level: ${industry.technologyLevel || 0}, Pollution: ${industry.pollutionLevel || 0}`}
+                      >
+                        <span className="industry-icon">{getIndustryIcon(industry.type || 'labor-intensive')}</span>
+                        <span className="industry-name">{industry.name}</span>
+                        <span className="industry-stats">
+                          ({Math.round((industry.employmentShare || 0.1) * 100)}% jobs)
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+              
+              {country.challenges && country.challenges.length > 0 && (
+                <div className="challenges-section">
+                  <h5>Challenges:</h5>
+                  {country.challenges
+                    .filter(c => c && (c.severity === 'critical' || c.severity === 'high'))
+                    .map((challenge, idx) => (
+                    <div key={idx} className={`challenge-badge ${challenge.severity}`}>
+                      {challenge.type === 'infrastructure' && '🏗️'}
+                      {challenge.type === 'political' && '⚡'}
+                      {challenge.type === 'environmental' && '🌍'}
+                      {challenge.type === 'economic' && '💰'}
+                      {challenge.type === 'social' && '👥'}
+                      {challenge.description}
+                    </div>
+                  ))}
+                </div>
+              )}
+              
+              {trapAnalysis.inTrap && (
+                <button
+                  className="trap-details-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowTrapAnalysis(showTrapAnalysis === country.id ? null : country.id);
+                  }}
+                >
+                  {showTrapAnalysis === country.id ? 'Hide' : 'Show'} Trap Analysis
+                </button>
+              )}
+              
+              {showTrapAnalysis === country.id && trapAnalysis.inTrap && (
+                <div className="trap-analysis">
+                  <h5>Middle-Income Trap Symptoms:</h5>
+                  <ul>
+                    {trapAnalysis.symptoms.map((symptom, idx) => (
+                      <li key={idx}>{symptom}</li>
+                    ))}
+                  </ul>
+                  <h5>Recommended Solutions:</h5>
+                  <ul>
+                    {trapAnalysis.solutions.map((solution, idx) => (
+                      <li key={idx}>{solution}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              
+              {country.historicalNote && (
+                <div className="historical-note">
+                  <em>{country.historicalNote}</em>
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
       
-      {selectedTransfer && (
+      {/* Transfer/Upgrade Instructions */}
+      {gameState.selectedTransfer && (
         <div className="transfer-instruction">
-          <p>Click on a country to transfer <strong>{selectedTransfer.industry}</strong> from <strong>{gameState.countries[selectedTransfer.from].name}</strong></p>
+          <p>
+            Select destination country for <strong>{gameState.selectedTransfer.industry}</strong> 
+            {' '}from <strong>{gameState.countries[gameState.selectedTransfer.from].name}</strong>
+          </p>
+          <p className="hint">Countries need lower wages and adequate infrastructure</p>
         </div>
       )}
       
+      {gameState.selectedUpgrade && (
+        <div className="upgrade-panel">
+          <h3>Upgrade {gameState.selectedUpgrade.fromIndustry}</h3>
+          <p>Select target industry for {gameState.countries[gameState.selectedUpgrade.country].name}:</p>
+          <div className="upgrade-options">
+            {industriesDatabase && Object.entries(industriesDatabase)
+              .filter(([name, ind]) => {
+                const hasIndustry = gameState.selectedUpgrade && 
+                  gameState.countries[gameState.selectedUpgrade.country]?.industries?.some(i => i.name === name);
+                return !hasIndustry && ind.type !== 'labor-intensive'; // Can only upgrade to higher types
+              })
+              .map(([name, industry]) => (
+                <button
+                  key={name}
+                  className="upgrade-option"
+                  onClick={() => performUpgrade(name)}
+                >
+                  {getIndustryIcon(industry.type)} {name}
+                  <span className="tech-level">Tech: {industry.technologyLevel}</span>
+                </button>
+              ))}
+          </div>
+        </div>
+      )}
+      
+      {/* Random Events */}
+      {gameState.currentEvent && (
+        <div className="event-popup">
+          <h3>{gameState.currentEvent.title}</h3>
+          <p>{gameState.currentEvent.description}</p>
+          {gameState.currentEvent.choices ? (
+            <div className="event-choices">
+              {gameState.currentEvent.choices.map((choice, idx) => (
+                <button
+                  key={idx}
+                  className="event-choice"
+                  onClick={() => handleEventChoice(idx)}
+                >
+                  {choice.label}
+                  {choice.cost && <span className="choice-cost"> (Cost: ${choice.cost})</span>}
+                </button>
+              ))}
+            </div>
+          ) : (
+            <button onClick={() => setGameState(prev => ({ ...prev, currentEvent: undefined }))}>
+              OK
+            </button>
+          )}
+        </div>
+      )}
+      
+      {/* Feedback Messages */}
       {showFeedback && (
-        <div className="feedback-popup">
+        <div className={`feedback-popup ${feedbackMessage.startsWith('✅') ? 'success' : 
+          feedbackMessage.startsWith('❌') ? 'error' : 
+          feedbackMessage.startsWith('⚠️') ? 'warning' : 'info'}`}>
           <p>{feedbackMessage}</p>
         </div>
       )}
       
-      <div className="game-info-panels">
-        <div className="historical-context">
-          <h3>Historical Context ({gameState.year}s)</h3>
-          <div className="historical-transfers">
-            {getHistoricalContext().map((transfer, index) => (
-              <div key={index} className="historical-transfer">
-                <strong>{transfer.year}:</strong> {transfer.from} to {transfer.to} ({transfer.industry})
-                <p className="impact">{transfer.impact}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-        
-        <div className="transfer-history">
-          <h3>Your Transfer History</h3>
+      {/* Info Panels */}
+      <div className="info-panels">
+        {/* Transfer History */}
+        <div className="panel transfer-history">
+          <h3>Development History</h3>
           {gameState.transferHistory.length === 0 ? (
-            <p className="empty-history">No transfers yet. Click on green industries to start!</p>
+            <p className="empty-state">No transfers or upgrades yet</p>
           ) : (
             <ul>
-              {gameState.transferHistory.map((transfer, index) => (
-                <li key={index}>
-                  {transfer.year}: {transfer.from} to {transfer.to} ({transfer.industry})
+              {gameState.transferHistory.slice(-10).reverse().map((transfer, idx) => (
+                <li key={idx} className={transfer.type}>
+                  <span className="year">{transfer.year}:</span>
+                  {transfer.type === 'transfer' ? (
+                    <span>{transfer.from} → {transfer.to} ({transfer.industry})</span>
+                  ) : (
+                    <span>{transfer.from} upgraded {transfer.industry}</span>
+                  )}
                 </li>
               ))}
             </ul>
           )}
         </div>
         
-        <div className="stage-lessons">
-          <h3>Development Stage Lessons</h3>
+        {/* Industry Details */}
+        <div className="panel industry-details">
+          <h3>Industry Requirements</h3>
           <button 
-            onClick={() => setShowHistoricalComparison(!showHistoricalComparison)}
             className="toggle-btn"
+            onClick={() => setShowIndustryDetails(!showIndustryDetails)}
           >
-            {showHistoricalComparison ? 'Hide' : 'Show'} Stage Details
+            {showIndustryDetails ? 'Hide' : 'Show'} Details
           </button>
           
-          {showHistoricalComparison && (
-            <div className="stage-details">
-              {Object.entries(flyingGeeseData.stageLessons).map(([stage, lesson]) => (
-                <div key={stage} className="stage-lesson">
-                  <h4>{stage.charAt(0).toUpperCase() + stage.slice(1).replace('-', ' ')}</h4>
-                  <p><strong>Challenges:</strong> {lesson.challenges.join(', ')}</p>
-                  <p><strong>Opportunities:</strong> {lesson.opportunities.join(', ')}</p>
-                  <p><strong>Strategy:</strong> {lesson.strategy}</p>
-                </div>
-              ))}
+          {showIndustryDetails && industriesDatabase && (
+            <div className="industry-list">
+              {Object.entries(industriesDatabase)
+                .filter(([_, ind]) => ind && ind.transferable)
+                .map(([name, industry]) => (
+                  <div key={name} className="industry-detail">
+                    <h4>{getIndustryIcon(industry.type)} {name}</h4>
+                    <div className="industry-specs">
+                      <span>Tech: {industry.technologyLevel}</span>
+                      <span>Pollution: {industry.pollutionLevel}</span>
+                      <span>Productivity: {industry.productivityLevel}</span>
+                    </div>
+                    {industry.upgradeRequirements && (
+                      <div className="requirements">
+                        {industry.upgradeRequirements.map((req, idx) => (
+                          <span key={idx} className="requirement">
+                            {req.description} ({req.minimum}+)
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
             </div>
           )}
         </div>
-      </div>
-      
-      <div className="nse-principles-panel">
-        <h3>NSE Principles in the Flying Geese Pattern</h3>
-        <div className="principles-grid">
-          <div className="principle">
-            <h4>1. Sequential Development</h4>
-            <p>Countries follow similar paths but at different times. Today's garment exporter is tomorrow's electronics assembler.</p>
-          </div>
-          <div className="principle">
-            <h4>2. Win-Win Transfers</h4>
-            <p>When industries transfer, both countries benefit: the sender upgrades to higher-value activities, the receiver gains proven industries.</p>
-          </div>
-          <div className="principle">
-            <h4>3. Endowment Evolution</h4>
-            <p>Success in labor-intensive industries leads to capital accumulation, enabling progression to more sophisticated sectors.</p>
-          </div>
-          <div className="principle">
-            <h4>4. Windows of Opportunity</h4>
-            <p>Countries must be ready when opportunities arise. Having the right infrastructure and policies matters.</p>
+        
+        {/* NSE Principles */}
+        <div className="panel nse-principles">
+          <h3>New Structural Economics Principles</h3>
+          <div className="principles-list">
+            <div className="principle">
+              <h4>1. Endowment Structure Evolution</h4>
+              <p>Countries develop by accumulating capital and upgrading from labor to capital to technology-intensive industries</p>
+            </div>
+            <div className="principle">
+              <h4>2. Comparative Advantage Following</h4>
+              <p>Success comes from developing industries suited to current factor endowments, not leapfrogging</p>
+            </div>
+            <div className="principle">
+              <h4>3. Government as Facilitator</h4>
+              <p>State helps overcome coordination failures and provides infrastructure, but markets pick winners</p>
+            </div>
+            <div className="principle">
+              <h4>4. Leading Dragon Effect</h4>
+              <p>China's size means it releases 85 million manufacturing jobs vs Japan's 9.7 million in 1960s</p>
+            </div>
           </div>
         </div>
       </div>

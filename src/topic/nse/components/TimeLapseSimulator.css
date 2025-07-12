@@ -1,12 +1,26 @@
+/* TimeLapseSimulator.css - Enhanced with NSE visual elements */
+
 .time-lapse-simulator {
   animation: fadeIn 0.5s ease;
 }
 
+.module-title {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 2rem;
+}
+
+/* Country selector panel */
 .country-selector-panel {
   background: rgba(255, 255, 255, 0.05);
   padding: 20px;
   border-radius: 12px;
   margin-bottom: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .country-selector-panel h4 {
@@ -18,6 +32,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
+  margin-bottom: 15px;
 }
 
 .country-toggle {
@@ -28,43 +43,139 @@
   padding: 5px 10px;
   border-radius: 8px;
   transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .country-toggle:hover {
   background: rgba(255, 255, 255, 0.1);
 }
 
-.country-toggle input[type="checkbox"] {
+.transfer-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   cursor: pointer;
+  margin-top: 10px;
 }
 
+/* Main visualization container */
 .timeline-container {
   position: relative;
-  height: 450px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, rgba(102, 126, 234, 0.05) 100%);
+  height: 600px;
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 16px;
   padding: 40px;
   overflow: hidden;
-  box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.3);
   margin-bottom: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.development-track {
-  position: relative;
-  height: 350px;
-  margin-bottom: 50px;
+.visualization-panel {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, rgba(102, 126, 234, 0.05) 100%);
+  box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.3);
+}
+
+/* Axis styling */
+.complexity-axis {
+  position: absolute;
+  left: 10px;
+  top: 40px;
+  bottom: 60px;
+  width: 140px;
+}
+
+.axis-label {
+  position: absolute;
+  font-size: 0.75rem;
+  color: #888;
+  transform: translateY(50%);
+  white-space: nowrap;
+}
+
+.gdp-axis {
+  position: absolute;
+  bottom: 20px;
+  left: 160px;
+  right: 40px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #888;
+}
+
+.axis-label-gdp {
+  font-weight: bold;
+  color: #667eea;
+}
+
+/* Grid lines */
+.grid-container {
+  position: absolute;
+  left: 160px;
+  right: 40px;
+  top: 40px;
+  bottom: 60px;
+}
+
+.grid-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Visualization area */
+.visualization-area {
+  position: absolute;
+  left: 160px;
+  right: 40px;
+  top: 40px;
+  bottom: 60px;
+}
+
+/* Transfer arrows */
+.transfer-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.transfer-arrow {
+  animation: dashFlow 3s linear infinite;
+}
+
+@keyframes dashFlow {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: -10;
+  }
+}
+
+.transfer-label {
+  font-size: 0.75rem;
+  fill: #fff;
+  opacity: 0.7;
+}
+
+/* Country positioning */
+.country-position {
+  position: absolute;
+  transform: translate(-50%, 50%);
+  transition: all 1s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
 .country-indicator {
-  position: absolute;
+  position: relative;
   width: 60px;
   height: 60px;
-  border-radius: 12px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.8em;
-  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.3s ease;
   cursor: pointer;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
 }
@@ -76,38 +187,137 @@
 
 .flag {
   font-size: 1em;
+  z-index: 2;
 }
 
+/* Wage and jobs indicators */
+.wage-indicator {
+  position: absolute;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.7rem;
+  font-weight: bold;
+  white-space: nowrap;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.jobs-indicator {
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.7rem;
+  white-space: nowrap;
+  color: #ffd700;
+  font-weight: bold;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid #ffd700;
+}
+
+/* Country info (hover) */
 .country-info {
   position: absolute;
   left: 70px;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.9);
-  padding: 10px 15px;
+  background: rgba(0, 0, 0, 0.95);
+  padding: 15px;
   border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   white-space: nowrap;
-  font-size: 0.75em;
+  font-size: 0.8rem;
   opacity: 0;
   transition: opacity 0.3s ease;
   pointer-events: none;
   z-index: 20;
+  min-width: 250px;
 }
 
 .country-indicator:hover .country-info {
   opacity: 1;
 }
 
-.timeline-track {
+.country-info.detailed strong {
+  display: block;
+  color: #fff;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+}
+
+.info-content p {
+  margin: 5px 0;
+  color: #ccc;
+}
+
+.info-content span {
+  color: #667eea;
+  font-weight: bold;
+}
+
+.transfer-info.receiving {
+  color: #4ade80;
+}
+
+.transfer-info.sending {
+  color: #f87171;
+}
+
+/* Flying Geese Formation */
+.flying-geese-indicator {
   position: absolute;
-  bottom: 40px;
-  left: 40px;
-  right: 40px;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+  padding: 10px 15px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.formation-label {
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: #a78bfa;
+  margin-bottom: 5px;
+}
+
+.formation-countries {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.formation-countries .arrow {
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.formation-countries .country-flag {
+  font-size: 1.2rem;
+}
+
+/* Timeline controls */
+.timeline-controls {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.timeline-track {
+  position: relative;
   height: 6px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 3px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  margin-bottom: 20px;
+  overflow: hidden;
 }
 
 .timeline-progress {
@@ -122,28 +332,31 @@
 }
 
 .year-markers {
-  position: absolute;
-  bottom: 10px;
-  left: 40px;
-  right: 40px;
   display: flex;
   justify-content: space-between;
-  font-size: 0.9em;
-  color: #888;
+  margin-bottom: 20px;
 }
 
 .year-marker {
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  cursor: pointer;
   transition: all 0.3s ease;
-  padding: 5px;
+  color: #ccc;
 }
 
 .year-marker:hover {
-  color: #667eea;
-  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+  color: #fff;
 }
 
 .year-marker.active {
-  color: #f093fb;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-color: transparent;
+  color: #fff;
   font-weight: bold;
 }
 
@@ -152,13 +365,12 @@
   justify-content: center;
   align-items: center;
   gap: 20px;
-  margin-bottom: 30px;
 }
 
 .control-btn {
   padding: 12px 24px;
   background: rgba(255, 255, 255, 0.1);
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 10px;
   color: #fff;
   cursor: pointer;
@@ -179,6 +391,7 @@
   font-size: 1.1em;
   font-weight: bold;
   color: #fff;
+  border: 1px solid rgba(102, 126, 234, 0.3);
 }
 
 .year-display span {
@@ -186,24 +399,27 @@
   font-size: 1.2em;
 }
 
+/* Insights panel */
 .insights-panel {
   background: rgba(255, 255, 255, 0.05);
   padding: 30px;
   border-radius: 16px;
   animation: fadeIn 0.5s ease;
   margin-bottom: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .insights-panel h3 {
   color: #667eea;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
 }
 
-.summary {
-  font-size: 1.1em;
-  line-height: 1.6;
+.insights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
   margin-bottom: 20px;
-  color: #fff;
 }
 
 .key-pattern,
@@ -211,7 +427,6 @@
   background: rgba(255, 255, 255, 0.03);
   padding: 15px;
   border-radius: 8px;
-  margin-bottom: 15px;
   border-left: 3px solid #667eea;
 }
 
@@ -222,6 +437,42 @@
   margin-bottom: 8px;
 }
 
+.summary {
+  font-size: 1.1em;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+/* Metrics grid */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.metric-card {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  padding: 15px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.metric-value {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #667eea;
+  margin-bottom: 5px;
+}
+
+.metric-label {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+/* Country details */
 .country-details {
   margin-top: 25px;
 }
@@ -278,78 +529,67 @@
   color: #667eea;
 }
 
-.flying-geese-observation,
-.comparative-advantage-tracker {
-  background: rgba(102, 126, 234, 0.1);
-  padding: 20px;
-  border-radius: 12px;
-  margin-top: 20px;
-  border: 1px solid rgba(102, 126, 234, 0.2);
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.flying-geese-observation h4,
-.comparative-advantage-tracker h4 {
-  color: #f093fb;
-  margin-bottom: 10px;
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
 }
 
-.comparative-advantage-tracker ul {
-  list-style: none;
-  padding: 0;
-}
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .timeline-container {
+    height: 500px;
+    padding: 20px;
+  }
 
-.comparative-advantage-tracker li {
-  margin: 8px 0;
-  padding-left: 20px;
-  position: relative;
-}
+  .complexity-axis {
+    width: 100px;
+  }
 
-.comparative-advantage-tracker li:before {
-  content: '→';
-  position: absolute;
-  left: 0;
-  color: #667eea;
-}
+  .gdp-axis {
+    left: 120px;
+  }
 
-.nse-framework-explanation {
-  background: rgba(0, 0, 0, 0.3);
-  padding: 30px;
-  border-radius: 16px;
-  margin-top: 30px;
-}
+  .grid-container,
+  .visualization-area {
+    left: 120px;
+  }
 
-.nse-framework-explanation h3 {
-  color: #667eea;
-  margin-bottom: 20px;
-  text-align: center;
-}
+  .country-indicator {
+    width: 48px;
+    height: 48px;
+  }
 
-.framework-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-}
+  .axis-label {
+    font-size: 0.625rem;
+  }
 
-.framework-concept {
-  background: rgba(255, 255, 255, 0.05);
-  padding: 20px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.3s ease;
-}
+  .country-toggles {
+    gap: 10px;
+  }
 
-.framework-concept:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
-  border-color: #667eea;
-}
-
-.framework-concept h4 {
-  color: #f093fb;
-  margin-bottom: 10px;
-}
-
-.framework-concept p {
-  line-height: 1.6;
-  color: #ccc;
+  .year-markers {
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  
+  .year-marker {
+    padding: 5px 10px;
+    font-size: 0.9rem;
+  }
 }

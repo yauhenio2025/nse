@@ -3,14 +3,17 @@ import {
   timeLapseData, 
   insights, 
   getCountryDevelopmentStage,
-  getPositionFromGDP 
+  getPositionFromGDP,
+  getPositionFromComplexity,
+  formatWage
 } from '../../../data/nse/timeLapseData';
 import './TimeLapseSimulator.css';
 
 const TimeLapseSimulator: React.FC = () => {
   const [currentYear, setCurrentYear] = useState(1960);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [selectedCountries, setSelectedCountries] = useState<string[]>(['korea', 'china', 'bangladesh']);
+  const [selectedCountries, setSelectedCountries] = useState<string[]>(['japan', 'korea', 'china', 'vietnam', 'bangladesh']);
+  const [showTransfers, setShowTransfers] = useState(true);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const allCountries = ['japan', 'korea', 'taiwan', 'china', 'india', 'bangladesh', 'vietnam'];
@@ -25,13 +28,13 @@ const TimeLapseSimulator: React.FC = () => {
   };
 
   const countryColors: Record<string, string> = {
-    japan: 'linear-gradient(135deg, #ff6b6b, #ee5a24)',
-    korea: 'linear-gradient(135deg, #f093fb, #f5576c)',
-    taiwan: 'linear-gradient(135deg, #667eea, #764ba2)',
-    china: 'linear-gradient(135deg, #fa709a, #fee140)',
-    india: 'linear-gradient(135deg, #f77062, #fe5196)',
-    bangladesh: 'linear-gradient(135deg, #4facfe, #00f2fe)',
-    vietnam: 'linear-gradient(135deg, #43e97b, #38f9d7)'
+    japan: '#ff6b6b',
+    korea: '#f093fb',
+    taiwan: '#667eea',
+    china: '#fa709a',
+    india: '#f77062',
+    bangladesh: '#4facfe',
+    vietnam: '#43e97b'
   };
 
   useEffect(() => {
@@ -44,7 +47,7 @@ const TimeLapseSimulator: React.FC = () => {
           }
           return prev + 10;
         });
-      }, 2000);
+      }, 3000);
     } else {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
@@ -82,10 +85,25 @@ const TimeLapseSimulator: React.FC = () => {
 
   const currentData = timeLapseData[currentYear];
   const currentInsight = insights[currentYear];
+  const transfers = currentData.transfers || [];
+
+  // Industrial complexity levels for Y-axis
+  const complexityLevels = [
+    { level: 10, label: 'Innovation & R&D' },
+    { level: 9, label: 'High-Tech Services' },
+    { level: 8, label: 'Semiconductors' },
+    { level: 7, label: 'Electronics Design' },
+    { level: 6, label: 'Automobiles' },
+    { level: 5, label: 'Electronics Assembly' },
+    { level: 4, label: 'Heavy Industry' },
+    { level: 3, label: 'Light Manufacturing' },
+    { level: 2, label: 'Textiles & Garments' },
+    { level: 1, label: 'Agriculture' }
+  ];
 
   return (
     <div className="time-lapse-simulator">
-      <h2 className="module-title">⏱️ Watch Development Trajectories Unfold (1960-2020)</h2>
+      <h2 className="module-title">⏱️ East Asian Development Trajectories (1960-2020)</h2>
       
       <div className="country-selector-panel">
         <h4>Select Countries to Track:</h4>
@@ -101,83 +119,275 @@ const TimeLapseSimulator: React.FC = () => {
             </label>
           ))}
         </div>
+        <label className="transfer-toggle">
+          <input
+            type="checkbox"
+            checked={showTransfers}
+            onChange={(e) => setShowTransfers(e.target.checked)}
+          />
+          <span>Show Industrial Transfers</span>
+        </label>
       </div>
 
-      <div className="timeline-container">
-        <div className="development-track">
-          {selectedCountries.map((country, index) => {
+      <div className="timeline-container visualization-panel">
+        {/* Y-axis labels */}
+        <div className="complexity-axis">
+          {complexityLevels.map((level) => (
+            <div 
+              key={level.level}
+              className="axis-label"
+              style={{ bottom: `${getPositionFromComplexity(level.level)}%` }}
+            >
+              {level.label}
+            </div>
+          ))}
+        </div>
+
+        {/* Grid lines */}
+        <div className="grid-container">
+          {complexityLevels.map((level) => (
+            <div 
+              key={level.level}
+              className="grid-line"
+              style={{ bottom: `${getPositionFromComplexity(level.level)}%` }}
+            />
+          ))}
+        </div>
+
+        {/* X-axis (GDP/Wages) */}
+        <div className="gdp-axis">
+          <span>$100</span>
+          <span>$1,000</span>
+          <span>$10,000</span>
+          <span>$40,000</span>
+          <span className="axis-label-gdp">GDP/capita</span>
+        </div>
+
+        {/* Main visualization area */}
+        <div className="visualization-area">
+          {/* Industrial transfers */}
+          {showTransfers && transfers.length > 0 && (
+            <svg className="transfer-layer">
+              <defs>
+                {transfers.map((transfer, idx) => (
+                  <marker
+                    key={`marker-${idx}`}
+                    id={`arrowhead-${idx}`}
+                    markerWidth="10"
+                    markerHeight="10"
+                    refX="9"
+                    refY="3"
+                    orient="auto"
+                  >
+                    <polygon
+                      points="0 0, 10 3, 0 6"
+                      fill={countryColors[transfer.from]}
+                      opacity="0.6"
+                    />
+                  </marker>
+                ))}
+              </defs>
+              {transfers.map((transfer, idx) => {
+                const fromCountry = currentData[transfer.from];
+                const toCountry = currentData[transfer.to];
+                if (!fromCountry || !toCountry) return null;
+
+                const fromX = getPositionFromGDP(fromCountry.gdp);
+                const fromY = getPositionFromComplexity(fromCountry.industrialComplexity);
+                const toX = getPositionFromGDP(toCountry.gdp);
+                const toY = getPositionFromComplexity(toCountry.industrialComplexity);
+
+                return (
+                  <g key={`transfer-${idx}`}>
+                    <path
+                      d={`M ${fromX}% ${100-fromY}% Q ${(fromX+toX)/2}% ${100-(fromY+toY)/2-20}% ${toX}% ${100-toY}%`}
+                      stroke={countryColors[transfer.from]}
+                      strokeWidth="2"
+                      fill="none"
+                      opacity="0.4"
+                      markerEnd={`url(#arrowhead-${idx})`}
+                      strokeDasharray="5,5"
+                      className="transfer-arrow"
+                    />
+                    <text
+                      x={`${(fromX+toX)/2}%`}
+                      y={`${100-(fromY+toY)/2-10}%`}
+                      textAnchor="middle"
+                      className="transfer-label"
+                    >
+                      {transfer.industry} ({transfer.jobs}M jobs)
+                    </text>
+                  </g>
+                );
+              })}
+            </svg>
+          )}
+
+          {/* Country indicators */}
+          {selectedCountries.map((country) => {
             const data = currentData[country];
             if (!data) return null;
+            
+            const xPos = getPositionFromGDP(data.gdp);
+            const yPos = getPositionFromComplexity(data.industrialComplexity);
             
             return (
               <div 
                 key={country}
-                className={`country-indicator ${country}`}
+                className="country-position"
                 style={{ 
-                  left: `${getPositionFromGDP(data.gdp)}%`,
-                  top: `${(index * 50) + 20}px`,
-                  background: countryColors[country]
+                  left: `${xPos}%`,
+                  bottom: `${yPos}%`,
                 }}
               >
-                <span className="flag">{countryFlags[country]}</span>
-                <div className="country-info">
-                  <strong>{country.charAt(0).toUpperCase() + country.slice(1)} {currentYear}</strong><br />
-                  {data.industry}<br />
-                  ${data.gdp.toLocaleString()}/capita<br />
-                  {data.majorPolicy || data.challenge}
+                <div 
+                  className="country-indicator"
+                  style={{ 
+                    background: `linear-gradient(135deg, ${countryColors[country]}, ${countryColors[country]}dd)`,
+                    boxShadow: `0 0 30px ${countryColors[country]}66`
+                  }}
+                >
+                  <span className="flag">{countryFlags[country]}</span>
+                  
+                  {/* Wage indicator */}
+                  <div className="wage-indicator">
+                    {formatWage(data.wage)}/mo
+                  </div>
+                  
+                  {/* Jobs indicator for major manufacturers */}
+                  {data.manufacturingJobs && data.manufacturingJobs > 10 && (
+                    <div className="jobs-indicator">
+                      {data.manufacturingJobs}M jobs
+                    </div>
+                  )}
+                  
+                  {/* Hover info */}
+                  <div className="country-info detailed">
+                    <strong>{country.charAt(0).toUpperCase() + country.slice(1)} ({currentYear})</strong>
+                    <div className="info-content">
+                      <p><span>Industry:</span> {data.industry}</p>
+                      <p><span>GDP/capita:</span> ${data.gdp.toLocaleString()}</p>
+                      <p><span>Wage:</span> {formatWage(data.wage)}/month</p>
+                      <p><span>Stage:</span> {getCountryDevelopmentStage(data.gdp, data.wage)}</p>
+                      {data.majorPolicy && <p><span>Policy:</span> {data.majorPolicy}</p>}
+                      {data.challenge && <p><span>Challenge:</span> {data.challenge}</p>}
+                      {data.receivingFrom && (
+                        <p className="transfer-info receiving">↓ Receiving from: {data.receivingFrom.join(', ')}</p>
+                      )}
+                      {data.transferringTo && (
+                        <p className="transfer-info sending">↑ Transferring to: {data.transferringTo.join(', ')}</p>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
             );
           })}
+
+          {/* Flying Geese Formation Indicator */}
+          {currentInsight.flyingGeeseFormation && currentInsight.flyingGeeseFormation.length > 1 && (
+            <div className="flying-geese-indicator">
+              <div className="formation-label">Flying Geese Formation:</div>
+              <div className="formation-countries">
+                {currentInsight.flyingGeeseFormation.map((country, idx) => (
+                  <React.Fragment key={country}>
+                    {idx > 0 && <span className="arrow">→</span>}
+                    <span className="country-flag">{countryFlags[country] || '🌍'}</span>
+                  </React.Fragment>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
-        
+      </div>
+      
+      {/* Timeline and controls */}
+      <div className="timeline-controls">
         <div className="timeline-track">
           <div 
-            className="timeline-progress" 
+            className="timeline-progress"
             style={{ width: `${((currentYear - 1960) / 60) * 100}%` }}
           />
         </div>
         
         <div className="year-markers">
           {[1960, 1970, 1980, 1990, 2000, 2010, 2020].map(year => (
-            <span 
+            <span
               key={year} 
-              className={`year-marker ${year === currentYear ? 'active' : ''}`}
               onClick={() => handleYearChange(year)}
-              style={{ cursor: 'pointer' }}
+              className={`year-marker ${year === currentYear ? 'active' : ''}`}
             >
               {year}
             </span>
           ))}
         </div>
-      </div>
-      
-      <div className="controls">
-        <button className="control-btn" onClick={handlePlayPause}>
-          {isPlaying ? '⏸️ Pause' : '▶️ Play'}
-        </button>
-        <button className="control-btn" onClick={handleReset}>
-          🔄 Reset
-        </button>
-        <div className="year-display">
-          Year: <span>{currentYear}</span>
+        
+        <div className="controls">
+          <button 
+            onClick={handlePlayPause}
+            className="control-btn"
+          >
+            {isPlaying ? '⏸️ Pause' : '▶️ Play'}
+          </button>
+          <button 
+            onClick={handleReset}
+            className="control-btn"
+          >
+            🔄 Reset
+          </button>
+          <div className="year-display">
+            Year: <span>{currentYear}</span>
+          </div>
         </div>
       </div>
       
+      {/* Insights panel */}
       <div className="insights-panel">
-        <h3>📅 {currentYear} - Key Developments</h3>
+        <h3>📊 {currentYear} - Key Developments</h3>
+        
+        <div className="insights-grid">
+          <div className="key-pattern">
+            <strong>🔍 Pattern Recognition</strong>
+            <p>{currentInsight.keyPattern}</p>
+          </div>
+          
+          <div className="nse-lesson">
+            <strong>🎓 NSE Framework Lesson</strong>
+            <p>{currentInsight.lesson}</p>
+          </div>
+        </div>
+        
         <p className="summary">{currentInsight.summary}</p>
         
-        <div className="key-pattern">
-          <strong>🔍 Pattern Recognition:</strong>
-          <p>{currentInsight.keyPattern}</p>
+        {/* Key metrics */}
+        <div className="metrics-grid">
+          <div className="metric-card">
+            <div className="metric-value">
+              {selectedCountries.filter(c => currentData[c]?.wage > 500).length}
+            </div>
+            <div className="metric-label">High-wage countries</div>
+          </div>
+          <div className="metric-card">
+            <div className="metric-value">
+              {transfers.reduce((sum, t) => sum + t.jobs, 0)}M
+            </div>
+            <div className="metric-label">Jobs transferring</div>
+          </div>
+          <div className="metric-card">
+            <div className="metric-value">
+              {selectedCountries.filter(c => currentData[c]?.industrialComplexity >= 7).length}
+            </div>
+            <div className="metric-label">High-tech countries</div>
+          </div>
+          <div className="metric-card">
+            <div className="metric-value">
+              ${Math.max(...selectedCountries.map(c => currentData[c]?.wage || 0))}
+            </div>
+            <div className="metric-label">Highest wage/mo</div>
+          </div>
         </div>
         
-        <div className="nse-lesson">
-          <strong>🎓 NSE Lesson:</strong>
-          <p>{currentInsight.lesson}</p>
-        </div>
-        
+        {/* Country details grid */}
         <div className="country-details">
           <h4>Country Details:</h4>
           <div className="details-grid">
@@ -194,73 +404,20 @@ const TimeLapseSimulator: React.FC = () => {
                     </span>
                   </div>
                   <div className="detail-content">
-                    <p><strong>Stage:</strong> {getCountryDevelopmentStage(data.gdp)}</p>
                     <p><strong>Industry:</strong> {data.industry}</p>
                     <p><strong>GDP/capita:</strong> ${data.gdp.toLocaleString()}</p>
-                    <p><strong>Exports:</strong> {data.exports}</p>
-                    {data.majorPolicy && <p><strong>Policy:</strong> {data.majorPolicy}</p>}
-                    {data.challenge && <p><strong>Challenge:</strong> {data.challenge}</p>}
+                    <p><strong>Wage:</strong> {formatWage(data.wage)}/month</p>
+                    <p><strong>Mfg Jobs:</strong> {data.manufacturingJobs}M</p>
+                    {data.receivingFrom && (
+                      <p className="transfer-info receiving">↓ Receiving from: {data.receivingFrom.join(', ')}</p>
+                    )}
+                    {data.transferringTo && (
+                      <p className="transfer-info sending">↑ Transferring to: {data.transferringTo.join(', ')}</p>
+                    )}
                   </div>
                 </div>
               );
             })}
-          </div>
-        </div>
-        
-        <div className="flying-geese-observation">
-          <h4>🦢 Flying Geese Pattern Observation:</h4>
-          {currentYear >= 1970 && (
-            <p>
-              Notice how industries move from higher-income to lower-income countries as wages rise. 
-              {currentYear >= 1980 && " Japan's textiles moved to Korea/Taiwan in the 1970s."}
-              {currentYear >= 1990 && " Korea's textiles are now moving to China."}
-              {currentYear >= 2000 && " China's simple manufacturing is beginning to move to Vietnam and Bangladesh."}
-              {currentYear >= 2010 && " The pattern continues with each country climbing the development ladder."}
-            </p>
-          )}
-        </div>
-        
-        <div className="comparative-advantage-tracker">
-          <h4>📊 Comparative Advantage Shifts:</h4>
-          <ul>
-            {selectedCountries.map(country => {
-              const data = currentData[country];
-              return (
-                <li key={country}>
-                  <strong>{country.charAt(0).toUpperCase() + country.slice(1)}:</strong> 
-                  {' '}Comparative advantage in {data.industry.toLowerCase()} 
-                  (matches its ${data.gdp}/capita income level)
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      </div>
-      
-      <div className="nse-framework-explanation">
-        <h3>📚 Understanding Through NSE Framework</h3>
-        <div className="framework-grid">
-          <div className="framework-concept">
-            <h4>1. Endowment-Determined Structure</h4>
-            <p>Each country's industrial structure reflects its factor endowments at that time. 
-            Countries with low wages excel at labor-intensive industries, while capital-rich countries 
-            move to capital-intensive sectors.</p>
-          </div>
-          <div className="framework-concept">
-            <h4>2. Dynamic Structural Change</h4>
-            <p>Success in industries matching comparative advantage leads to capital accumulation, 
-            wage increases, and natural progression to more sophisticated industries. This is 
-            endogenous structural change.</p>
-          </div>
-          <div className="framework-concept">
-            <h4>3. Flying Geese Pattern</h4>
-            <p>As lead countries upgrade, they transfer mature industries to followers. This creates 
-            win-win situations where leaders move up the value chain while followers industrialize.</p>
-          </div>
-          <div className="framework-concept">
-            <h4>4. Government Facilitation</h4>
-            <p>Successful countries had governments that identified and facilitated industries matching 
-            their comparative advantage, rather than protecting non-viable industries.</p>
           </div>
         </div>
       </div>
