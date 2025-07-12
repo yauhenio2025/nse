@@ -1,0 +1,138 @@
+/* Schema-Driven Module Styles */
+.schema-demo {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.module-selector {
+  display: flex;
+  gap: 1rem;
+  margin: 2rem 0;
+  flex-wrap: wrap;
+}
+
+.module-selector button {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+}
+
+.module-selector button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.schema-driven-module {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 2rem;
+  margin: 2rem 0;
+}
+
+.module-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  gap: 1rem;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.module-content h4 {
+  color: #00dbde;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.module-content h5 {
+  color: #fc00ff;
+  margin: 1rem 0 0.5rem;
+}
+
+.decision-tree {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+}
+
+.pattern {
+  background: rgba(0, 219, 222, 0.1);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+  border-left: 3px solid #00dbde;
+}
+
+.schema-info {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 1rem;
+  padding: 2rem;
+  margin-top: 2rem;
+}
+
+.schema-info h3 {
+  color: #fc00ff;
+  margin-bottom: 1rem;
+}
+
+.schema-info ul {
+  list-style: none;
+  padding: 0;
+}
+
+.schema-info li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.schema-info li:last-child {
+  border-bottom: none;
+}
+
+/* Schema Preview Enhancements */
+.schema-editor pre {
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.schema-editor code {
+  color: #00dbde;
+}
+
+.schema-editor h1, .schema-editor h2 {
+  color: #fc00ff;
+}
+
+.schema-editor h3, .schema-editor h4 {
+  color: #00dbde;
+}
+
+.schema-editor strong {
+  color: #fff;
+}
+
+.schema-editor em {
+  color: #aaa;
+  font-style: italic;
+}

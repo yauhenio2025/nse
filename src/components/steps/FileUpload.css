@@ -36,8 +36,8 @@
 
 .uploaded-files {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
   margin-top: 2rem;
 }
 
@@ -48,6 +48,7 @@
   padding: 1rem;
   transition: all 0.3s ease;
   animation: slideIn 0.3s ease;
+  overflow: hidden;
 }
 
 @keyframes slideIn {
@@ -66,14 +67,36 @@
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
 }
 
+.file-card h4 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0.5rem;
+  font-size: 0.95em;
+}
+
 .author-info {
   font-size: 0.85em;
   color: #999;
   margin-top: 0.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.file-card p {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0.25rem 0;
+  font-size: 0.9em;
 }
 
 .file-tags {
   margin-top: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
 }
 
 .tag {
@@ -82,7 +105,11 @@
   padding: 0.25rem 0.75rem;
   border-radius: 1rem;
   font-size: 0.8rem;
-  margin: 0.25rem;
+  margin: 0;
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .action-buttons {

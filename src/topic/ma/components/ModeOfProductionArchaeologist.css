@@ -1,0 +1,220 @@
+.production-archaeologist {
+  animation: fadeIn 0.5s ease;
+}
+
+.dig-site {
+  position: relative;
+  background: linear-gradient(to bottom, #8b6914 0%, #654321 50%, #3e2723 100%);
+  height: 500px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5);
+}
+
+.strata-layer {
+  position: absolute;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 20px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.strata-layer:hover {
+  transform: translateX(10px);
+  filter: brightness(1.2);
+}
+
+.strata-layer.selected {
+  transform: translateX(15px);
+  filter: brightness(1.3);
+  box-shadow: 0 0 20px rgba(220, 38, 38, 0.3);
+}
+
+.artifact {
+  width: 80px;
+  height: 80px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2em;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.artifact:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+}
+
+.artifact-info {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.95);
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 250px;
+  display: none;
+  z-index: 10;
+  font-size: 0.5em;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.artifact:hover .artifact-info {
+  display: block;
+  animation: fadeIn 0.2s ease;
+}
+
+.artifact-info strong {
+  color: #dc2626;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.analysis-panel {
+  margin-top: 30px;
+  padding: 25px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.analysis-panel h3 {
+  color: #dc2626;
+  margin-bottom: 15px;
+}
+
+.analysis-panel ul {
+  list-style: none;
+  padding-left: 20px;
+}
+
+.analysis-panel ul li {
+  margin-bottom: 8px;
+  position: relative;
+}
+
+.analysis-panel ul li:before {
+  content: "•";
+  color: #dc2626;
+  position: absolute;
+  left: -15px;
+}
+
+.control-buttons {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+/* Comparison table styling */
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.comparison-table th,
+.comparison-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.comparison-table th {
+  background: rgba(220, 38, 38, 0.2);
+  font-weight: bold;
+  color: #fff;
+}
+
+.comparison-table tr:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.key-insight {
+  margin-top: 20px;
+  padding: 15px;
+  background: rgba(220, 38, 38, 0.1);
+  border-left: 4px solid #dc2626;
+  border-radius: 4px;
+}
+
+/* Evolution timeline */
+.evolution-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.evolution-stage {
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.evolution-stage:hover {
+  transform: translateX(10px);
+  border-color: #dc2626;
+  box-shadow: 0 10px 30px rgba(220, 38, 38, 0.2);
+}
+
+.evolution-stage h3 {
+  color: #dc2626;
+  margin-bottom: 10px;
+}
+
+.evolution-arrow {
+  text-align: center;
+  font-size: 2em;
+  color: #dc2626;
+  animation: pulse 2s infinite;
+}
+
+/* Contradictions analysis */
+.contradictions-analysis {
+  margin-top: 20px;
+}
+
+.contradictions-analysis h3 {
+  color: #dc2626;
+  margin-bottom: 15px;
+}
+
+.contradictions-analysis ul {
+  list-style: none;
+  padding: 0;
+}
+
+.contradictions-analysis li {
+  margin-bottom: 15px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  border-left: 3px solid #dc2626;
+}
+
+.contradictions-analysis li strong {
+  color: #dc2626;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}

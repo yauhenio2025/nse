@@ -51,21 +51,21 @@ export const FileUpload: React.FC<FileUploadProps> = ({
         <p>Supports PDF, DOCX, TXT, and EPUB formats</p>
       </div>
       
-      {uploadedFiles.length > 0 && (
-        <div className="uploaded-files">
-          {uploadedFiles.map((file, index) => (
-            <div key={index} className="file-card">
-              <h4>{file.name}</h4>
-              {file.author && <p className="author-info">{file.author}</p>}
-              <p>{file.type} • {file.size}</p>
-              <div className="file-tags">
-                <span className="tag">Processed</span>
-                <span className="tag">{selectedField.toUpperCase()} Core Text</span>
-              </div>
-            </div>
-          ))}
+{uploadedFiles.length > 0 && (
+  <div className="uploaded-files">
+    {uploadedFiles.map((file, index) => (
+      <div key={index} className="file-card">
+        <h4 title={file.name}>{file.name}</h4>
+        {file.author && <p className="author-info" title={file.author}>{file.author}</p>}
+        <p title={`${file.type} • ${file.size}`}>{file.type} • {file.size}</p>
+        <div className="file-tags">
+          <span className="tag">Processed</span>
+          <span className="tag">{selectedField.toUpperCase()} Core Text</span>
         </div>
-      )}
+      </div>
+    ))}
+  </div>
+)}
       
       <div className="action-buttons">
         <button className="btn btn-secondary" onClick={onBack}>Back</button>

@@ -1,0 +1,217 @@
+/* src/topic/gsh/ParallelHistories.module.css */
+
+.parallelHistories {
+  animation: fadeIn 0.5s ease;
+}
+
+.sectionTitle {
+  font-size: 2em;
+  margin-bottom: 36px;
+  color: #fff;
+  text-align: center;
+  font-weight: 300;
+}
+
+.timelineContainer {
+  position: relative;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 20px;
+  padding: 40px;
+  margin-bottom: 30px;
+}
+
+.timelineGrid {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 30px;
+}
+
+.yearMarkers {
+  display: flex;
+  flex-direction: column;
+  gap: 100px;
+  padding-top: 60px;
+}
+
+.yearMarker {
+  background: linear-gradient(135deg, #ff6b6b 0%, #f9ca24 50%, #f0932b 100%);
+  padding: 12px;
+  border-radius: 12px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.1em;
+  box-shadow: 0 5px 20px rgba(255, 107, 107, 0.3);
+}
+
+.regionTimelines {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.regionColumn {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 24px;
+  backdrop-filter: blur(10px);
+}
+
+.regionHeader {
+  text-align: center;
+  margin-bottom: 24px;
+  padding: 12px;
+  background: rgba(255, 184, 108, 0.15);
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1.1em;
+  border: 1px solid rgba(255, 184, 108, 0.3);
+}
+
+.eventCard {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 18px;
+  margin-bottom: 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.eventCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.6s ease;
+}
+
+.eventCard:hover::before {
+  left: 100%;
+}
+
+.eventCard:hover {
+  transform: translateX(8px);
+  border-color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.08);
+  box-shadow: 0 10px 30px rgba(255, 107, 107, 0.2);
+}
+
+.eventCard h4 {
+  margin-bottom: 8px;
+  color: #fff;
+  font-size: 1.05em;
+}
+
+.eventCard p {
+  font-size: 0.9em;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.5;
+}
+
+.eventType {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1em;
+  backdrop-filter: blur(10px);
+}
+
+.resistanceEvent {
+  background: rgba(255, 107, 107, 0.6);
+}
+
+.independenceEvent {
+  background: rgba(46, 213, 115, 0.6);
+}
+
+.culturalEvent {
+  background: rgba(155, 89, 182, 0.6);
+}
+
+.economicEvent {
+  background: rgba(241, 196, 15, 0.6);
+}
+
+.connectionNote {
+  display: block;
+  margin-top: 8px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85em;
+}
+
+.controls {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+.controlBtn {
+  padding: 14px 28px;
+  background: rgba(255, 255, 255, 0.05);
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1.05em;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.controlBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .timelineGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .yearMarkers {
+    flex-direction: row;
+    gap: 20px;
+    padding-top: 0;
+    overflow-x: auto;
+    margin-bottom: 20px;
+  }
+  
+  .yearMarker {
+    padding: 8px 16px;
+    white-space: nowrap;
+  }
+  
+  .regionTimelines {
+    grid-template-columns: 1fr;
+  }
+}

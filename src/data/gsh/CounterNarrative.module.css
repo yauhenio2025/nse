@@ -1,0 +1,244 @@
+/* src/topic/gsh/CounterNarrative.module.css */
+
+.counterNarrative {
+  animation: fadeIn 0.5s ease;
+}
+
+.sectionTitle {
+  font-size: 2em;
+  margin-bottom: 36px;
+  color: #fff;
+  text-align: center;
+  font-weight: 300;
+}
+
+.narrativeBuilder {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 36px;
+  margin-bottom: 30px;
+}
+
+.sourceSelector {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 24px;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.sourceSelector::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sourceSelector::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+
+.sourceSelector::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.sourceSelector h3 {
+  margin-bottom: 24px;
+  color: #f9ca24;
+}
+
+.sourceCategory {
+  margin-bottom: 24px;
+}
+
+.sourceCategory h4 {
+  color: #ff6b6b;
+  margin-bottom: 12px;
+  font-size: 1.1em;
+}
+
+.sourceItem {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.sourceItem::after {
+  content: '✓';
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%) scale(0);
+  color: #f9ca24;
+  font-size: 1.2em;
+  transition: transform 0.3s ease;
+}
+
+.sourceItem.selected::after {
+  transform: translateY(-50%) scale(1);
+}
+
+.sourceItem:hover {
+  border-color: #f9ca24;
+  background: rgba(249, 202, 36, 0.08);
+  transform: translateX(5px);
+}
+
+.sourceItem.selected {
+  background: rgba(249, 202, 36, 0.15);
+  border-color: #f9ca24;
+}
+
+.narrativeDisplay {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 36px;
+  min-height: 500px;
+  position: relative;
+}
+
+.perspectiveIndicator {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.perspectiveTag {
+  background: rgba(255, 184, 108, 0.2);
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 0.9em;
+}
+
+.narrativeText {
+  line-height: 1.8;
+  font-size: 1.1em;
+}
+
+.narrativeText h3 {
+  margin-bottom: 20px;
+}
+
+.narrativeSection {
+  margin-bottom: 24px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 12px;
+  border-left: 3px solid #ff6b6b;
+}
+
+.narrativeSource {
+  font-size: 0.9em;
+  color: #f9ca24;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.biasAnalysis {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 24px;
+  margin-top: 24px;
+}
+
+.biasAnalysis h4 {
+  margin-bottom: 16px;
+  color: #f9ca24;
+}
+
+.biasMeter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.biasIndicator {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+  margin: 0 16px;
+}
+
+.biasFill {
+  height: 100%;
+  background: linear-gradient(135deg, #ff6b6b 0%, #f9ca24 50%, #f0932b 100%);
+  transition: width 0.6s ease;
+}
+
+.biasDetails {
+  margin-top: 20px;
+}
+
+.biasDetails ul {
+  margin-top: 10px;
+  padding-left: 20px;
+}
+
+.biasDetails li {
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.controls {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+.controlBtn {
+  padding: 14px 28px;
+  background: rgba(255, 255, 255, 0.05);
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1.05em;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.controlBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .narrativeBuilder {
+    grid-template-columns: 1fr;
+  }
+  
+  .sourceSelector {
+    max-height: 400px;
+  }
+}

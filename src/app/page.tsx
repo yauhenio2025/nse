@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { ProgressBar } from '@/components/common/ProgressBar';
 import { FieldSelector } from '@/components/steps/FieldSelector';
@@ -21,6 +22,7 @@ const STEPS = [
 ];
 
 export default function Home() {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedField, setSelectedField] = useState<string>('');
   const [uploadedFiles, setUploadedFiles] = useState<any[]>([]);
@@ -31,7 +33,11 @@ export default function Home() {
   };
 
   const handleNextStep = () => {
-    if (currentStep < 6) {
+    // Special handling for Expert Review step
+    if (currentStep === 5 && selectedField) {
+      // Navigate directly to the appropriate lab
+      router.push(`/topic/${selectedField}`);
+    } else if (currentStep < 6) {
       setCurrentStep(currentStep + 1);
     }
   };

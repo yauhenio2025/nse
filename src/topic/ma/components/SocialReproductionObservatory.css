@@ -1,0 +1,232 @@
+.reproduction-observatory {
+  animation: fadeIn 0.5s ease;
+}
+
+.daily-cycle {
+  position: relative;
+  height: 500px;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+  border-radius: 50%;
+  margin: 0 auto 30px;
+  width: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .daily-cycle {
+    width: 350px;
+    height: 350px;
+  }
+}
+
+.cycle-center {
+  width: 100px;
+  height: 100px;
+  background: rgba(220, 38, 38, 0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2em;
+  box-shadow: 0 0 50px rgba(220, 38, 38, 0.5);
+  z-index: 10;
+}
+
+.activity-node {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  transform: translate(-50%, -50%);
+}
+
+.activity-node:hover {
+  transform: translate(-50%, -50%) scale(1.15);
+  background: rgba(220, 38, 38, 0.3);
+  border-color: #dc2626;
+  box-shadow: 0 10px 30px rgba(220, 38, 38, 0.4);
+}
+
+.activity-node.selected {
+  background: rgba(220, 38, 38, 0.4);
+  border-color: #dc2626;
+  transform: translate(-50%, -50%) scale(1.1);
+  box-shadow: 0 15px 40px rgba(220, 38, 38, 0.5);
+}
+
+.activity-node span {
+  font-size: 1.5em;
+}
+
+.activity-node small {
+  font-size: 0.8em;
+  margin-top: 5px;
+  color: #999;
+}
+
+.flow-line {
+  position: absolute;
+  height: 2px;
+  background: rgba(220, 38, 38, 0.3);
+  pointer-events: none;
+}
+
+.reproduction-analysis {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+@media (max-width: 768px) {
+  .reproduction-analysis {
+    grid-template-columns: 1fr;
+  }
+}
+
+.analysis-metric {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.analysis-metric:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+}
+
+.analysis-metric h4 {
+  color: #dc2626;
+  margin-bottom: 10px;
+  font-size: 1.1em;
+}
+
+.analysis-metric p {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9em;
+}
+
+.reproduction-controls {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+/* Activity analysis popup */
+.activity-analysis {
+  max-width: 600px;
+}
+
+.activity-analysis h2 {
+  color: #dc2626;
+  margin-bottom: 15px;
+}
+
+.activity-analysis p {
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+.hidden-labor {
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  border-left: 3px solid #3b82f6;
+}
+
+.value-analysis {
+  padding: 15px;
+  background: rgba(220, 38, 38, 0.1);
+  border-radius: 8px;
+  border-left: 3px solid #dc2626;
+}
+
+/* Hidden labor analysis */
+.hidden-labor-analysis h2 {
+  color: #dc2626;
+  margin-bottom: 20px;
+}
+
+.hidden-labor-analysis h3 {
+  color: #3b82f6;
+  margin: 15px 0;
+}
+
+.hidden-labor-analysis ul {
+  list-style: none;
+  padding: 0;
+  margin: 15px 0;
+}
+
+.hidden-labor-analysis li {
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.total-value {
+  font-size: 1.2em;
+  color: #dc2626;
+  margin-top: 20px;
+}
+
+.key-insight {
+  margin-top: 20px;
+  padding: 15px;
+  background: rgba(220, 38, 38, 0.1);
+  border-left: 4px solid #dc2626;
+  border-radius: 4px;
+}
+
+/* Value calculation table */
+.value-calculation table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+.value-calculation th,
+.value-calculation td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.value-calculation th {
+  background: rgba(220, 38, 38, 0.2);
+  font-weight: bold;
+}
+
+.value-calculation tr:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.total-summary {
+  margin-top: 20px;
+  padding: 15px;
+  background: rgba(220, 38, 38, 0.1);
+  border-radius: 8px;
+  font-size: 1.1em;
+}
+
+/* Cycle animation */
+@keyframes cycleRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.daily-cycle.running {
+  animation: cycleRotate 10s linear infinite;
+}

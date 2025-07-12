@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   elements, 
   checkCombination,
@@ -15,14 +15,37 @@ const MicroFoundationBuilder: React.FC = () => {
   const [isDragActive, setIsDragActive] = useState(false);
   const [selectedCountryCase, setSelectedCountryCase] = useState<CountryCase | null>(null);
   const [showLessons, setShowLessons] = useState(false);
+  const [expandedElement, setExpandedElement] = useState<string | null>(null);
+  const [touchedElement, setTouchedElement] = useState<string | null>(null);
+  const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (hoverTimeout) {
+        clearTimeout(hoverTimeout);
+      }
+    };
+  }, [hoverTimeout]);
 
   const handleDragStart = (element: Element) => {
     setDraggedElement(element);
+    setExpandedElement(null); // Close any expanded element when dragging starts
+    // Clear any pending hover timeout
+    if (hoverTimeout) {
+      clearTimeout(hoverTimeout);
+      setHoverTimeout(null);
+    }
   };
 
   const handleDragEnd = () => {
     setDraggedElement(null);
     setIsDragActive(false);
+    // Clear any pending hover timeout
+    if (hoverTimeout) {
+      clearTimeout(hoverTimeout);
+      setHoverTimeout(null);
+    }
   };
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -68,6 +91,36 @@ const MicroFoundationBuilder: React.FC = () => {
 
   const getElementById = (id: string) => elements.find(el => el.id === id);
 
+  // Handle element detail interactions
+  const handleElementMouseEnter = (elementId: string) => {
+    if (!draggedElement && !isDragActive) {
+      // Set a delay before expanding to avoid accidental expansions
+      const timeout = setTimeout(() => {
+        setExpandedElement(elementId);
+      }, 800); // 800ms delay
+      setHoverTimeout(timeout);
+    }
+  };
+
+  const handleElementMouseLeave = () => {
+    // Clear any pending timeout
+    if (hoverTimeout) {
+      clearTimeout(hoverTimeout);
+      setHoverTimeout(null);
+    }
+    setExpandedElement(null);
+  };
+
+  const handleElementClick = (e: React.MouseEvent, elementId: string) => {
+    e.stopPropagation();
+    // Toggle on click for mobile/accessibility
+    if (touchedElement === elementId) {
+      setTouchedElement(null);
+    } else {
+      setTouchedElement(elementId);
+    }
+  };
+
   // Group elements by category
   const elementsByCategory = elements.reduce((acc, element) => {
     if (!acc[element.category]) {
@@ -94,6 +147,10 @@ const MicroFoundationBuilder: React.FC = () => {
     }
   };
 
+  const isElementExpanded = (elementId: string) => {
+    return expandedElement === elementId || touchedElement === elementId;
+  };
+
   return (
     <div className="micro-foundation-layout">
       {/* Left Sidebar - Elements */}
@@ -108,17 +165,28 @@ const MicroFoundationBuilder: React.FC = () => {
               {categoryElements.map((element) => (
                 <div
                   key={element.id}
-                  className="element-card-compact"
+                  className={`element-card-compact ${isElementExpanded(element.id) ? 'expanded' : ''} ${draggedElement?.id === element.id ? 'dragging' : ''}`}
                   draggable
                   onDragStart={() => handleDragStart(element)}
                   onDragEnd={handleDragEnd}
-                  title={element.detailedExplanation}
+                  onMouseEnter={() => handleElementMouseEnter(element.id)}
+                  onMouseLeave={handleElementMouseLeave}
+                  onClick={(e) => handleElementClick(e, element.id)}
                 >
-                  <span className="element-icon-small">{element.icon}</span>
-                  <div className="element-info">
-                    <h5>{element.name}</h5>
-                    <p>{element.description}</p>
+                  <div className="element-main-content">
+                    <span className="element-icon-small">{element.icon}</span>
+                    <div className="element-info">
+                      <h5>{element.name}</h5>
+                      <p className="element-short-desc">{element.description}</p>
+                    </div>
+                    <span className="info-indicator">ⓘ</span>
                   </div>
+                  {isElementExpanded(element.id) && element.detailedExplanation && (
+                    <div className="element-detailed-info">
+                      <div className="detail-divider"></div>
+                      <p className="element-detailed-text">{element.detailedExplanation}</p>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
